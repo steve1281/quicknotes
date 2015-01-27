@@ -1,0 +1,39 @@
+
+
+
+Commit:
+	
+	git commit -m "Modified plan comments - test" -a
+
+
+Link to the remote :
+
+	$ git remote add DPML http://consappdev.tbaytel.com/git/DealerPortalMiddleLayer.git
+
+And push the files:
+	git push DPML master
+
+
+
+To pull those changes to another directory
+Switch to that directory
+Do a
+
+	git pull
+
+A conflict looks like:
+
+$ git pull
+remote: Counting objects: 124, done
+remote: Compressing objects: 100% (15/15)
+Unpacking objects: 100% (15/15), done.
+From http://consappdev.tbaytel.com/git/DealerPortalMiddleLayer
+   12e7141..5b22e84  master     -> origin/master
+Updating 9e3144d..5b22e84
+error: Your local changes to the following files would be overwritten by merge:
+        DealerPortalMiddleLayer.suo
+        HTWSPlan.vb
+Please, commit your changes or stash them before you can merge.
+Aborting
+
+

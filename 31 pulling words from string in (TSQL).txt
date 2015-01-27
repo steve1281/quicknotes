@@ -1,0 +1,17 @@
+ /* 
+  declare @temp as varchar(30)
+  set @temp = 'test this thing'
+
+  select LEFT(@temp,LEN(@temp)-CHARINDEX(' ',REVERSE(@temp))),RIGHT(@temp,CHARINDEX(' ',REVERSE(@temp))-1)
+
+select * from tbt.DigitalTvQual_DistanceAndAddress
+where st_nm like '%Old School%'	  
+*/
+/*
+declare @s as varchar(200)
+set @s = 'OLD SCHOOL RD'
+-- last word
+select right(@s,coalesce(nullif(charindex(' ',reverse(@s))-1,-1), len(@s)))
+-- with last word removed.
+select LEFT(@s,LEN(@s)-CHARINDEX(' ',REVERSE(@s))),RIGHT(@s,CHARINDEX(' ',REVERSE(@s))-1)
+*/

@@ -1,0 +1,8 @@
+declare @dbstate_Desc nvarchar(120);
+select @dbstate_Desc=state_desc from sys.databases where name ='TbaytelMonitoring'
+if @dbstate_Desc='ONLINE'
+Begin
+	exec [db].[CheckMARTENSWorkTicketTable]
+End
+
+

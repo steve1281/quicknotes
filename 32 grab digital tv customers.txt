@@ -1,0 +1,13 @@
+select ssp.ssp_subscribed_plan_id,sbr_house_number,sbr_street, sbr_street_suffix, sbr_post_direction
+         FROM subscribed_feature sf, general_charge gc, subscribed_plan ssp, charge_classification cc , Subscription_point sp
+         WHERE 
+--          ssp.ssp_subscribed_plan_id = GetCurrentSubPlan(" & SP & ") AND
+          ssp.SSP_SUBSCRIBED_PLAN_ID = sf.SSP_SUBSCRIBED_PLAN_ID  
+          AND sf.GCR_GENERAL_CHARGE_ID = gc.gcr_general_charge_id 
+          AND sf.ssf_status NOT IN ('PI', 'PO') 
+          AND gc.gcr_recurring <> 'N' 
+          AND sf.ssf_start_date < SYSDATE 
+          AND (sf.ssf_stop_date IS NULL or sf.ssf_stop_date > SYSDATE) 
+          AND gc.CHC_CHARGE_CLASS_ID = cc.CHC_CHARGE_CLASS_ID 
+          AND cc.CHC_CHARGE_CLASS_ID in (576) 
+          AND sp.sbr_nxx='450'

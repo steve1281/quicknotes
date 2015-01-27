@@ -1,0 +1,1 @@
+If you’re using Excel 2003, select the cells you want to copy, go to the Edit menu and choose Go To.  There’ll be a button on the pop-up that says "Special" - it’s in the lower-left.  Click this, and on the new box, choose "Visible Cells Only."  Now when you copy and paste, the hidden cells will be ignored.

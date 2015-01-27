@@ -1,0 +1,11 @@
+
+The classic query to get active subscriptions given a bill point:
+
+
+
+select   sp.sbr_subscription_id,sp.sbr_service_type 
+FROM  Subscription_point sp
+JOIN  subscriber_status sst on sst.sbs_subscriber_status_id = getcurrentsubstatus(sp.sbr_subscription_id)
+JOIN  status_option so on so.sop_status_id = sst.sbs_status
+WHERE  sp.BLP_BILLING_POINT_ID    =51189786
+AND    so.sop_status_type = 'A'

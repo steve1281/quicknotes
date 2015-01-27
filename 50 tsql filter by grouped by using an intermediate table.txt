@@ -1,0 +1,57 @@
+
+--
+-- prep work, build a table to play with. normall this would be provided by the database
+--
+
+declare @tab table (
+a integer,
+b integer,
+c varchar(5)
+)
+
+
+insert into @tab 
+select 10,2,'A'
+union
+select 10,3,'A'
+union
+select 12,4,'B'
+union
+select 12,2,'C'
+union 
+select 13,3,'D'
+union
+select 13,4,'E'
+
+select * from @tab
+
+--
+-- ok, real work starts here.
+--
+
+--
+-- create an intermediate table to store the "filter" information
+-- 
+declare @mead table (
+ a integer,
+ b integer
+)
+
+--
+-- use max and group by to pull out the "key" data
+--
+insert into @mead 
+  select max(a),max(b) from @tab
+  group by a
+
+
+select * from @mead
+
+--
+-- now use the intermediate key as an inner join to pull out the rest of the data
+-- in effect we are using the data in @mead as a sort of index
+--
+select t.a, t.b, t.c from @tab t
+   inner join @mead m on m.a=t.a and m.b=t.b
+
+

@@ -1,0 +1,21 @@
+Creating host equivalent user/pass in DNN
+
+NOTE:  You cannot give HOST roles in a DNN environment; you MUST create a new account.
+       You can give Administrative, but will be UNABLE to create new modules with it.
+
+login as host
+HOST > HOST ACCOUNTS
+click the \/ button, Add New User
+ - fill out the form
+ - you should get an email
+ - if you edit the account it will NOT have any roles
+
+Logout
+Login as the new account
+- you should observe that the HOST menu is available to you.
+- (the HOST menu is only avalable to HOST accounts)
+
+
+
+
+

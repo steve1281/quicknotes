@@ -1,0 +1,108 @@
+
+Templates for boolean checkbox things
+
+
+Create a gridview with checkbox code  (like so:
+
+                 <asp:TemplateField HeaderText="M">
+                      <ItemTemplate>
+                          <asp:CheckBox ID="chkM" runat="server" Checked='<%# Bind("M") %>'></asp:CheckBox>
+                      </ItemTemplate>
+                  </asp:TemplateField>
+) 
+
+Here is the entire GRID:
+
+
+
+<asp:GridView runat="server" id="grdFeatures" borderwidth="1px" 
+                    AutoGenerateColumns="False" Width="90%" CssClass="GridViewStyleBlue" 
+                CellPadding="5" >
+
+                     <RowStyle CssClass="RowStyleBlue" />
+                     <EmptyDataRowStyle CssClass="EmptyRowStyleBlue" />
+                     <SelectedRowStyle CssClass="SelectedRowStyleBlue" />
+                     <HeaderStyle CssClass="HeaderStyleBlue" />
+                    <EditRowStyle CssClass="EditRowStyleBlue" />
+                    <AlternatingRowStyle CssClass="AltRowStyleBlue" />
+              <Columns>
+
+                  <asp:TemplateField HeaderText="M">
+                      <ItemTemplate>
+                          <asp:CheckBox ID="chkM" runat="server" Checked='<%# Bind("M") %>'></asp:CheckBox>
+                      </ItemTemplate>
+                  </asp:TemplateField>
+
+                  <asp:TemplateField HeaderText="R">
+                      <ItemTemplate>
+                          <asp:CheckBox ID="chkR" runat="server" Checked='<%# Bind("R") %>'></asp:CheckBox>
+                      </ItemTemplate>
+                  </asp:TemplateField>
+     
+              
+              <asp:BoundField HeaderText="Selected Feature"   DataField = "SelectedFeature"   Visible='true' />
+              <asp:BoundField HeaderText="Amount"           DataField = "Amount"   Visible='true' />
+              <asp:BoundField HeaderText="From"             DataField = "From"   Visible='true' />
+              <asp:BoundField HeaderText="Through"          DataField = "Through"   Visible='true' />
+              <asp:BoundField HeaderText="Billed Through"   DataField = "BilledThrough"   Visible='true' />
+              <asp:BoundField HeaderText="Back Bill/CR"     DataField = "BackBillCR"   Visible='true' />
+              <asp:BoundField HeaderText="Pct"              DataField = "PCT"   Visible='true' />
+              <asp:BoundField HeaderText="Qty"              DataField = "Qty"   Visible='true' />
+
+
+              <asp:ButtonField Text="Edit" CommandName="EditAccount"/>
+                  <asp:TemplateField ShowHeader="False">
+                      <ItemTemplate>
+                          <asp:LinkButton ID="LinkButton1" runat="server" CausesValidation="false" 
+                              CommandName="DeleteAccount" Text="Delete"
+                              CommandArgument="<%# CType(Container, GridViewRow).RowIndex %>" />
+                      </ItemTemplate>
+                  </asp:TemplateField>
+              </Columns>
+            </asp:GridView>
+
+
+
+In the code behind you will need a DataTable with a "M" in it.
+
+Protected Sub FakeFeatureList()
+        Dim dt As DataTable = New DataTable   
+	'' create a fake table.
+
+        dt.Columns.Add(New DataColumn("M"))    '' <------ our boolean
+        dt.Columns.Add(New DataColumn("R"))
+        dt.Columns.Add(New DataColumn("SelectedFeature"))
+        dt.Columns.Add(New DataColumn("Amount"))
+        dt.Columns.Add(New DataColumn("From"))
+        dt.Columns.Add(New DataColumn("Through"))
+        dt.Columns.Add(New DataColumn("BilledThrough"))
+        dt.Columns.Add(New DataColumn("BackThrough"))
+        dt.Columns.Add(New DataColumn("BackBillCR"))
+        dt.Columns.Add(New DataColumn("Pct"))
+        dt.Columns.Add(New DataColumn("Qty"))
+
+	'' create a row
+	Dim row As DataRow = dt.NewRow()
+        row.ItemArray = New Object() {
+            True,				'' <------ our boolean
+            True,
+            "GSM Transition 1",
+            "20.0",
+            "11/15/2010",
+            "",
+            "08/09/2012",
+            True,
+            "",
+            "1"
+        }
+	
+	'' add it
+        dt.Rows.Add(row)
+
+	'' source and bind.
+        grdFeatures.DataSource = dt
+        grdFeatures.DataBind()
+
+    End Sub
+
+

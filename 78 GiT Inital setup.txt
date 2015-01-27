@@ -1,0 +1,47 @@
+
+Creating a local git repository - cloning...
+
+
+Setup:
+
+1. install git. (http://git-scm.com/downloads)
+
+2. optionally, install tortoise-git (http://code.google.com/p/tortoisegit/)
+
+
+Execute:
+
+(usng the Command line)
+
+
+1. Open Git-Bash.
+
+2. Go the directory you want to clone to.
+eg.
+	cd /b/DotNetNuke\ Projects
+
+3. Clone
+
+	git clone http://consappdev.tbaytel.com/git/dnn6_tbaytel_net.git
+
+
+Finally:
+
+Note: using the --global will make this the default so you can skip it in future clones.
+
+1. set username 
+e.g.
+	git config --global user.name "steven.falcigno"
+
+2. set email
+e.g.
+
+	git config --global user.email "steven.falcigno@tbaytel.com"
+
+git config --global push.default matching
+
+References: http://gitref.org/  and Greg Bates.
+
+
+
+

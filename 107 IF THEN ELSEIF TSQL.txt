@@ -1,0 +1,16 @@
+Transact SQL if then else 
+
+IF @ContactType = 'Broker'
+Begin
+	SET	s.BrokerID = @ID
+END
+ELSE IF @ContactType = 'FundAcct' --THEN
+Begin
+	SET s.FundAccountantID = @ID
+END
+ELSE IF @ContactType = 'Custodian' --THEN
+Begin
+	SET	s.CustodianID = @ID
+END
+END IF
+

@@ -1,0 +1,3 @@
+add this to the class of the anchor.
+
+class="size(large medium small) button color link_button"

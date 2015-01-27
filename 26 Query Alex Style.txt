@@ -1,0 +1,4 @@
+            Dim tblCustomerID As New DataTable
+            Dim sqlargs As IDictionary(Of String, Object) = New Dictionary(Of String, Object)
+            sqlargs.Add("UserId", SqlUtil.sqlInteger(UserID))
+            tblCustomerID = SqlUtil.execStoredProcDataTable("uspCustomerGet", sqlargs)

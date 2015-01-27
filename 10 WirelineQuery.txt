@@ -1,0 +1,55 @@
+BEGIN TRAN
+
+		
+		--declare @PhoneNum varchar(50) = '8077680669'
+		-- declare @PhoneNum varchar(50) = '8072513177'
+		declare @PhoneNum varchar(50) = '8073430576'
+		declare @sqL varchar(MAX)
+		
+		declare @SBR_NXX varchar(5)= '768' 
+		declare @SBR_PHONE_LINE_NO varchar(10) = '0669'
+
+		set @SQL = 
+		'
+		select
+*
+		from 
+		Openquery
+		(SUITESOLUTIONS,z
+		''
+			select 
+				sp.cus_customer_id,
+				bp.blp_billing_point_id,
+				sbs.sbs_status,
+				sop.sop_status_type,
+				bp.blp_product_category,
+				sp.sbr_service_type,
+				sp.sbr_npa || sp.sbr_nxx|| sp.sbr_phone_line_no as phone
+				
+				        
+			from 
+				subscription_point    sp, 
+				billing_point         bp,
+				crm.SUBSCRIBER_STATUS sbs, 
+				crm.STATUS_OPTION     sop
+			where 
+				sp.sbr_npa || sp.sbr_nxx|| sp.sbr_phone_line_no = ''''' + @PhoneNum + '''''
+				and GetCurrentStatus(bp.blp_billing_point_id)   = sbs.sbs_subscriber_status_id
+				and sbs.sbs_status                              = sop.sop_STATUS_ID
+				and sop.sop_status_type                         = ''''A''''
+				and sp.blp_billing_point_id                     = bp.blp_billing_point_id
+				and bp.blp_product_category                     = 1
+				and	sp.sbr_service_type                         = 100  
+				
+				''
+		) SS
+
+		'
+
+
+		exec(@sql)
+		
+
+
+
+ROLLBACK

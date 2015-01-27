@@ -1,0 +1,23 @@
+BEGIN TRAN
+SELECT DISTINCT ServiceLevelID FROM tbt.DigitalTvQual_ApprovedAddresses
+
+--SELECT TOP 2 * FROM tbt.DigitalTvQual_ApprovedAddresses WHERE ServiceLevelID = '-1'
+--SELECT TOP 2 * FROM tbt.DigitalTvQual_ApprovedAddresses WHERE ServiceLevelID = '0'
+--SELECT TOP 2 * FROM tbt.DigitalTvQual_ApprovedAddresses WHERE ServiceLevelID = '0.0'
+--SELECT TOP 2 * FROM tbt.DigitalTvQual_ApprovedAddresses WHERE ServiceLevelID = '1'
+--SELECT TOP 2 * FROM tbt.DigitalTvQual_ApprovedAddresses WHERE ServiceLevelID = '1.0'
+--SELECT TOP 2 * FROM tbt.DigitalTvQual_ApprovedAddresses WHERE ServiceLevelID = '2'
+--SELECT TOP 2 * FROM tbt.DigitalTvQual_ApprovedAddresses WHERE ServiceLevelID = '2.0'
+--SELECT TOP 2 * FROM tbt.DigitalTvQual_ApprovedAddresses WHERE ServiceLevelID = '3'
+--SELECT TOP 2 * FROM tbt.DigitalTvQual_ApprovedAddresses WHERE ServiceLevelID = '3.0'
+--SELECT TOP 2 * FROM tbt.DigitalTvQual_ApprovedAddresses WHERE ServiceLevelID = '4.1'
+--SELECT TOP 2 * FROM tbt.DigitalTvQual_ApprovedAddresses WHERE ServiceLevelID = '4.3'
+--SELECT TOP 2 * FROM tbt.DigitalTvQual_ApprovedAddresses WHERE ServiceLevelID = '4.4'
+
+
+
+SELECT TOP(20) * FROM tbt.DigitalTVQual_LookupHistory dlh
+ORDER BY dlh.DTVPreQualLookupHistoryID DESC
+
+
+ROLLBACK

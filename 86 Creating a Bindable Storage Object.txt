@@ -1,0 +1,137 @@
+
+
+Using an ObjectDataSource aka a bindable storage object.  
+
+Typically used when you :
+
+- want to abstract the actual datasource away from the UI
+- may have more than one datasource and need logic to choose
+- want to added/modify the datasource programatically
+- need one and only object to access the datasource (eg. for threading or caching)
+
+
+Generally, BSO can be used as a datasource for gridviews etc. There are several ways to do this; this is how I do it.
+
+Create a class file in the App_code file heiarachy:
+
+Import whatever you need as per usual.
+
+Create the "row" object:
+
+     Public Class DevicePlanFeature
+
+Into this class you will put public properties reprenting the data items:
+
+
+
+    Dim _description As String
+    Public Property Description As String
+        Get
+            Return _description
+        End Get
+        Set(value As String)
+            _description = value
+        End Set
+    End Property
+
+Name the properties intelligently; this is the default name used in the APS.NET items.
+
+Also add constructors.  I use two, one that takes each property as an argument, and another that can take an array of object().
+
+eg:
+
+
+
+
+   Public Sub New(xdevice As String, xplanname As String, xfeature As String)
+
+        Description = xdevice
+        PlanName = xplanname
+        Feature = xfeature
+
+    End Sub
+
+and
+
+
+    Public Sub New(p1 As Object())
+        Me.New(p1(0), p1(1), p1(2))
+    End Sub
+
+
+Next, create the aggregate class. This is the class you actually bind to in the ASP.NET environment.
+
+    Public Class Devices
+
+
+In in create a list to store your data:
+
+    Private _devicePlanFeatureSet As List(Of DevicePlanFeature)
+
+In the constructor you can populate if you want; I typically need some sort of initializer, so the code will just allocate:
+
+    Public Sub New()
+        _devicePlanFeatureSet = New List(Of DevicePlanFeature)
+    End Sub
+
+Add methods for selecting, inserting, updating, and deleting as required. Most of the time, you will create just a "select" method:
+
+    Public Function GetDevicePlanFeatures(subid As Integer) As List(Of DevicePlanFeature)
+        Init(subid)
+        Return _devicePlanFeatureSet
+    End Function
+
+The implementation of the Init method will vary from object to object; the idea is to populate the list. Assuming a query returing a datatable, you might:
+
+        For Each row As DataRow In dt.Rows
+           Dim entry As DevicePlanFeature
+           entry = New DevicePlanFeature(row(0), row(1), row(2))
+            _devicePlanFeatureSet.Add(entry)
+        Next
+
+(note: its probably better to explicitly identify the cells in the row by name instead of index)
+
+
+Thats the class.  The next step is to actually create the object in code.
+
+Before we start - Go learn the difference between Source vs Design mode, and how to get the wizard up on a .NET object. If you already know, great. 
+
+There are a lot of ways of creating these. The easiest, imho, is to go into source mode and cut, paste and tailor this code:
+
+
+    <div>
+    <asp:ObjectDataSource ID="srcTest" runat="server" 
+            SelectMethod="GetDevicePlanFeatures" TypeName="Devices">
+        <SelectParameters>
+            <asp:QueryStringParameter DefaultValue="0" Name="subid" 
+                QueryStringField="subno" Type="Int32" />
+        </SelectParameters>
+        </asp:ObjectDataSource>
+    </div>
+
+Switching to the Design mode and working through the wizard is a good idea too; you can see some of the alternatives.	
+
+Note the SelectMethod assignment, and where it gets it parameters from. Make sure your method(s) can manage the DefaultValue.
+
+Once the ObjectSource has been created, you can link it to a .NET object, wither in source or via the Design wizard.  In this case, its probably better to use the wizard, because its going to generate a lot of tags for you automajically:
+
+   <asp:GridView ID="grdDeviceSummary" runat="server" AutoGenerateColumns="False" 
+            DataSourceID="srcDeviceSummary">
+        <Columns>
+            <asp:BoundField DataField="Description" HeaderText="Description" 
+                SortExpression="Description" />
+            <asp:BoundField DataField="PlanName" HeaderText="PlanName" 
+                SortExpression="PlanName" />
+            <asp:BoundField DataField="Feature" HeaderText="Feature" 
+                SortExpression="Feature" />
+        </Columns>
+
+    </asp:GridView>
+
+
+
+
+Thats pretty much it. You can now manipulate the grid or chart or whatever by renaming columns, adding new ones, converting to links, etc just as you would do if it were manual.  The only thing to rememeber is if the storage object is changed - ie a new property is added, you will have to refresh the schema (menu item off .NET object in Design mode).
+
+
+

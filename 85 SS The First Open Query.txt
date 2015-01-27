@@ -1,0 +1,11 @@
+
+SELECT * FROM OPENQUERY(SUITESOLUTIONS,'
+
+	select s.* 
+	from billing_point bp , subscription_point s
+	where 1=1
+	and bp.blp_billing_point_id = 51943142
+	and s.blp_billing_point_id = bp.blp_billing_point_id
+	
+
+')

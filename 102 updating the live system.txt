@@ -1,0 +1,19 @@
+
+Setup.
+
+1. two boxes www1 failover to www2
+2. 10 minute filesync, copy latest file 
+
+To update.
+
+0. copy www1 and www2 live to backup
+1. break the fail over, stop the filesync
+2. login to www2
+3. git pull
+4. manually run filesync using diff option
+5. compare files, pick the ones to move from git to live
+6. copy
+7. test, curse, fix, test
+8. re-enable sync; run once
+9. login to www1, test
+10. re-enable failover

@@ -1,0 +1,12 @@
+Attaching to running process
+
+Since a simple run will cause a complete rebuild and cause a lot of issues (e.g. build time is 10 minutes) we use attach to process.
+
+Under Debug, select Attach to process.
+
+You will see a list of all the processes active. We are looking for the asp worker process, typically:
+
+aspnet_wp.exe
+
+Once this is connected, you can set break points in your code as per usual.
+

@@ -1,0 +1,21 @@
+
+
+SELECT  u.UserID ,
+        u.Username ,
+        u.Email ,
+        u.DisplayName ,
+        u.FirstName ,
+        u.LastName,
+        ca.AccountNumber,
+        ca.IsActive,
+        ca.isSubscribed 
+
+FROM users u
+JOIN tbt.customer c ON u.UserID = c.userid
+JOIN tbt.CustomerAccount ca ON ca.CustomerID = c.customerid
+
+WHERE u.Email <> u.Username
+and u.Lastmodifiedbyuserid = u.userid
+AND ca.IsActive = 1
+ORDER BY u.userid DESC
+

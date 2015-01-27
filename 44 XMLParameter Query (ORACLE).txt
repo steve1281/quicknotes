@@ -1,0 +1,145 @@
+select 
+* 
+from
+(select SVO_INIT_BY,SVO_FOREIGN_SO_ID,svo_service_order_id,svo_crm_so_xml,sbr_subscription_id,svo_due_date,svo_CREATED_date,SVO_SHORT_DESCRIPTION,SVO_CRM_ACTIVITY from crm_service_order 
+--        union ALL
+--        select SVO_INIT_BY,SVO_FOREIGN_SO_ID,svo_service_order_id,svo_crm_so_xml,sbr_subscription_id,svo_due_date,svo_CREATED_date,SVO_SHORT_DESCRIPTION,SVO_CRM_ACTIVITY from crm_so_archive
+) 
+       SVO,
+     XMLTable(
+         'for $i in /CRMActivity/CustomerRequest/EventData/SubscribedPlan/Feature/Parameter 
+         return $i' 
+         PASSING XMLTYPE(svo_crm_SO_xml)
+         COLUMNS 
+           SFP_PARAM_VALUE VARCHAR2(20) PATH 'Value',
+           HAppyCrazyUnrelatedMonky VARCHAR2(60) PATH 'ProvParamName'
+	       ) SO_PARAM
+
+-------------------------
+Example XML:
+
+- <CRMActivity id="1" name="Features" ProductCategory="">
+- <Customer id="12595070" type="SP">
+  <CompanyName>HSPA Pre Paid UAT</CompanyName> 
+  <FirstName /> 
+  <LastName /> 
+  <InternalName /> 
+- <Address>
+  <HouseNumber>1046</HouseNumber> 
+  <HouseSuffix /> 
+  <PreDirection /> 
+  <Street>Lithum</Street> 
+  <StreetSuffix>Dr</StreetSuffix> 
+  <PostDirection /> 
+  <Location /> 
+  <City>Thunder Bay</City> 
+  <State>ON</State> 
+  <County /> 
+  <Zip>P7B 6G3</Zip> 
+  <OldExtPlantAddressId /> 
+  </Address>
+- <ESN>
+  <ESNNumber /> 
+  <MEIDNumber /> 
+  <IMEINumber>1111111111111119</IMEINumber> 
+  </ESN>
+- <Service id="8076311953" type="phone">
+  <AccountType id="2">Business</AccountType> 
+  <ServiceType id="290">HSPA-Prepaid</ServiceType> 
+  <FacilityType id="1">00-Thunder Bay</FacilityType> 
+  <PortedIn>N</PortedIn> 
+  <PlantCircuitProvider /> 
+  <OrigInServiceDate>11/15/2011</OrigInServiceDate> 
+  <RotaryTouch>T</RotaryTouch> 
+  <CircuitID /> 
+  <LifeLineExempt>1</LifeLineExempt> 
+  <LifeLineExemptText>Non-Lifeline</LifeLineExemptText> 
+  <MinMonthlyExempt>N</MinMonthlyExempt> 
+  <ICCIDNumber>89302720401920441972</ICCIDNumber> 
+  <IMSINumber>302720392044197</IMSINumber> 
+- <Directory>
+  <DirectoryID>1</DirectoryID> 
+  <DirectoryName>Non Published</DirectoryName> 
+  <DirectoryShortDesc>NP</DirectoryShortDesc> 
+  </Directory>
+  <NumDirectories>0</NumDirectories> 
+  </Service>
+  </Customer>
+- <CustomerRequest type="CHANGE FEATURE">
+  <User>smior</User> 
+- <EventData>
+- <SubscribedPlan id="2707579">
+  <PlanID>1180585</PlanID> 
+  <StartDate>11/15/2011</StartDate> 
+- <Feature id="13142688" action="A">
+  <PlanFeatureID>1225145</PlanFeatureID> 
+  <Name>Prepaid PIN Failure</Name> 
+  <Status>PENDING</Status> 
+  <Quantity>1</Quantity> 
+  <QuantityChangeValue /> 
+  <QuantityChangedDate /> 
+  <Amount>0.00</Amount> 
+  <BackBillCredit>Y</BackBillCredit> 
+  <SuppressDetail>N</SuppressDetail> 
+  <Occurrance>YYYYYYYYYYYY</Occurrance> 
+  <NumMinutes /> 
+  <StartDate>11/15/2011</StartDate> 
+  <StartDateOption>Due Date</StartDateOption> 
+  <StopDate /> 
+  <StopDateOption /> 
+  <Usage>SERVICE</Usage> 
+  <BillingCode /> 
+  <ExtBillingPct /> 
+  <NumberOfBillCycles /> 
+  <ParentSubscribedFeatureId /> 
+  <OptionVisibility>1</OptionVisibility> 
+  <Unique>N</Unique> 
+- <Parameter id="">
+  <ProvDefParamID>1001126</ProvDefParamID> 
+  <ProvParamName>Amount</ProvParamName> 
+  <EventProcessor>99</EventProcessor> 
+  <ShowOnAppt>N</ShowOnAppt> 
+  <ProvisionID>AMOUNT</ProvisionID> 
+  <Value>10.00</Value> 
+  <VlcValue /> 
+  <VlcType /> 
+  <ProvType>PROVPARAM</ProvType> 
+  </Parameter>
+- <Parameter id="">
+  <ProvDefParamID>1001128</ProvDefParamID> 
+  <ProvParamName>PIN Value</ProvParamName> 
+  <EventProcessor>99</EventProcessor> 
+  <ShowOnAppt>N</ShowOnAppt> 
+  <ProvisionID>PINVALUE</ProvisionID> 
+  <Value>99999999</Value> 
+  <VlcValue /> 
+  <VlcType /> 
+  <ProvType>PROVPARAM</ProvType> 
+  </Parameter>
+  </Feature>
+  </SubscribedPlan>
+  </EventData>
+  <DueDate>11/15/2011</DueDate> 
+  <Comments /> 
+  <martenscomments /> 
+  </CustomerRequest>
+- <ServiceOrder id="7649580">
+  <Task id="1087680" type="N">FTRCHGHP</Task> 
+  <StartDate>11/15/2011</StartDate> 
+  <ParentSIMID /> 
+  <GroupID /> 
+  <TempIdType /> 
+  <mode /> 
+  <osdatemin>11/15/2011</osdatemin> 
+  <osdatemax>12/31/9999</osdatemax> 
+  <associated_spid /> 
+  <FollowUp>N</FollowUp> 
+  <DependentSO>0</DependentSO> 
+  <PrepDate>11/15/2011</PrepDate> 
+  <SIMID>2293965</SIMID> 
+  </ServiceOrder>
+  <ServiceCharges /> 
+- <Encryption>
+  <Key>D2AF28FAD634A3DFECBB73C3B605B71BBB279C2703C933BE445695D2C51A7EBE</Key> 
+  </Encryption>
+  </CRMActivity>

@@ -1,0 +1,14 @@
+
+List all the applications:
+
+
+%systemroot%\system32\inetsrv\appcmd list app
+
+
+Aim application at different dir:
+
+%systemroot\%system32\inetsrv\appcmd set app "Default Web Site/OldApplicationName" -path:/NewApplicationName;
+
+List virtual directories:
+
+%systemroot%\system32\inetsrv\appcmd list vdir

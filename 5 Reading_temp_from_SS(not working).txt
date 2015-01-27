@@ -1,0 +1,38 @@
+insert #svf_temp_digitalTvQual_in
+(pn)
+Select Distinct 
+	PhoneNumber
+From
+	tbt.DigitalTvQual_ApprovedAddresses
+where phonenumber is not null
+
+select pn from #svf_temp_digitalTvQual_in
+
+	set @SQL =
+		'
+		Insert into #svf_temp_digitalTvQual_out
+		(pn)
+		select pn from Openquery
+		(SUITESOLUTIONS,
+		    ''
+		    select pn from  #svf_temp_digitalTvQual_in
+		    ''
+		) SS
+		'
+
+
+------------
+	set @SQL =
+		'
+		Insert into #svf_temp_digitalTvQual_out
+		(pn)
+		select pn from Openquery
+		(SUITESOLUTIONS,
+		    ''
+		    select 
+				bp.cus_customer_id 
+from 
+billing_point bp
+		    ''
+		) SS
+		'

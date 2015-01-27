@@ -1,0 +1,20 @@
+SELECT * FROM dbo.ModuleControls mc
+JOIN dbo.ModuleDefinitions md ON md.ModuleDefID = mc.ModuleDefID
+JOIN dbo.Modules m            ON m.ModuleDefID  = md.ModuleDefID
+JOIN dbo.TabModules tm        ON tm.ModuleID    = m.ModuleID
+JOIN dbo.Tabs t               ON t.TabID        = tm.TabID
+WHERE 
+-- controlsrc like 'DesktopModules/TbayTel/CustomerServiceQualification.ascx' 
+--controlsrc like 'DesktopModules/TbayTel/%AccountManage.ascx'    
+--controlsrc like 'DesktopModules/TbayTel/%BillingSummaryPrototype.ascx'
+--controlsrc like 'DesktopModules/TbayTel/%Custo%'
+--controlsrc like 'DesktopModules/TbayTel/CustomerRegistration/%'
+controlsrc like 'DesktopModules/TbayTel/%ViewBill%'
+
+AND   m.IsDeleted <> 1
+AND  tm.IsDeleted <> 1
+AND  t.IsDeleted <> 1
+
+      
+   
+   

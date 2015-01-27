@@ -1,0 +1,16 @@
+
+open gitBash
+
+Go to the directory:
+
+
+	cd /b/GiTs/DealerPortalMiddleLayer
+
+Get new files and changed files:
+
+
+	git pull http://consappdev.tbaytel.com/git/DealerPortalMiddleLayer.git master
+
+
+
+.... HELP GIT IS A DISASTER ....

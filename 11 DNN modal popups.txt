@@ -1,0 +1,45 @@
+
+
+You will need to add:
+
+    Protected Sub Page_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+...
+        Try
+            If DotNetNuke.Framework.AJAX.IsInstalled Then
+                DotNetNuke.Framework.AJAX.RegisterScriptManager()
+            End If
+        Catch exc As Exception        'Module failed to load
+            ProcessModuleLoadException(Me, exc)
+        End Try
+...
+    End Sub
+
+
+To enable AJAX controls.
+
+
+
+For the popup, register:
+
+<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="act" %>
+
+and add code:
+
+
+<act:modalpopupextender id="ModalPopupExtender1" runat="server" 
+
+    dropshadow               = "false"
+	cancelcontrolid          = "btnCancel" 
+	okcontrolid              = "btnOkay" 
+	targetcontrolid          = "btnTermsOfService" 
+	popupcontrolid           = "pnlTermsOfService" 
+	popupdraghandlecontrolid = "PopupHeader" 
+	drag                     = "true" >
+	
+</act:modalpopupextender>
+
+and an panel ("pnlTermsOfService") and a button ( "btnTermsOfService" ) 
+
+Note: you can customize this using css.
+
+

@@ -1,0 +1,55 @@
+The other option would be to look at the Cycle.  
+
+Cycles 1,2,3,10 and 20 are Mobility.  
+
+
+Cycles 71,72 & 73 are Telecommunications.  
+
+Cycle 75 is Security.  
+
+
+This may change at some point in the future, but we are talking years if ever.
+
+If you only have Bill Group which is a value on the BILLING_POINT table, you can get the cycle by joining the BILL_GROUP table.  Here are the important fields:
+      
+   
+   
+----------------------------
+
+@websiteUnregisters - billpointid, deletedate 
+
+@ebillingSubs - ebilling signups/
+
+@UNebillingSubs - ebilling unsignups
+
+
+AND CYC_CYCLE_ID IN (1,2,3,10,20) -- mobility
+AND CYC_CYCLE_ID IN (71,72,73)    -- telecom
+AND CYC_CYCLE_ID IN (75)          -- security
+
+
+
+
+Excample:
+
+
+-
+-- total ebilling signup  TELECOM
+--
+DECLARE @myTbaytelEbillingTotalTelecomSignup INTEGER
+;WITH cte AS 
+(
+	SELECT 
+		ROW_NUMBER() OVER(PARTITION BY BLP_BILLING_POINT ORDER BY PhoneNumber DESC) AS ROW,
+		si.SBR_SERVICE_TYPE, 
+		si.BLP_BILLING_POINT, 
+		si.PhoneNumber,
+		Adddate
+	FROM tbt.customeraccount ca 
+	JOIN myTbaytel_Repository.ssol.SubscriberInformation si 		ON si.BLP_BILLING_POINT = ca.BillPointID
+	JOIN myTbaytel_Repository.ssol.AccountInformation ai ON ai.BLP_BILLING_POINT = ca.BillPointID
+	WHERE  IsActive =1 
+	
+) SELECT  @myTbaytelEbillingTotalTelecomSignup = COUNT(*)   FROM cte
+WHERE row = 1
+AND CYC_CYCLE_ID IN (71,72,73)    -- telecom

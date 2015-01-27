@@ -1,0 +1,1 @@
+I believe you need to stop IIS, go to c:\Windows\Microsoft.NET\Framework\v4.0.30319\, open the Temporary ASP.NET Files and delete the folders within it. Start IIS again, and re-compile your project.

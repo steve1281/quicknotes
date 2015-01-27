@@ -1,0 +1,48 @@
+===Intermediate Angular tricks  ===
+
+    Document describing collection of tricks we can do with angular.js
+
+    The reader should be familiar with building .NET applications and DNN IPC. An understanding of 
+    basic javascript (refer to "132 Javascript Notes.txt") is needed.  "133 Merging DNN with Angular.txt" is
+    a good reference here as well. Probably need "134 Example of Angular-DNN application.txt" too.
+    
+    {"author":"Steve Falcigno","date":"June 20, 2014"}
+
+  
+=== Terms ===
+   View - piece of markup with an app and a controller encasing it.
+   Model - $scope.  variable in a controller.
+   Controller - code that connects the view to the model
+   
+=== Rules of Thumb ===
+
+      
+=== Dump model on view ===
+
+  If your controller has a model like:
+    $scope.name = "John Smith";
+  
+  You can put it on the view:
+    <p>Hello {{name}} </p>
+    
+=== Dump an array on the view ====  
+
+    <div ng-repeat="record in records">
+        <p>
+            <strong>{{record.FriendlyName}}</strong>
+            {{record.BillPoint}} 
+            {{record.Email}}
+        </p>
+    </div>
+
+=== Trigger a method in the controller ===
+    
+    <div ng-click="play(0)">
+    
+    </div>
+    
+=== Select css class based on model ===
+
+   <div ng-class="{'ttt-X':Xes[0],'ttt-O':Oes[0]}">
+
+   </div>    

@@ -1,0 +1,28 @@
+
+declare @data varchar(10)
+set @data='100'
+
+print CAST(Left(SubString(@data, PatIndex('%[0-9.-]%', @data), 8000),
+     PatIndex('%[^0-9.-]%', SubString(@data, PatIndex('%[0-9.-]%', @data), 8000) + 'X')-1) 
+     as integer)
+
+
+set @data='100A'
+
+print CAST(Left(SubString(@data, PatIndex('%[0-9.-]%', @data), 8000),
+     PatIndex('%[^0-9.-]%', SubString(@data, PatIndex('%[0-9.-]%', @data), 8000) + 'X')-1) 
+     as integer)
+
+set @data='ABCD-100ABCD'
+
+print CAST(Left(SubString(@data, PatIndex('%[0-9.-]%', @data), 8000),
+     PatIndex('%[^0-9.-]%', SubString(@data, PatIndex('%[0-9.-]%', @data), 8000) + 'X')-1) 
+     as integer)
+
+
+Outputs:
+
+100
+100
+-100
+

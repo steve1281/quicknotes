@@ -1,0 +1,11 @@
+select objectSID, DisplayName, GivenName, SN, samAccountName,cn, primarygroupid
+from OpenQuery(ADSI,
+ 'SELECT objectSID, cn, samAccountName,
+      givenName, sn, legacyExchangeDN, OU,mail, displayName, userPrincipalName, userAccountControl, primarygroupid
+   FROM ''LDAP://DC=tbaytel,DC=local''
+   WHERE objectClass=''Person''
+   AND objectClass = ''user''
+   AND (userAccountControl = ''66048'' or userAccountControl = ''512'')
+')
+where not displayName is null
+order by displayName

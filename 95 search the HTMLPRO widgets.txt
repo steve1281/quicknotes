@@ -1,0 +1,20 @@
+A gem from Greg for searching the HTML PRO controls content.
+
+
+
+SELECT  ht.LastModifiedOnDate ,
+        tm.TabModuleID ,
+        t.tabid ,
+        ht.content ,
+        t.tabname ,
+        t.tabpath
+FROM    dbo.HtmlText ht
+        JOIN dbo.TabModules tm ON ht.moduleid = tm.moduleid
+        JOIN dbo.tabs t ON tm.tabid = t.tabid
+WHERE   ht.itemid = ( SELECT TOP ( 1 )
+                                ht2.itemid
+                      FROM      dbo.HtmlText ht2
+                      WHERE     ht.moduleid = ht2.moduleid
+                      ORDER BY  ht2.LastModifiedOnDate DESC
+                    )
+        AND content LIKE '%www-dev%'

@@ -1,0 +1,13 @@
+Imports TbaytelLogger.TBayTel.Log
+...
+
+
+
+       CALog.InsertLog(
+            New Dictionary(Of String, String) _
+            From {{"severity", CALog.Severity.INFORMATION_3},
+                  {"userid", UserController.GetCurrentUserInfo.UserID},
+                  {"username", UserController.GetCurrentUserInfo.Username},
+                  {"modulename", "AddAnAccountV2"},
+                  {"activity", "BuildCustomer"}
+                 })

@@ -1,0 +1,18 @@
+Post this into your host->sql window and it will give you a summary.  It shows the modules and how many tabs they are on.  It doesn't show modules that aren't used anywhere.
+
+
+
+select p.PortalId, dtm.FriendlyName, count (distinct t.TabId) as UsedOnTabsCount
+from {databaseOwner}{objectQualifier}portals p
+inner join {databaseOwner}{objectQualifier}Tabs t
+ on p.PortalId = t.POrtalId
+inner join {databaseOwner}{objectQualifier}TabModules tm
+ on tm.TabId = t.TabId
+inner join {databaseOwner}{objectQualifier}Modules m
+ on m.ModuleId = tm.ModuleId
+inner join {databaseOwner}{objectQualifier}ModuleDefinitions dm
+ on dm.ModuleDefId = m.ModuleDefId
+inner join {databaseOwner}{objectQualifier}DesktopModules dtm
+ on dtm.DesktopModuleId = dm.DesktopModuleId
+group by p.PortalId, dtm.FriendlyName
+order by 1,2

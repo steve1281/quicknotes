@@ -1,0 +1,19 @@
+<%@ Control Language="VB" AutoEventWireup="false" CodeFile="PredictivePrequal.ascx.vb" Inherits="DesktopModules_TbayTel_PredictivePrequal_PredictivePrequal" %>
+<%@ Register TagPrefix="dnn" Namespace="DotNetNuke.Web.Client.ClientResourceManagement" Assembly="DotNetNuke.Web.Client" %>
+
+ 
+    <dnn:DnnJsInclude ID="DnnAngularSessionInclude" 
+    runat="server" 
+    FilePath="~/DesktopModules/TbayTel/PredictivePrequal/lib/angular/angular.js" 
+    ForceProvider="DnnFormBottomProvider" 
+    Priority="220" />
+
+   <dnn:DnnJsInclude ID="DnnAppSessionInclude" 
+    runat="server" 
+    FilePath="~/DesktopModules/Tbaytel/PredictivePrequal/js/app.js" 
+    ForceProvider="DnnFormBottomProvider" 
+    Priority="230" />
+
+<div class="container" ng-app="eventsApp">
+  <div>{{1 + 2}}</div>
+</div>

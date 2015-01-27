@@ -1,0 +1,229 @@
+
+=== to clone ===
+git clone https://sfalcigno@bitbucket.org/greg_tbaytel/dnn6_tbaytel_net.git
+
+cd dnn6_tbaytel_net
+
+=== list branches ===
+
+$ git branch -a
+* master
+  remotes/origin/HEAD -> origin/master
+  remotes/origin/dnn7_preparation
+  remotes/origin/flex_usage
+  remotes/origin/issue69
+  remotes/origin/logviewer-wip
+  remotes/origin/master
+  remotes/origin/prod
+  remotes/origin/rottentomatoes
+  remotes/origin/staging
+  remotes/origin/tbaytel-skin
+  remotes/origin/user-report-charts
+  remotes/origin/wireless_code_usage
+
+=== checkout branch ===
+
+$ git checkout dnn7_preparation
+...
+Switched to a new branch 'dnn7_preparation'
+
+
+=== copy a "good" web.config ===
+
+$ cp ../../6/dnn6_tbaytel_net/web.config .
+
+
+=== To identify the branch you are on ===
+
+     git branch
+ 
+The * identifies the branch your on.
+
+
+Or, more specifically:
+
+    git rev-parse --abbrev-ref HEAD
+
+Should identify the branch exactly.
+
+
+=== What will a commit actually commit? ===
+
+To see the diff between the branch you are working on and what you have changed but not committed:
+
+   git diff
+
+
+As a bit of an extension, you can diff to commits too:
+
+  git diff 0da94be 59ff30c > my.patch
+
+=== How do I list the commits? ===
+
+To see the commits on your "local" space:
+
+  git log origin/master master
+
+
+=== Using stash to "undo" ===
+
+Make some changes, stash them away, and then clear them.
+(You cannot stash untracked files. Which means you will need to git add them first.)
+
+First, stash.
+
+   git stash
+
+You can list you current stashes.
+
+   git stash list
+
+You can re-apply the stash;
+
+   git stash apply
+
+NOTE:  this doesn't clear the stash! Its still there.
+To clear the stash:
+
+   git stash clear
+
+
+=== Conflict Management ===
+
+Git is pretty good about conflict resolution
+
+Lets fake one; edit a file, stash the changes, edit it some more, then apply the stash.
+
+  vi README.MD
+  // make some changes
+  git stash
+  vi README.MD
+  // make some more changes
+
+Lets try to apply the stash:
+    $ git stash apply
+    error: Your local changes to the following files would be overwritten by merge:
+        README.md
+    Please, commit your changes or stash them before you can merge.
+    Aborting
+
+Pretty good, so commit:
+
+   git commit -a
+   // add in some comments.
+
+Ok, now apply the stash...
+
+    $ git stash apply
+    Auto-merging README.md
+    CONFLICT (content): Merge conflict in README.md
+
+No surprise there. So edit the broken file(s). (yes there are good tools for this, much better than vi)
+
+     vi README.MD
+
+     css3_missing_manual
+     ===================
+
+     share point for my work with the CSS3 Missing manual Reference Book
+     
+     <<<<<<< Updated upstream
+     Some simpler revision.
+     =======
+     Some other simple revision.
+     >>>>>>> Stashed changes
+
+
+We are interested on the stuff between the <<<<<< and >>>>>
+Make it look the way you want. eg)
+
+     css3_missing_manual
+     ===================
+
+     share point for my work with the CSS3 Missing manual Reference Book
+     
+     Some other simple revision.
+
+
+Mentioned this already; there are tools for this.
+Once you have settled on a version, you will need to commit again
+
+      $  git commit README.MD
+      [master 46048c8] fixed the merge conflict
+       1 file changed, 1 insertion(+), 1 deletion(-)
+
+
+In this example, we have stash to clear:
+
+      git stash clear
+
+   
+
+=== Feature branching ===
+
+Note: I am working off "master"
+Most sites work off of "develop" or "prod" etc.
+
+Create the branch:
+
+    $ git checkout -b myfeature master
+    Switched to a new branch 'myfeature'
+
+Make some changes
+
+    vi README.MD
+
+You need to commit you changes (as per usual)
+
+    $ git commit README.MD
+    [myfeature a2443a4] messing around with branching.
+    1 file changed, 2 insertions(+)
+
+Compile, test, maybe commit some more etc etc 
+
+Happy, lets put it back into the parent.
+
+    $ git checkout master
+    Switched to branch 'master'
+
+Take a quick look at README.MD - your changes are not there.
+So lets fix that.
+
+		//     $ git merge --no-ff myfeature
+     $ git merge myfeature
+     Merge made by the 'recursive' strategy.
+     README.md | 2 ++
+     1 file changed, 2 insertions(+)
+
+(we use the no-ff to make sure all comments in the commit chain are included)
+One interesting point. This appears to have commit-ed for us, its ready for pushing.
+
+     $ git push
+
+
+In terms of cleanup, you delete the feature branch:
+
+     $ git branch -d myfeature
+     Deleted branch myfeature (was a2443a4).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

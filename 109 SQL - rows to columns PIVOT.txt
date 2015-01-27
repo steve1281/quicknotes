@@ -1,0 +1,67 @@
+
+-- inputs
+DECLARE @startDate AS VARCHAR(40)
+DECLARE @endDate AS VARCHAR(40)
+
+SET @startDate = '2013-09-18 16:04:55.483'
+SET @endDate = '2013-09-26 13:25:26.200'
+
+--SET @startDate = '2013-09-20'
+--SET @endDate = '2013-09-30'
+
+DECLARE @cols VARCHAR(300)
+DECLARE @gcols VARCHAR(300) 
+
+
+
+-- poor mans view.
+CREATE TABLE #jnLog 
+(
+		LogID INTEGER,
+        CreatedDate DATETIME, 
+		LogKeyValuePairID INTEGER,
+        LogKey VARCHAR(100),
+        LogValue VARCHAR(2000)
+)
+
+insert INTO #jnLog 
+SELECT  a.LogID ,
+        a.CreatedDate, 
+        b.LogKeyValuePairID ,
+        b.LogKey ,
+        b.LogValue	 from 
+tbt.log a JOIN tbt.LogKeyValuePairs b ON a.LogID = b.LogID
+
+
+SET @cols = '('
+SET @gcols = ''
+
+SELECT  @cols= @cols +  A.LogKey +',' 
+FROM (
+	SELECT DISTINCT LogKey FROM  tbt.LogKeyValuePairs) AS A
+
+SELECT  @gcols= @gcols +  'MAX(['+A.LogKey + ']) AS '+A.LogKey+',' 
+FROM 
+	(SELECT DISTINCT LogKey FROM  tbt.LogKeyValuePairs) AS A
+
+--  drop a fake column on the end to accomodate the extra ,.
+SET @cols += 'happy)'
+SET @gcols += 'MAX([happy]) As X '
+
+
+DECLARE @esql VARCHAR(MAX) 
+SET @esql = ''+
+' select logid, CreatedDate,' + @gcols + 
+' from #jnLog  a ' +
+' pivot ( ' +
+'   min(LogValue) for LogKey' + 
+'   in '+ @cols + 
+'  ) pvt ' +
+' where logid in  (SELECT c.LogID FROM tbt.log c WHERE CreatedDate >= '''+@startDate+''' AND CreatedDate <= '''+@endDate+''' )' +
+' GROUP BY LogID ,CreatedDate'
+
+
+
+EXEC( @esql)         
+
+DROP TABLE #jnLog

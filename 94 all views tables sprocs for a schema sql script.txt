@@ -1,0 +1,79 @@
+select 
+    s.name as [Schema], 
+    o.type_desc as [Type],
+    o.name as [Name] 
+from
+    sys.all_objects o
+    inner join sys.schemas s on s.schema_id = o.schema_id 
+where
+    o.type in ('U', 'V', 'P') -- tables, views, and stored procedures
+    AND s.name = 'tbt'
+order by
+    o.type_desc,s.name
+
+
+---------------------------------------------------------------
+
+even more useful:
+
+USE [DNN_www_dev]
+select 
+    s.name as [Schema], 
+    o.type_desc as [Type],
+    o.name as [Name] 
+from
+    sys.all_objects o
+    inner join sys.schemas s on s.schema_id = o.schema_id 
+where
+    o.type in ('U', 'V', 'P') -- tables, views, and stored procedures
+    AND s.name = 'tbt'
+    AND o.name NOT IN (
+				select 
+				
+					o.name as [Name] 
+				from
+					extranettestdb.Dnn_www_staging.sys.all_objects o
+					inner join extranettestdb.Dnn_www_staging.sys.schemas s on s.schema_id = o.schema_id 
+				where
+					o.type in ('U', 'V', 'P') -- tables, views, and stored procedures
+					AND s.name = 'tbt'
+				    
+    )
+order by
+    o.type_desc,s.name
+    
+----------------------------------
+
+
+For reference:
+
+Object type:
+AF = Aggregate function (CLR)
+C = CHECK constraint
+D = DEFAULT (constraint or stand-alone)
+F = FOREIGN KEY constraint
+FN = SQL scalar function
+FS = Assembly (CLR) scalar-function
+FT = Assembly (CLR) table-valued function
+IF = SQL inline table-valued function
+IT = Internal table
+P = SQL Stored Procedure
+PC = Assembly (CLR) stored-procedure
+PG = Plan guide
+PK = PRIMARY KEY constraint
+R = Rule (old-style, stand-alone)
+RF = Replication-filter-procedure
+S = System base table
+SN = Synonym
+SQ = Service queue
+TA = Assembly (CLR) DML trigger
+TF = SQL table-valued-function
+TR = SQL DML trigger
+TT = Table type
+U = Table (user-defined)
+UQ = UNIQUE constraint
+V = View
+X = Extended stored procedure
+
+
+    

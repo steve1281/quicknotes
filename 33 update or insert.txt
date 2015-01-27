@@ -1,0 +1,45 @@
+
+--
+-- 
+-- 
+declare @import table (
+  data1 varchar(100),
+  data2 varchar(100)
+)
+
+insert into @import 
+select top 100 id,ap_id from tbt.DigitalTvQual_ApprovedAddresses
+
+select * from @import
+
+declare cursed cursor for 
+ select top 1000 id,ap_id from tbt.DigitalTvQual_ApprovedAddresses
+ 
+open cursed
+
+declare @data1 varchar(100)
+declare @data2 varchar(100)
+
+fetch next from cursed
+into @data1, @data2
+
+while @@fetch_status = 0
+begin
+
+update @import
+set
+  data2 = @data2
+  where data1 = @data1
+
+  if @@rowcount=0
+  begin
+    insert into @import(data1,data2) values (@data1,@data2) 
+  end 
+
+  fetch next from cursed into @data1, @data2
+end
+
+select * from @import
+
+close cursed
+deallocate cursed
