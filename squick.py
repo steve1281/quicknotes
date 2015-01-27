@@ -86,7 +86,7 @@ def banner():
     print " |                                                                   |"
     print " |    Source folder is: " +  initfolder
     print " |                                                                   |"
-    print " |    * will list all quick notes in the folder                      |"
+    print " |    * will list all quick notes in the folder and reset filter.    |"
     print " |    a number will print the quick note                             |"
     print " |    enter on its own will quit the program                         |"
     print " |    / followed by a string will change the search folder.          |"
