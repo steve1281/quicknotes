@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 """
 Retrieve a list of quicknotes from a directory, sort them.
 Search for a specific string, shorten the list. Repeat.
