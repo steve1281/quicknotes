@@ -1,0 +1,20 @@
+
+To calculate the number <units> between two dates:
+
+  SELECT  DATEDIFF(hour, '2005-12-31 18:59:59', '2006-01-01 00:00:00') 
+
+You can replace hour with day, year, minute etc etc
+
+To do arithmetic on a date:
+
+  SELECT DATEADD(year,-1, '2006-06-01') AS "-1 Year";
+
+You can get todays date using:
+
+  SELECT GETDATE()
+
+
+Combining these, you can get one day prior today by:
+
+  SELECT DATEADD(DAY,-1,GETDATE())
+

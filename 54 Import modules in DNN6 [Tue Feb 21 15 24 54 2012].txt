@@ -1,0 +1,22 @@
+Importing modules.
+
+
+Log in as a HOST account
+goto:  HOST>Extensions
+click the [Manage] widget located in the left hand corner of the modules. 
+(note: this is transparent until you hover on it.)
+Click 'New Extension Wizard'
+
+Find the zip file.
+Answer the questions intelligently.
+
+Now, 
+
+
+
+Checkins
+
+
+You need to CVS/SVN/HG the UI (usually in desktop modules)  and the implementation (typically a DLL or set of DLLS)
+
+

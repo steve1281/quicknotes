@@ -1,0 +1,9 @@
+use [myTbaytel_Repository]
+GO
+GRANT SELECT ON [ssol].[SubscriberInformation] TO [dnn6user]
+GO
+
+use [myTbaytel_Repository]
+GO
+GRANT SELECT ON [ssol].[ValidChoices] TO [dnn6user]
+GO

@@ -1,0 +1,15 @@
+<!--
+Generic Table
+
+-->
+
+<table runat="server" id="tblName" visible="true">
+  <thead>
+  <tr><td>Header</td></tr>
+  </thead>
+  <tr>
+    <td>
+Put text, or asp compenents, or whatever, here.
+    </td>
+  </tr>
+</table>

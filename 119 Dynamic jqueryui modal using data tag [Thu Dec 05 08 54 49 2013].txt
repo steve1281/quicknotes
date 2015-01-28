@@ -1,0 +1,29 @@
+
+Dynamiclly loading a popup, grabbing data-fulltext attribute:
+
+
+
+    $('#<%=grdLogsSummary.ClientID%> td').click(function () {
+
+        var text = $(this).data('fulltext');
+
+        if (text != null) {
+            var NewDialog = $('<div id="fulltext-dialog">\
+            <p>'+ text + '</p>\
+        </div>');
+
+            NewDialog.dialog({
+                modal: true,
+                title: "Full text of cell",
+                show: 'clip',
+                width: '800',
+                height: '600',
+                buttons: [
+
+                    { text: "Close", click: function () { $(this).dialog("close") } }
+                ]
+            });
+            return false;
+        }
+
+    });

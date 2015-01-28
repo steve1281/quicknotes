@@ -1,0 +1,235 @@
+=== Basic DNN7 Application Setup ===
+
+    Document describing the steps to create a typical DNN7 page.
+    This example uses the jquery and jqueryui which is included in our skin.
+    It doesn't demonstrate WebAPI style ajax calls.
+    
+    Its worth pointing out that an application or module is rendered into html on a page that
+    already has a body, head and form tag. Use of javascript and css requires a certain attention 
+    to the possibility that other "applications" on the page may also use the same names. There is no
+    guarantee that you will not have multiples of *this* application on the page!
+       
+    
+    
+    {"author":"Steve Falcigno","date":"July 9, 2014"}
+
+=== Directory Structure ===
+
+    Working under the traditional DesktopModules\Tbaytel\<modulename> the following hierarchy is created:
+    
+    .
+    +---css
+    +---img
+    +---js
+
+    Notes:  Depending on the application, you may or may not use these folders.
+    
+=== .NET Front end ===        
+
+    The traditional .NET files (.ASCX and .ASCX.VB) live in the root (.) folder. Example:
+        ./DirectBillView.ascx
+        ./DirectBillView.ascx.vb
+
+    == Code Behind ==
+    
+    The .vb file should import whatever it needs. In this example, the DPML is imported. Modify the
+    inheritance to a PortalModuleBase:    
+    
+        Imports DealerPortalMiddleLayer.TbayTel.DealerPortalMiddleLayer
+        
+        Partial Class DesktopModules_TbayTel_DirectBillView_DirectBillView
+            Inherits DotNetNuke.Entities.Modules.PortalModuleBase
+                    ...
+        End Class
+    
+        
+    == Markup == 
+    
+    What I do with the markup, initially, is to copy in some default code. 
+    This will include style and script tags, which will be moved out into the css and
+    js folders later on,
+    
+    The basic template looks like
+        <%@ Control ...   [provided already]
+    
+    Next, create the UI. Typically, some inputs and a some buttons. Try to keep this "pure", with no ASP tags.
+    
+        <div class="dbv-wrapper">
+            <div class="dbv-main">
+              <div class="dbv-input>
+                 <label for="example">Example</label>
+                 <input id="example" />
+              </div>
+            </div>
+            <div class="dbv-buttons">
+              <div class="dbv-left-buttons">
+                 <input type="button" id="submit" value="Submit" />
+              </div>
+              <div class="dbv-right-buttons">
+              <div>
+            </div>
+        </div>
+
+    We will need some backend communication. There are a couple ways of doing this; in this simple example we will
+    assume a postback.  (you could use a WebAPI and an ajax call; for an example of this refer to "134 Example of Angular-DNN application")
+    For now, assume a simple postback approach. Create a hidden div with some tags for storage and a button for postback:
+    
+        <div class="hidden">
+            <asp:Button ID="btnSubmit" runat="server" />
+            <asp:HiddenField ID="hdnExample" runat="server" />
+        </div>
+    
+    Note: I use a simple naming convention: btnSubmit lines up with submit, example lines up with hdnExample. This makes things easier.
+    
+    == javascript ==
+    
+    Next, we need to connect the front end and the back end.  This will live in the js folder, for now, put tags. 
+    
+        <script>
+            function transferToBackEnd() {
+                $('#<%=hdnExample.ClientID%>').val($('#example').val());
+            }
+
+            function transferToFrontEnd() {
+                $('#example').val($('#<%=hdnExample.ClientID%>').val());
+            }
+
+            $(document).ready(function () {
+
+                transferToFrontEnd();
+
+                $('#submit').click(function () {
+                    transferToBackEnd(); 
+                    $('#<%=btnSubmit.ClientID%>').click();
+                    return false;
+                });
+
+            });
+        </script>
+    
+    == style ==
+    
+    The skin we use will have a lot of default styling to keep the website standard. As well, there is some optional classes (e.g., OverviewMain) that 
+    you can use. I typically make sure that classes that are specific to this module (keep in mind there will be multiple modules on a page) are prefixed
+    with initials. So DirectBillView classes are prefixed with "dbv-".   Put all the tags here, even if they are not used. Finally, we will move these
+    to a file in the css folder when we are done.
+    
+        <style>
+            .dbv-wrapper
+            {
+                min-width:500px;
+                min-height:500px;
+                margin: 5px 5px 5px 5px; /* TRBL */
+                padding:5px 5px 5px 5px; /* TRBL */
+                border: 1px solid black;
+            }
+
+            .dbv-main
+            {
+            }
+            .dbv-buttons
+            {
+                display:block;
+                padding:20px 5px 5px 5px; /* TRBL */
+            }
+            .dbv-left-buttons
+            {
+            }
+
+            .dbv-right-buttons
+            {
+            }
+            .dbv-input
+            {
+                
+            }
+            .dbv-input label
+            {
+                display:inline-block;
+                min-width:100px;
+                font-weight:bold;
+            }
+            .dbv-input input
+            {
+                min-width:100px;
+            }
+
+        </style>
+
+ == Migration to multiple files ==
+
+    A lot of files in production still contain their js and css. This is due to the idiotic way the DNN CMS imports stuff. 
+    For completeness we will cover this off here.
+    
+        
+       
+    Create a js/app.js file. Copy your javascript, without the script tags, into it. 
+    
+    Create a css/app.css file.  Copy your style, without the style tags, into it.
+        
+
+   In the markup, you will need to include, using the DNN custom tags, the js and css.
+  
+    Under the Control definition, add:
+        <%@ Register TagPrefix="dnn" Namespace="DotNetNuke.Web.Client.ClientResourceManagement" Assembly="DotNetNuke.Web.Client" %>
+  
+    For css:
+    
+      <dnn:DnnCssInclude ID="DnnAPPCSS" 
+        runat="server" 
+        FilePath="~/DesktopModules/Tbaytel/DirectView/css/app.css" 
+        ForceProvider="DnnFormBottomProvider" 
+        Priority="102" />
+        
+    For javascript:
+   
+       <dnn:DnnJsInclude ID="DnnAppSessionInclude" 
+         runat="server" 
+         FilePath="~/DesktopModules/Tbaytel/DirectView/js/app.js" 
+         ForceProvider="DnnFormBottomProvider" 
+         Priority="230" /> 
+
+    Note the use of "Priority=". This controls your load order, not the position of the tag in the markup. (annoying!)
+    
+
+== Header comments ==
+    
+    Comments inside code are up for debate. Header comments are not.
+    
+    At the top of markup files:
+    <%--/*
+     * Program: DirectBillView main markup
+     * Author: -------------
+     * Date: June 5, 2014
+     * Depends on: *see includes, DirectBillView.vb, DNN framework
+     * Depended on: 
+     * Notes:
+     *       <none>
+     * Revisions:
+     *       Jun 12,2014 - added code to stop fade if only one slide. - svf
+     * 
+     */--%>
+
+    Note:  Don't put you actual name in the markup ever.
+    
+    Comments inside VB or C# (code behind):
+    
+    '/*
+    ' * Program: DirectBillView server side
+    ' * Author: John Doe
+    ' * Date: June 5, 2014
+    ' * Depends on: DirectBillView.ascx, DNN framework
+    ' * Depended on: 
+    ' * Notes:
+    ' *       <none>
+    ' * Revisions:
+    ' *       <none>
+    ' * 
+    ' */
+
+   Notes: The idea is simple enough. What is the code, who does it call, who calls it, when was it made, and by who, and any revisions.
+   
+=== Conclusions ===
+
+    
+

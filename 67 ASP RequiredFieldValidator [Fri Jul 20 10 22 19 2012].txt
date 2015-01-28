@@ -1,0 +1,30 @@
+<asp:requiredfieldvalidator 
+     id       = "valCodeblank" 
+     runat    = "server" 
+     cssclass = "NormalRed" 
+     display  = "Dynamic" 
+     errormessage      = "<br>Please enter an access code." 
+     controltovalidate = "txtCode" 
+     meta:resourcekey  = "valUserNameResource1">
+</asp:requiredfieldvalidator>
+
+
+
+    <asp:RegularExpressionValidator ID="valCode" runat="server"     
+                                    ErrorMessage="Invalid Code was entered." 
+                                    ControlToValidate="txtCode"     
+                                    ValidationExpression="^[A-Z][0-9]+" />
+
+
+------------------------------------------------------------------------------------------
+
+
+       <asp:requiredfieldvalidator 
+            id       = "valCodeblank" 
+            runat    = "server" 
+            cssclass = "NormalRed" 
+            display  = "Dynamic" 
+            errormessage      = "Please enter an access code." 
+            controltovalidate = "txtCode" 
+            meta:resourcekey  = "valUserNameResource1" />
+         </td>

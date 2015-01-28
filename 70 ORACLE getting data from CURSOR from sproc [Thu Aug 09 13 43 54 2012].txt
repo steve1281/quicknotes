@@ -1,0 +1,4 @@
+set SERVEROUTPUT on;
+VAR V_CUR REFCURSOR;
+exec Contract_Pkg.SelectAllContracts(:V_CUR);
+PRINT V_CUR;

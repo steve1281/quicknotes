@@ -1,0 +1,34 @@
+
+
+
+Jobs are scheduled from tbtapplive. You can find them (if your app as PINFailureActivity):
+
+   \\tbtapplive\e$\Jobs\Eagle\TBayTel\ScheduledReports\PINFailureActivity
+
+
+There is a batch file : PINFailureActivity.bat  that you would schedule.
+The target database to run against is: Database_List.txt
+The email targets are  in : Mail_Recipients.txt
+
+NOTES: there should also be a test configuration (files are prefixed Test).
+
+--------------------------------
+
+Need to set up the processing_parameter table:
+
+1. Create new entry:
+
+insert into processing_parameter values
+('PIN FAILURE QUERY DATE', sysdate-60, 'Last time the PIN Failure Activity Report was reported', 'JCOOPER',sysdate, 'JCOOPER',sysdate);
+
+2. Update as required (ie. when you are testing you will need to retest):
+
+update processing_parameter
+set prp_parameter_value = sysdate -60
+where prp_parameter_key = 'PIN FAILURE QUERY DATE';
+
+3. You can query the latest run:
+
+select * from processing_parameter
+where prp_parameter_key = 'PIN FAILURE QUERY DATE';
+

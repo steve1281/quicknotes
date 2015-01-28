@@ -1,0 +1,123 @@
+
+-- 
+--
+declare @serviceTypeXREF table (
+  code varchar(10),
+  literal varchar(100),
+  descriptiveName varchar(100),
+  roletype VARCHAR(100)
+)
+--
+-- Manually populate
+--
+insert into @serviceTypeXREF (  
+  code, 
+  literal,
+  descriptiveName,
+  roletype
+)  
+select '250','DSL Only', 'dunno','Home Internet Customer'
+union all
+select '110','Toll Free', 'dunno','none'
+union all
+select '120','10-Calling Card', 'dunno','none'
+union all
+select '130','15-Dial Up Internet','dunno','Home Internet Customer'
+union all                                
+select '140','20-Directory Only','dunno','none'
+union all                                  
+select '150','25-Alarm Circuits','dunno','none'
+union all
+select '160','30-OPX','dunno','none'
+union all
+select '170','35-Multi Line Trunk','dunno','none'
+union all
+select '180','40-High Speed','dunno','none'
+union all
+select '190','45-Data/ Loops/ Circuits/ Specials','dunno','none'
+union all
+select '200','50-Paystation - Centurian','dunno','none'
+union all
+select '210','55-Paystation - Millenium','dunno','none'
+union all
+select '225','36-DID Trunk','dunno','none'
+union all
+select '230','37-DID/PRD Local','dunno','none'
+union all
+select '235','38-PRI','dunno','none'
+union all
+select '215','60-ISDN','dunno','none'
+union all
+select '115','Distinctive/Teen Ring','dunno','none'
+union all
+select '245','Special Services','dunno','none'
+union all
+select '240','Fixed Call Forwarding','dunno','none'
+union all
+select '195','DEFAULT','dunno','none'
+union all
+select '100','1-POTS','dunno','Land Line Customer'
+union all
+select '220','Centrex','dunno','none'
+union all
+select '99','Wrls-Prepaid','dunno','none'
+union all
+select '260','Security','dunno','Security Customer'
+union all
+select '255','Satellite Internet','dunno','none'
+union all
+select '50','05-Analog','dunno','none'
+union all
+select '51','00-Digital','dunno','none'
+union all
+select '265','TLINK','dunno','none'
+union all
+select '270','Digital TV','dunno','Digital TV Customer'
+union all
+select '275','HSPA','Mobile','Mobile Customer'
+union all
+select '280','GSM','dunno','Mobile Customer'
+union all
+select '285','1FB TLINK','dunno','none'
+union all
+select '290','HSPA-Prepaid','dunno','Mobile Pre-Paid Customer'
+
+
+SELECT GETDATE() AS 'run time of report'
+--
+SELECT COUNT(*) AS 'Active billing points on tbaytel' 
+FROM tbt.CustomerAccount
+WHERE IsActive = 1
+
+SELECT COUNT(*) AS 'SubPoints (Phone Numbers) from billing points' 
+FROM myTbaytel_Repository.ssol.SubscriberInformation
+WHERE BLP_BILLING_POINT IN (SELECT BillPointID FROM tbt.CustomerAccount WHERE IsActive = 1)
+
+--
+-- query a list of all subscriptions that are ACTIVE in Enventis and ACTIVE in CustomerAccount
+--
+SELECT 
+	COUNT(SBR_SERVICE_TYPE) AS 'Number of Subs in Category', 
+	RTRIM(MAX(xf.literal)) AS 'Billing system name',
+	SBR_SERVICE_TYPE AS 'Billing syste code'
+
+FROM myTbaytel_Repository.ssol.SubscriberInformation rs
+  JOIN tbt.customeraccount ca ON ca.BillPointID = rs.BLP_BILLING_POINT
+  JOIN @serviceTypeXREF xf ON xf.code = rs.SBR_SERVICE_TYPE
+  WHERE ca.IsActive = 1
+  GROUP BY SBR_SERVICE_TYPE
+  ORDER BY 'Number of Subs in Category' DESC
+    
+ 
+ SELECT  COUNT(CreatedOnDate) AS 'New Users',GETDATE() - 1 AS 'Since Date'
+ FROM users 
+ WHERE GETDATE() - 1 < CreatedOnDate
+ 
+ SELECT  COUNT(*) AS 'Total Users',GETDATE() as 'As Of'
+ FROM users 
+ 
+ 
+ SELECT  COUNT(BLP_PULL_CODE) AS 'Number Of', BLP_PULL_CODE
+ FROM myTbaytel_Repository.ssol.AccountInformation
+ WHERE BLP_PULL_CODE IN ('EO', 'EN')
+ GROUP BY BLP_PULL_CODE

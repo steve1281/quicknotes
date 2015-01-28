@@ -1,0 +1,60 @@
+
+Build xml from some datatable(s):
+
+
+DECLARE @s VARCHAR(MAX)
+SET @s = '<root>'
+
+SELECT 
+	@s = @s +'<service>' + '<number>' + CAST(COUNT(SBR_SERVICE_TYPE) AS VARCHAR(30)) + '</number>' +
+	         '<system>' + RTRIM(MAX(xf.literal)) + '</system>' +
+	         '<code>' + CAST(SBR_SERVICE_TYPE AS VARCHAR(30)) + '</code>' + '</service>'
+	FROM myTbaytel_Repository.ssol.SubscriberInformation rs
+	  JOIN tbt.customeraccount ca ON ca.BillPointID = rs.BLP_BILLING_POINT
+	  JOIN @serviceTypeXREF xf ON xf.code = rs.SBR_SERVICE_TYPE
+	  WHERE ca.IsActive = 1
+	  GROUP BY SBR_SERVICE_TYPE
+  
+SET @s = @s + '</root>'
+
+----------------------------------------------------
+
+
+
+Then in your VB, assuming that the @s above was a single column in a returned table: UsageSummaryDT, Item("Service_BreakDown"):
+
+
+   Protected Sub DealWithServiceExpand(row As Integer)
+        '' user has issued an "expand" command. We will need to process the xml in the 
+        '' UsageSummary DT.
+
+        Dim ds As New DataSet()
+        '' hard coded schema. Not a great idea normally.
+        ds.ReadXmlSchema(New StringReader("" +
+                              "<?xml version='1.0' encoding='ISO-8859-1' ?>" +
+                              "<xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema'>" +
+                              "<xs:element name='service'>" +
+                              "<xs:complexType>" +
+                              "  <xs:sequence>" +
+                              "    <xs:element name='number' type='xs:positiveInteger'/>" +
+                              "    <xs:element name='system' type='xs:string'/>" +
+                              "    <xs:element name='code'   type='xs:positiveInteger'/>" +
+                               " </xs:sequence>" +
+                              "</xs:complexType>" +
+                            "</xs:element>" +
+                            "</xs:schema>"))
+
+        '' make sure you assign a schema before reading the xml
+        ds.ReadXml(New StringReader(UsageSummaryDT.Rows(row).Item("Service_BreakDown")))
+
+        '' apply a sort to the dataset
+        ds.Tables("service").DefaultView.Sort = "number desc"
+
+        '' bind
+        grdServicesPop.DataSource = ds.Tables("service")
+        grdServicesPop.DataBind()
+
+
+    End Sub
+
+ 

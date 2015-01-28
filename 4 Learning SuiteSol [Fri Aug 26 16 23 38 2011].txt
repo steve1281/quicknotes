@@ -1,0 +1,62 @@
+- need a schema for MARTENS
+
+--------------------------------------------------------
+
+Oracle Schema:
+
+
+
+crm.STATUS_OPTION
+
+
+- Oracle user defined functions equivalent:
+
+
+  create or replace FUNCTION GetCurrentStatus(billingPointID IN NUMBER) RETURN NUMBER
+
+  IS
+
+  statusID NUMBER;
+
+  BEGIN
+
+    SELECT sbs_subscriber_status_id
+      INTO statusID
+      FROM (SELECT sbs_subscriber_status_id
+              FROM SUBSCRIBER_STATUS
+             WHERE blp_billing_point_id = billingPointID
+               AND sbs_rollback_date IS NULL
+             ORDER BY sbs_status_update_date DESC,
+                      sbs_subscriber_status_id DESC)
+     WHERE ROWNUM = 1;
+
+    RETURN statusID;
+
+  EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RETURN 0;
+
+  END;
+--------------------------------------------------------
+
+
+
+----------------------------------------------
+[tbt].[DigitalTVQual_MasterLoad] :
+-- =============================================
+-- Author:		Joe Boban
+-- Create date: August 15 2011
+-- Description:	The first step of the Digital TV Qual List Process.  Imports data from martens and some
+--				from Suite Solutions.  This is only part of the process, the application is also required
+--				to pull more data from Suite Solution.
+-- =============================================
+
+
+				sp.SBR_NPA || sp.SBR_NXX || sp.SBR_PHONE_LINE_NO = ''''' + @PhoneNum + '''''
+				and GetCurrentStatus(bp.BLP_BILLING_POINT_ID) = sbs.sbs_subscriber_status_id
+				and sbs.sbs_status = sop.sop_STATUS_ID
+				and sop.sop_status_type =''''A''''
+				and GetCurrentSubStatus(sp.SBR_SUBSCRIPTION_ID) = sbs2.sbs_subscriber_status_id
+				and sbs2.sbs_status = sop2.sop_STATUS_ID
+				and sop2.sop_status_type =''''A''''
+				and sp.blp_billing_point_id = bp.blp_billing_point_id

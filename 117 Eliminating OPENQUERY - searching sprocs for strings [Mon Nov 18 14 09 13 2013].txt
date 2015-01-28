@@ -1,0 +1,69 @@
+To determine which sprocs actually use openquery:
+
+SELECT *
+	FROM sys.sql_modules m 
+	INNER JOIN sys.objects o 
+	ON m.object_id=o.object_id
+	WHERE m.definition Like '%openquery%'
+
+As an aside, the collation by default is:
+	select databasepropertyex('DNN_WWW', 'collation') sqlcollation;
+	--> SQL_Latin1_General_CP1_CI_AS  (case inssensitve)
+
+---------------------------------------------------------------
+From this list:
+
+- find which sprocs are actually being used, and where.
+- went to each sproc to check to see if the openquery was actually commented out.
+
+uspPaymentSuiteSolutionHistoryGet --> CustomControls_PaymentsHistoryCtrl, DesktopModules_TBayTel_PaymentHistory_PaymentHistory
+uspCustomerAccountInsert --> CustomerAccount
+uspCustomerAccountPullCodeGet --> DesktopModules_UserManagement, DesktopModules_EBill_EBill
+uspCustomerAccountPreAuthGet --> GetPreAuthData
+uspCustomerAccountisSubscribedUpdate --> DesktopModules_EBill_EBill, DesktopModules_UserManagement   ** updates **
+uspCustomerAccountInsertCheck --> DesktopModules_TbayTel_AccountAddv2_AccountAddv2
+uspGetServiceTypesForBPID --> NewCustomer, DesktopModules_Usage
+uspGetBillpointIdForSubpointId --> CustomControls_CurrentUsageUserControl, DesktopModules_Usage
+uspGetTNForSubpointId --> CustomControls_CurrentUsageUserControl, DesktopModules_Usage
+
+-------------------------
+In VB, in dead modules:
+
+uspCustomerAccountDigitalTVGet --> DesktopModules_AccountManage_AccountManage, DesktopModules_RemotePvr_RemotePvr 
+uspAccountPasswordHintGet --> DesktopModules_AddAccount_AccountAdd
+-------------------------
+
+Stored Procs not accessed by web site which have openquerys:
+
+uspDigitalTVPromosGet --> none
+uspCustomerAccountGetByNumber --> none
+uspCustomerAccountStatusUpdate --> none
+uspCustomerAccountUpdateSecurityRoleAll --> none
+uspCustomerAccountGetSIMSInfo --> none
+uspDigitalTVGetPlans --> none
+uspCustomerAccountInsertCheck_old --> none
+uspCustomerAccountInsertCheck_oct19_2012 --> none
+uspCustomerAccountInsertCheck_oct1_2012 --> none
+uspCustomerAccountInsertCheck_2 --> none
+uspCustomerAccountCheckPullCode --> none
+uspDigitalTVGetHardware --> none
+uspCustomerAccountUpdateSecurityRole -->none
+uspDTV_CustomerAccountDigitalTVGetByUsername --> none
+uspGetAccountsByBPID_ORIGINAL --> none
+uspCustomerAccountBalanceGet --> none
+uspCustomerAccountTypeCheck --> none
+uspDigitalTVGetPlanID --> none
+uspDigitalTVGetPlanFeatures --> none
+uspCustomerNameGetByBillpoint --> none
+uspCustomerAccountGetBySubpoint --> none
+uspHomePhonePromosGet --> none
+uspGetServiceTypesForBPID_noroletypes --> none
+uspGetPersonalInformationByBPID --> none
+uspGetFeatureLimitsByBPID --> none
+uspDSLPromosGet -->  none
+uspGetAccountMetaByBPID --> none
+uspWirelessPromosGet --> none
+
+Please do not add any openquery calls, and avoid the use of the stored procedures above if possible. 
+
+Thanks

@@ -1,0 +1,24 @@
+Note: 
+
+INSERT INTO seems to ignore the primary key:
+
+
+
+CREATE TABLE #Person2 
+(
+PKey INT PRIMARY KEY IDENTITY,
+FirstName varchar(20),
+LastName varchar(20),
+Address varchar (20),
+Age int
+)
+
+INSERT INTO #Person2 VALUES('bob1','blow','East Avenue',22)
+INSERT INTO #Person2 VALUES('bob2','blow','East Avenue',22)
+INSERT INTO #Person2 VALUES('bob3','blow','East Avenue',22)
+
+SELECT * FROM #Person2
+
+DROP TABLE #Person2
+
+

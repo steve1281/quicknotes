@@ -1,0 +1,58 @@
+Add to the .ascx.  No code behind code is required.
+
+
+<!-- script to jqueryize the list into tabs -->
+<script type="text/javascript">
+
+    jQuery(function ($) {
+
+        $('#tabs').dnnTabs();
+
+    });
+
+</script>
+
+
+<div id="tabs" class="dnnForm dnnModuleSettings dnnClear">
+
+<!--
+
+    List that identifies the divs to be used for each tab.
+
+-->
+
+
+	<ul class="dnnAdminTabNav dnnClear" >
+	    <li><a href="#divCustomerID">Customer Identification</a></li>
+	    <li><a href="#divCustomerDetail">Customer Details</a></li>
+	    <li><a href="#divContractInformation" >Customer Information</a></li>
+	    <li><a href="#divFeatures">Features</a></li>
+	    <li><a href="#divAvailableFeatures">Available Features</a></li>
+	</ul>
+
+
+<!--
+
+    Create a set of CLIENT side divs (NO runat), one for each div indicated i
+    in the list above
+-->
+
+	<div id="divCustomerID">
+	...
+	</div>
+	<div id="divCustomerDetail">
+	...
+	</div>
+	<div id="divContractInformation">
+	...
+	</div>
+	<div id="divFeatures">
+	...
+	</div>
+	<div id="divAvailableFeatures">
+	...
+	</div>
+
+</div> 
+
+

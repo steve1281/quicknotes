@@ -1,0 +1,9 @@
+Memory Lane
+
+
+to check for a null object:
+
+If IsNothing(<object>)  Then
+...
+End
+

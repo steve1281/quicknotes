@@ -1,0 +1,120 @@
+Crystal Reports Online Help
+Defining an SQL Command
+If the database you are using supports a query language such as SQL, you can write your own command which will be represented in Crystal Reports as a Table object. This allows database users complete control of the data processing that gets pushed down to the database server. A user who has experience with databases and the SQL language can write a highly optimized command that can considerably reduce the size of the set of data returned from the server.
+
+You can write your own command by using the Add Command node in the Database Expert to create a virtual table which will represent the results of processing the command. Once the command has been created, you can store it in the BusinessObjects Enterprise Repository so it can be shared between many users.
+
+Note:    Some of the Crystal Reports native database drivers do not support the Add Command feature:
+
+DB2 Server 
+Sybase Server 
+Informix Online Server 
+When you use a virtual table that was created as a Command, or when you use a Command from the BusinessObjects Enterprise Repository, Crystal Reports does not alter the syntax of the SQL submitted to the server (that is, it does not automatically add quoting or escape characters). This behavior also applies to parameters used in Commands. Therefore, you must add the quoting and escape characters that are necessary for your database driver.
+
+To create a command object
+In the Database Expert, expand the Create New Connection folder and browse the subfolders to locate your data source. 
+Log on to your data source if necessary. 
+Under your data source, double-click the Add Command node. 
+In the Add Command to Report dialog box, enter an appropriate query/command for the data source you have opened. 
+For example:
+
+SELECT
+
+    Customer.`Customer ID`,
+
+    Customer.`Customer Name`,
+
+    Customer.`Last Year's Sales`,
+
+    Customer.`Region`,
+
+    Customer.`Country`,
+
+    Orders.`Order Amount`,
+
+    Orders.`Customer ID`,
+
+    Orders.`Order Date`
+
+FROM
+
+    Customer Customer INNER JOIN Orders Orders ON
+
+        Customer.`Customer ID` = Orders.`Customer ID`
+
+WHERE
+
+    (Customer.`Country` = 'USA' OR
+
+    Customer.`Country` = 'Canada') AND
+
+    Customer.`Last Year's Sales` < 10000.
+
+ORDER BY
+
+    Customer.`Country` ASC,
+
+    Customer.`Region` ASC
+
+Note:    The use of double or single quotes (and other SQL syntax) is determined by the database driver used by your report. You must, however, manually add the quotes and other elements of the syntax as you create the command.
+
+Optionally, you can create a parameter for your command by clicking Create and entering information in the Command Parameter dialog box. 
+For more information about creating parameters, see To create a parameter for a command object.
+
+Click OK. 
+You are returned to the Report Designer. In the Field Explorer, under Database Fields, a Command table appears listing the database fields you specified.
+
+Note:    
+
+To construct the virtual table from your Command, the command must be executed once. If the command has parameters, you will be prompted to enter values for each one. 
+By default, your command is called Command. You can change its alias by selecting it and pressing F2. 
+To edit a command object
+In the Selected Tables area of the Database Expert, select the command you want to edit. 
+Right-click the command and select Edit Command from the shortcut menu. 
+Note:    If the command is stored in the BusinessObjects Enterprise Repository, you must disconnect it before editing. For more information, see Modifying objects in the repository.
+
+Make the changes you want in the Modify Command dialog box and click OK when you're done. 
+To create a parameter for a command object
+You can create a parameter field while working in the Add Command to Report dialog box or the Modify Command dialog box.
+
+In the Parameter List area of the appropriate command dialog box, click Create. 
+In the Command Parameter dialog box, enter the following information in the fields provided: 
+Parameter Name 
+Enter the name you want to identify your parameter by.
+
+Prompting Text 
+Enter the text you want to appear when the program prompts you.
+
+Value Type 
+Select the data type of the parameter field.
+
+Default Value 
+Enter the value you want the program to use if you do not supply a new value. This is an optional step.
+
+Click OK. 
+Your parameter is added to the Parameter List. You can modify or delete it by returning to the Modify Command dialog box.
+
+To add a parameter to a command object
+Place the cursor in the query text in the spot where you want to insert the parameter. 
+Double-click the parameter's name in the Parameter List. 
+The parameter is added where your cursor is sitting. It should look like this:
+
+WHERE
+
+Customer.`Country` = '{?CountryParam}'
+
+Note:    You must manually add quotes and other elements of syntax as you create your command.
+
+If you want to change the parameter field you've created, go to the Field Explorer dialog box and select it from the Parameter Fields node. See Parameter Fields and Prompts for more information.
+
+
+--------------------------------------------------------------------------------
+
+   
+Business Objects
+http://www.businessobjects.com/
+Support services
+http://www.businessobjects.com/services/support/
+Product Documentation on the Web
+http://support.businessobjects.com/documentation/
+ 

@@ -1,0 +1,131 @@
+=== Getting DNN to compile ===
+
+    Document describing the steps to get DNN to compile.
+
+    This document assumes you are using our development database and a repository of code.
+    
+    I use a directory structure like:
+    b:\git\dnn7\8
+    
+   
+    I use my bitbucket account (sfalcigno) you should use yours.
+    I copy a development web.config. If this is your first time, get someone else's.  The web.config on the
+    site is probably not going to work. (I added some notes about web.config at the end.)
+    
+    {"author":"Steve Falcigno","date":"July 14, 2014"}
+
+    This is **ONE** possible approach.
+
+=== clone and configure ===
+
+   git clone https://sfalcigno@bitbucket.org/greg_tbaytel/dnn_tbaytel_net.git
+   cd dnn_tbaytel_net/
+   git checkout prod_dnn7
+   cp ../../6/dnn_tbaytel_net/web.config .
+
+=== inetmgr ===
+   
+   open  Internet Information Services  (Windows-R inetmgr)
+   open sites - default web site
+   add an application (assuming a new one) call it dnn
+   point it at your folder (b:\git\dnn7\8\dnn_tbaytel_net) 
+   make note of the application pool; I used "ASP.NET v4.0"
+
+=== permissions ===
+
+Note: you really don't need to do this in a development environment; BUT you do need to do it 
+      in a production one, so I will include here.  
+
+    open the folder b:\git\dnn7\8\
+    right click the dnn_tbaytel_net folder
+    click security
+    [EDIT]
+    [ADD]
+    Switch the Location to the computer name 
+    Add user: IIS AppPool\ASP.NET v4.0
+    Give that user FULL CONTROL
+
+=== hiding folders ===
+
+    Dotnetnuke has several folders in the their deployment that cannot be compiled in VSStudio if
+    you open as a website. For debugging purposes, I prefer to open as a website.
+
+    We need to "hide" these from the compiler.
+    Open the parent folder, right click the target folder, check the Hidden BOX, apply to subs.
+
+    As of 7/14/2014 hiding:
+
+        B:\GiT\dnn7\8\dnn_tbaytel_net\DesktopModules\Admin\ModuleCreator
+        B:\GiT\dnn7\8\dnn_tbaytel_net\DesktopModules\Admin\UrlManagement
+        B:\GiT\dnn7\8\dnn_tbaytel_net\DesktopModules\DigitalAssets
+        B:\GiT\dnn7\8\dnn_tbaytel_net\DesktopModules\DNNCorp\PortalGroups
+        B:\GiT\dnn7\8\dnn_tbaytel_net\DesktopModules\NZMK.NZMK_SmartForms
+
+=== compiling/running ===
+
+    open vs2012 as an admin
+    file, open website, dnn
+    ---> you may need to configure your visual studio to use port 80 and 443 and not to create a browser of its 
+         own. R-click the website in your solution explorer, Property, Start Options, make sure it 
+         says Use default Web Server <---
+    click the green arrow. Be patient, your site will open.
+     
+
+     
+
+=== about the web.config: connection strings ===
+   
+There are couple key parts of the config to be aware of. Firstly, connection strings:
+The first three are "ours", the next are used by the middleware (owned by app services)
+
+ <connectionStrings>
+    <!-- Connection String for SQL Server 2005/2008 Express -->
+    <add name="SiteSqlServer" 
+         connectionString="Data Source=appdevdb;Initial Catalog=DNN_WWW_Shrink;User ID=dnnuser;Password=vermont3" 
+         providerName="System.Data.SqlClient"   />
+         
+    <add name="LoggerSqlServer" 
+         connectionString="Data Source=appdevdb;Initial Catalog=DNN_WWW_Shrink;User ID=dnnuser;Password=vermont3" 
+         providerName="System.Data.SqlClient" />
+         
+    <add name="MyTbaytelRepository" 
+         connectionString="Data Source=appdevdb;Initial Catalog=myTbaytel_Repository;User ID=ssol;Password=Only4ssol" 
+         providerName="System.Data.SqlClient" />
+
+
+    <add name="TbaytelSqlServer" 
+         connectionString="Server=appdevdb;Database=extranet_dnn_v1_9;uid=sa;pwd=vermont3;" 
+         providerName="System.Data.SqlClient"/>
+         
+    <add name="WirelessCodeDB" 
+        connectionString="Data Source=appdevdb;Initial Catalog=Extranet_DNN_V1_9;User ID=sa;Password=vermont3" 
+        providerName="System.Data.SqlClient" />
+
+
+  </connectionStrings>
+    
+    SiteSqlServer       -- Where DotNetNuke keeps its data.
+    LoggerSqlServer     -- Where we log our data. 
+    MyTbaytelRepository -- Application Services gives us some EventIS (SuiteSoltuion) as part of daily run.
+    TbaytelSqlServer    -- Where the middleware stored procedures are.
+    WirelessCodeDB      -- Specific WCOC database 
+    
+    
+
+=== about the web.config: bindings ===
+
+There are set of bindings used by the web.config
+    10.2.5.77 - development web services
+    10.1.9.34 - production web services
+    10.1.4.99 - backup web services
+For development, use 10.2.5.77 only.
+
+For DTV, they use:
+    172.31.44.1 - channel services 
+DTV doesn't have a "development" model.
+
+    
+    
+      
+   
+   

@@ -1,0 +1,136 @@
+
+This document discusses moving data from .NET (backend) to Jquery (frontend) and back again.
+Its target audience is intermediate javascript and .NET programmers.
+
+This is **ONE** way to do it.
+
+=== Simple Read Only ===
+
+Create a public property in your VB (or C#) codebehind that looks like:
+  
+  Public ReadOnly Property HomeDir() As String
+        Get
+            Return FileMappings.GetURL(FileMappings.c_home, Me) + "/"
+        End Get
+  End Property
+
+In your markup you can access this via:
+
+  var localSpec = '<%= HomeDir %>';
+
+== Read/Write ==
+
+This is fine, unless you need to manipulate the results. In this case, use asp objects on the form.
+Example:
+    <div>
+     <!-- .net fields for the survey information. -->
+        <asp:HiddenField ID='hdnName' runat="server" />
+        <asp:HiddenField ID='hdnEmail' runat='server' />
+        <asp:HiddenField ID='hdnPhoneNumber' runat='server' />
+        <asp:HiddenField ID='hdnComments' runat='server' />
+        <asp:HiddenField ID='hdnContactAt' runat='server' />
+        <asp:HiddenField ID='hdnContactMeFor' runat='server' />
+        <asp:HiddenField ID="hdnServiceType" runat="server" />
+        <asp:HiddenField ID="hdnKEY" runat="server" />
+        <asp:Button ID="btnSurvey" runat="server" Text="Survey" />
+        <asp:HiddenField ID="hdnServiceLevel" runat="server" />
+        <asp:HiddenField ID="hdnFibreIsComing" runat="server" Value="false" />
+        <asp:HiddenField ID='hdnMessage' runat='server' />
+        <asp:HiddenField ID="hdnBusinessAddress" runat="server" />
+    <!-- .net fields for the customeraddresscheck panel -->
+        <asp:HiddenField ID="hdnFullAddress" runat="server" />
+        <asp:HiddenField ID="hdnHouseNumber" runat="server" />
+        <asp:HiddenField ID="hdnStreetName" runat="server" />
+        <asp:HiddenField ID="hdnStreetSuffix" runat="server" />
+        <asp:HiddenField ID="hdnDirection" runat="server" />
+        <asp:Button ID="btnCheckAddress" runat="server" Text="Go" />
+        <asp:Button ID='btnReturn' runat="server" CssClass='hidden' Value="false" />
+    <!-- .net field for wizard -->
+        <asp:HiddenField ID="hdnWizardPage" runat="server" Value="ask"/>
+       <asp:HiddenField ID="hdnDTVQualified" runat="server" Value="no"/>
+    </div>
+
+
+You can access these values via jquery and the <% %> notation.
+The notation <%= %>  instructs ASP.NET to resolve/evaluate the contained value. 
+For example:
+
+     <asp:HiddenField ID="hdnWizardPage" runat="server" Value="ask"/>
+
+Can be accessed by:
+     y = $('#<%=hdnWizardPage.ClientID%>').val();
+Or set by:
+     $('#<%=hdnWizardPage.ClientID%>').val(y);
+
+The problem with this is that .NET entities must be in ascx or aspx files, and will be resolved by the .NET runtime.
+So if you want things cleanly stored in js files, you will have to resolve the ascx in a script tag inside the ascx/aspx file.
+Example:
+
+     x = '#<%=hdnExample%> ';
+
+This will resolve to (example):
+
+    x = '#dnn123_ctrl_hdnExample';
+
+And can be accessed elsewhere (say in a separate included js file) as:
+     y = $(x).val();
+and 
+     $(x).val(y);
+
+This works and is reasonably convenient. ( I am still looking for a better way). One improvement, to avoid
+cluttering up the global space, is to use a javascript object:
+
+    <script>
+    var dotnet = (function () {
+        
+        return {
+            localSpec: '<%=HomeDir %>',
+            sURL: '<%=HomeDir %>' + '<%=ServiceURL%>',
+            busPrequalPath: '<%=BusinessPrequalPath %>',
+    
+            fullAddress: '#<%=hdnFullAddress.ClientID%>',
+            serviceLevelID: '#<%=hdnServiceLevel.ClientID%>',
+            businessAddress: "#<%=hdnBusinessAddress.ClientID%>",
+    
+    
+            returnButtonID: '#<%=btnReturn.ClientID %>',
+            checkAddressButtonID: '#<%=btnCheckAddress.ClientID %>',
+            surveyButtonID: '#<%=btnSurvey.ClientID %>',
+    
+            fibreIsComing: '#<%=hdnFibreIsComing.ClientID%>',
+            wizardpage: '#<%=hdnWizardPage.ClientID %>',
+    
+            name: '#<%=hdnName.ClientID %>',
+            email: '#<%=hdnEmail.ClientID %>',
+            phonenumber: '#<%=hdnPhoneNumber.ClientID %>',
+            contactat: '#<%=hdnContactAt.ClientID %>',
+            comments: '#<%=hdnComments.ClientID %>',
+            contactmefor: '#<%=hdnContactMeFor.ClientID %>',
+    
+            housenumber: "#<%=hdnHouseNumber.ClientID %>",
+            streetname: "#<%=hdnStreetName.ClientID %>",
+            streetsuffix: "#<%=hdnStreetSuffix.ClientID %>",
+            direction: "#<%=hdnDirection.ClientID %>"
+        };
+    })();
+   </script>
+
+Some notes on this approach. This notation: 
+   (func(){})()
+will run an anonymous function. Anything var'd inside will be out of scope, which means we won't populate the global scope with a bunch of stuff.
+
+Next, a function can create an "object" by returning a standard JSON:
+   
+    return {  fielda: value1, fieldb: value2, etc etc };
+  
+And finally, output of the function is assigned to  a variable with global scope, so back in included js files:
+
+   console.log($(dotnet.direction).val());  
+
+will work, or, to follow our original examples,
+can be accessed elsewhere (say in a seperate included js file) as:
+     y = $(dotnet.direction).val();
+and 
+     $(dotnet.direction).val(y);
+
+There are still problems with this, for example two identical controls will conflict on the same page.

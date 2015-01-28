@@ -1,0 +1,88 @@
+Example of consuming web services via the middle layer.
+This example also use SuiteSolutions dlls.
+
+
+1. Add the DLLs (Add Reference) to your project. You may have to set your Application Pool on IIS to run 32 bit apps.
+
+2. Add the   <system.serviceModel> ... settings to your web.config.
+
+3. Modify your dotnetnuke module to use the imported data:
+
+In your ASCX file:
+(notes: I have skinned this with Todd's infragistic imposter skin. Also, I have included templates for editing.  All you really need to focus on is the DataFields.)
+
+....
+
+<asp:GridView runat="server" id="grdContractInformation" borderwidth="1" 
+                    AutoGenerateColumns="False" Width="114%" CssClass="GridViewStyleBlue" 
+                CellPadding="5" >
+
+                     <RowStyle CssClass="RowStyleBlue" />
+                     <EmptyDataRowStyle CssClass="EmptyRowStyleBlue" />
+                     <SelectedRowStyle CssClass="SelectedRowStyleBlue" />
+                     <HeaderStyle CssClass="HeaderStyleBlue" />
+                    <EditRowStyle CssClass="EditRowStyleBlue" />
+                    <AlternatingRowStyle CssClass="AltRowStyleBlue" />
+              <Columns>
+              <asp:BoundField HeaderText="Contract Type"    DataField="ContractType"    Visible='true'/>
+              <asp:BoundField HeaderText="Agent"            DataField="Agent"           Visible='true' />
+              <asp:BoundField HeaderText="Start_Date"       DataField="StartDate"       Visible='true' />
+              <asp:BoundField HeaderText="End_Date"         DataField="EndDate"         Visible="true"/>
+              <asp:BoundField HeaderText="Notes"            DataField="Notes"           Visible='true'/>
+              
+              <asp:ButtonField Text="Edit" CommandName="EditAccount"/>
+                  <asp:TemplateField ShowHeader="False">
+                      <ItemTemplate>
+                          <asp:LinkButton ID="LinkButton1" runat="server" CausesValidation="false" 
+                              CommandName="DeleteAccount" Text="Delete"
+                              CommandArgument="<%# CType(Container, GridViewRow).RowIndex %>" />
+                      </ItemTemplate>
+                  </asp:TemplateField>
+              </Columns>
+            </asp:GridView>
+
+.....
+
+
+In the ASCX.VB (codebehind):
+
+.....
+Imports DealerPortalMiddleLayer.TbayTel.DealerPortalMiddleLayer
+
+.....
+
+Protected Sub ContractInformation()
+
+        '' create a datatable with the datacolumns to match the bindings descibed in ASCX code:
+        Dim dt As DataTable = New DataTable
+        dt.Columns.Add(New DataColumn("ContractType"))
+        dt.Columns.Add(New DataColumn("Agent"))
+        dt.Columns.Add(New DataColumn("StartDate"))
+        dt.Columns.Add(New DataColumn("EndDate"))
+        dt.Columns.Add(New DataColumn("Notes"))
+
+        '' fetch data from the webservice:
+        Dim data As IEnumerable = Inquirer.GetContractsForSubscription(txtSubscription.Text)
+
+        '' break down the structure to get at the data contained within:
+        Dim sdata As SuiteSolution.Client.Data.SubscriptionContractData = data(0)(0)
+        Dim contracts As SuiteSolution.Client.Data.SubscriptionContractData = data(0)(0)
+        Dim contract As SuiteSolution.Client.Data.ContractData = contracts.Contracts(0)
+        Dim agent As SuiteSolution.Client.Data.AgentData = contract.Agent
+        Dim contractType As SuiteSolution.Client.Data.ContractTypeData = contract.Type
+
+        '' assign the extracted data to our datatable:
+        dt.Rows.Add(contractType.Description, agent.Description, contract.StartDate, contract.StopDate, contract.Notes)
+
+        '' old manual code:
+        ''dt.Rows.Add("1 Year - Upgrade", "00-TBAY MOBILITY", "01/06/2004", "01/05/2005", "ROGERS SBR CONVERT")
+
+        '' source and bind:
+        grdContractInformation.DataSource = dt
+        grdContractInformation.DataBind()
+
+    End Sub
+
+
+.......
+

@@ -1,0 +1,180 @@
+
+GiTs - Simple.
+
+1. Create a clone.
+$ git clone http://consappdev.tbaytel.com/git/DealerPortalMiddleLayer.git
+
+Change a file.
+$ git commit -m "added myself to the comments" -a
+$ git push
+
+Deal with conflicts.
+
+$ git pull
+-- edit with favorite conflict tool --
+$ git commit -m "after the merge " -a
+$ git push
+
+
+--------------------------------
+Welcome to the team B.  Lets get you a clone and get you to add yourself to readme.txt
+
+A:  
+$ git remote -v
+origin  http://consappdev.tbaytel.com/git/DealerPortalMiddleLayer.git (fetch)
+origin  http://consappdev.tbaytel.com/git/DealerPortalMiddleLayer.git (push)
+
+B:
+
+$ git clone http://consappdev.tbaytel.com/git/DealerPortalMiddleLayer.git
+Cloning into 'DealerPortalMiddleLayer'...
+remote: Counting objects: 167, done
+remote: Compressing objects: 100% (167/167)
+Receiving objects: 100% (167/167), 334.49 KiB, done.
+Resolving deltas: 100% (60/60), done.
+
+$ cd DealerPortalMiddleLayer/
+
+$ vi readme.txt
+
+$ git commit -m "added myself to the comments" -a
+[master ef8b912] added myself to the comments
+ 1 file changed, 1 insertion(+)
+
+$ git push
+Counting objects: 5, done.
+Delta compression using up to 8 threads.
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (3/3), 327 bytes, done.
+Total 3 (delta 2), reused 0 (delta 0)
+To http://consappdev.tbaytel.com/git/DealerPortalMiddleLayer.git
+   6140edc..ef8b912  master -> master
+
+A:
+
+$ git pull
+remote: Counting objects: 109, done
+remote: Compressing objects: 100% (3/3)
+Unpacking objects: 100% (3/3), done.
+From http://consappdev.tbaytel.com/git/DealerPortalMiddleLayer
+   6140edc..ef8b912  master     -> origin/master
+Updating 6140edc..ef8b912
+Fast-forward
+ readme.txt | 1 +
+ 1 file changed, 1 insertion(+)
+
+------------------------------------
+
+Person A and Person B decide to modify the same file. Person B checks in first.
+
+B:
+
+$ vi readme.txt
+$ git commit -m "added more to readme.txt" -a
+[master 88614ba] added more to readme.txt
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+$ git push
+Counting objects: 5, done.
+Delta compression using up to 8 threads.
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (3/3), 399 bytes, done.
+Total 3 (delta 1), reused 0 (delta 0)
+To http://consappdev.tbaytel.com/git/DealerPortalMiddleLayer.git
+   ef8b912..88614ba  master -> master
+
+A:
+
+$ vi readme.txt
+$ git commit -m "I needed to add my comments to readme.txt" -a
+[master 1e14cdd] I needed to add my comments to readme.txt
+ 1 file changed, 1 insertion(+)
+$ git push
+To http://consappdev.tbaytel.com/git/DealerPortalMiddleLayer.git
+ ! [rejected]        master -> master (non-fast-forward)
+error: failed to push some refs to 'http://consappdev.tbaytel.com/git/DealerPort
+alMiddleLayer.git'
+hint: Updates were rejected because the tip of your current branch is behind
+hint: its remote counterpart. Merge the remote changes (e.g. 'git pull')
+hint: before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+
+
+$ git pull
+remote: Counting objects: 109, done
+remote: Compressing objects: 100% (3/3)
+Unpacking objects: 100% (3/3), done.
+From http://consappdev.tbaytel.com/git/DealerPortalMiddleLayer
+   ef8b912..88614ba  master     -> origin/master
+Auto-merging readme.txt
+CONFLICT (content): Merge conflict in readme.txt
+Automatic merge failed; fix conflicts and then commit the result.
+
+$ vi readme.txt
+(for notes, the conflict looks like:
+
+<<<<<<< HEAD
+test2 : guess I should put my comment here too.
+test4 : added a 4th clone to this.
+=======
+test4 : I am pretty sure I am supposed to add more here. added a 4th clone to th
+is.
+>>>>>>> 88614baa6a40e2fc15a97c3f8334ef00cfdd8761
+
+Notes specific to this version.
+
+Added some additional comments.
+
+Some more notes are added.
+
+We all need to add comments.
+
+~
+~
+)
+(we edit this until we are happy.)
+
+$ git commit -m "after the merge " -a
+[master ba8717b] after the merge
+
+$ git push
+Counting objects: 10, done.
+Delta compression using up to 8 threads.
+Compressing objects: 100% (6/6), done.
+Writing objects: 100% (6/6), 614 bytes, done.
+Total 6 (delta 4), reused 0 (delta 0)
+To http://consappdev.tbaytel.com/git/DealerPortalMiddleLayer.git
+   88614ba..ba8717b  master -> master
+
+(at this point, A should probably call B and tell them to pull)
+
+
+B:
+
+$ git pull
+remote: Counting objects: 115, done
+remote: Compressing objects: 100% (6/6)
+Unpacking objects: 100% (6/6), done.
+From http://consappdev.tbaytel.com/git/DealerPortalMiddleLayer
+   88614ba..ba8717b  master     -> origin/master
+Updating 88614ba..ba8717b
+Fast-forward
+ readme.txt | 1 +
+ 1 file changed, 1 insertion(+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

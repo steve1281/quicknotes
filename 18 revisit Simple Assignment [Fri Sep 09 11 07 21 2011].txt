@@ -1,0 +1,5 @@
+declare @test integer
+
+select @test = 3
+
+print @test

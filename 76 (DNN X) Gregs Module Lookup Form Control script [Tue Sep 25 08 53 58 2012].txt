@@ -1,0 +1,11 @@
+
+set the t.tabid to the id you got from the url
+
+
+
+SELECT mc.modulecontrolid,controltitle,controlsrc FROM dbo.tabs t
+JOIN dbo.TabModules tm ON t.tabid=tm.tabid
+JOIN dbo.modules m ON tm.moduleid=m.moduleid
+JOIN dbo.moduledefinitions md ON m.moduledefid=md.ModuleDefID
+JOIN dbo.modulecontrols mc ON md.ModuleDefID=mc.moduledefid
+WHERE t.tabid=225

@@ -1,0 +1,18 @@
+Portal URL / Alias = PortalSettings.PortalAlias.HTTPAlias
+Portal ID = PortalSettings.PortalAlias.PortalID
+Portal Description = PortalSettings.Description
+Portal Name = PortalSettings.PortalName
+Portal Admin Email address = PortalSettings.Email
+Portal home folder = PortalSettings.HomeDirectory
+Link to Home page = NavigateUrl(PortalSettings.HomeTabId)
+Link to Splash page = NavigateURL(PortalSettings.SplashTabId)
+Link to Host page = NavigateURL(PortalSettings.SuperTabId)
+Link to Admin page = NavigateURL(PortalSettings.AdminTabId)
+
+Page Description = PortalSettings.ActiveTab.Description
+Page Link = PortalSettings.ActiveTab.FullUrl
+Page Name = PortalSettings.ActiveTab.TabName
+Page Title = PortalSettings.ActiveTab.Title
+Page Keywords = PortalSettings.ActiveTab.KeyWords
+Page Keywords = PortalSettings.ActiveTab.TabID
+Page Level = PortalSettings.ActiveTab.Level

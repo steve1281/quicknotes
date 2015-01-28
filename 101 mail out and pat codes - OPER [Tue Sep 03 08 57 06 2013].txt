@@ -1,0 +1,58 @@
+==== pat codes  ====
+database is applivedb.DotNetNuke
+
+[tbt].[uspAssignTokensToBusinessAccounts]
+create the next pat_august12_2013.xls  (just copy over the data of the one already on your desktop you got from Greg)
+
+no rollback
+
+
+
+email the PAT list to Renae and Agnes N.  - just look at the last email you sent.
+
+
+From: Gregory Bates <gregory.bates@tbaytel.com>
+Date: Tue, Aug 6, 2013 at 8:22 AM
+Subject: Re: PAT codes
+To: Renae Backen <renae.backen@tbaytel.com>
+Cc: Agnes Notarbartolo <agnes.notarbartolo@tbaytel.com>, Stephan Sisko <Stephan.Sisko@tbaytel.com>
+
+--------------------------------
+
+==== bulk mailer ===
+
+
+
+execute to see what will be send
+(dnn_www):
+EXEC tbt.uspBulkEmail_OutgoingEmail_GetQueued
+
+
+
+
+
+
+login www2  (81)
+open d:\
+execute : TbaytelBulkEmailer
+(had to install per user, should not ask again)
+not that the message of how many (2818 in this case) should match the query we ran.
+
+
+note: logs get written to C:\
+eg) bulkmailer.2013-08-07-11-55-10.txt
+
+
+sends emails in sets of 50, to reduce the laod on the email server.
+
+adds a row; type to OUTGOING/OUtGOING_UNDELIVERABLE
+
+3rd phase OUtGOING_UNDELIVERABLEs will send a private message to dnn6 accounts, adds another log type PROCESSED
+
+
+Mailbox unavailable. The server response was: twinair@tbaytel.net unknown user account
+
+ 
+--------------
+
+extranetdb.DotNetNuke.[tbt].[uspOnlineBillsBatchQueueEmails]

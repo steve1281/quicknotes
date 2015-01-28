@@ -1,0 +1,40 @@
+ - copy code backup from server.
+
+Server name:  tbtextranetapp
+Folder name:  ______________
+
+- copy database backup from server
+
+Server name: ____________
+Folder name: ____________
+Database:   extranetdb
+
+
+Restore database to a new database name  (JoeDNNUpgradeTest4)
+  - restore database to a new 
+Copy files to a directory
+Set up iis 
+Set protections:  ASPNET, FULL
+change root web.config connection string (SiteSqlServer)
+
+
+get it running on the 4.9 version (should be trivial)
+
+.............
+
+Download the 5.x version
+Copy the 5.x version over
+set the ASP to 3.5 using visual studio
+Change the filename
+--- need to add System.  to _______ in XML\Handlers\download.vb
+
+open the page (this should start the update process):  localhost/dnn
+
+There will be some errors.
+
+
+
+
+
+
+

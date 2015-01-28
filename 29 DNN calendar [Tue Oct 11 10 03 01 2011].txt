@@ -1,0 +1,35 @@
+
+
+In the ASCX:
+
+
+    <asp:hyperlink ImageUrl="~/images/calendar.png"  runat="server"
+                 id="cmdCalendar" resourcekey="Calendar" cssclass="CommandButton" >Calendar</asp:hyperlink>
+
+...
+
+<asp:TextBox  id="wdcBillDate" runat ="server"  Width="150px" Text="Enter a Date" style="text-align:left"/>
+
+...
+
+
+This creates the calendar link and targeted textbox. You also need some codebehind. NOTE: needs refresh whether a postback or not.
+
+
+    Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
+
+     cmdCalendar.NavigateUrl = DotNetNuke.Common.Utilities.Calendar.InvokePopupCal(wdcBillDate)
+
+...
+ If Not Page.IsPostBack Then
+...
+
+
+
+The wdcBillDate is a targetted textbox on the form:
+
+
+
+
+
+

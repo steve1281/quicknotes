@@ -1,0 +1,54 @@
+
+DECLARE @tempUsers TABLE (
+	[UserID] [int]  NOT NULL,
+	[Username] [nvarchar](100) NOT NULL,
+	[FirstName] [nvarchar](50) NOT NULL,
+	[LastName] [nvarchar](50) NOT NULL,
+	[IsSuperUser] [bit] NOT NULL,
+	[AffiliateId] [int] NULL,
+	[Email] [nvarchar](256) NULL,
+	[DisplayName] [nvarchar](128) NOT NULL,
+	[UpdatePassword] [bit] NOT NULL,
+	[LastIPAddress] [nvarchar](50) NULL,
+	[IsDeleted] [bit] NOT NULL,
+	[CreatedByUserID] [int] NULL,
+	[CreatedOnDate] [datetime] NULL,
+	[LastModifiedByUserID] [int] NULL,
+	[LastModifiedOnDate] [datetime] NULL)
+
+INSERT INTO @tempUsers (
+	[UserID]
+	,[Username]
+	,[FirstName]
+	,[LastName]
+	,[IsSuperUser]
+	,[AffiliateId]
+	,[Email] 
+	,[DisplayName]
+	,[UpdatePassword]
+	,[LastIPAddress]
+	,[IsDeleted]
+	,[CreatedByUserID]
+	,[CreatedOnDate]
+	,[LastModifiedByUserID]
+	,[LastModifiedOnDate]
+) 
+SELECT [UserID]
+      ,[Username]
+      ,[FirstName]
+      ,[LastName]
+      ,[IsSuperUser]
+      ,[AffiliateId]
+      ,[Email]
+      ,[DisplayName]
+      ,[UpdatePassword]
+      ,'127.0.0.1'   -- [LastIPAddress]
+      ,0             -- [IsDeleted]
+      ,null          -- [CreatedByUserID]
+      ,null          -- [CreatedOnDate]
+      ,null          -- [LastModifiedByUserID]
+      ,null          -- [LastModifiedOnDate]
+  FROM [DotNetNuke].[dbo].[Users]
+
+
+SELECT * FROM @tempUsers

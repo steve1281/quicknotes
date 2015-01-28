@@ -1,0 +1,57 @@
+DECLARE @temp TABLE (
+	hse_no VarChar(10),
+	hse_sufx  VarChar(10),
+	st_nm  VarChar(100),
+	st_sufx  VarChar(10),
+	dirl_cd  VarChar(10),
+	com_nm  VarChar(100)
+)
+
+insert @temp 
+SELECT 
+	hse_no 
+	,hse_sufx
+	,st_nm
+	,st_sufx
+	,dirl_cd
+	,com_nm
+FROM 
+	OPENQUERY(MARTENS,
+		N'
+		select
+			Distinct
+			hse_no
+		   ,hse_sufx
+		   ,st_nm
+		   ,st_sufx
+		   ,dirl_cd
+		   ,com_nm
+		from
+		vmr013eqp_adrs_ap
+		')
+
+declare @xs  varchar(200)
+
+declare xs_cursor cursor for
+select st_nm from @temp
+open xs_cursor;
+fetch next from xs_cursor into @xs
+while @@FETCH_STATUS = 0
+begin
+  print 'Street Name: ' + @xs
+  fetch next from xs_cursor
+  into @xs
+end
+close xs_cursor
+deallocate xs_cursor
+
+select 	
+    hse_no   'House',
+	hse_sufx 'Suffix',
+	st_nm    'Street Name',
+	st_sufx  'Street Suffix',
+	dirl_cd  'Street Direction',
+	com_nm   'Com? Name'
+	 from @temp
+	 
+	 

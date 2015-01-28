@@ -1,0 +1,61 @@
+-----------------------------------ASCX ----------------------------------
+
+<%@ Register Assembly="Infragistics2.WebUI.UltraWebTab.v7.2, Version=7.2.20072.61, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb" Namespace="Infragistics.WebUI.UltraWebTab" TagPrefix="igtab" %>
+
+<igtab:UltraWebTab ID="uwtSearch" runat="server" AutoPostBack="True" Height="5px" ThreeDEffect="False" Width="734px">
+        <Tabs>
+            <igtab:Tab Text="Phone Number" Key="PN"></igtab:Tab>
+            <igtab:Tab Text="Address" Key="AD"></igtab:Tab>
+        </Tabs>
+        <RoundedImage FillStyle="LeftMergedWithCenter" HoverImage="[ig_tab_winXP2.gif]" LeftSideWidth="7"
+                NormalImage="[ig_tab_winXP3.gif]" RightSideWidth="6" SelectedImage="[ig_tab_winXP1.gif]"
+                ShiftOfImages="2" />
+            <SelectedTabStyle>
+                <Padding Bottom="2px" />
+            </SelectedTabStyle>
+            <DefaultTabStyle BackColor="#FEFCFD" Font-Names="Microsoft Sans Serif" Font-Size="8pt"
+                ForeColor="Black" Height="22px" Width="130px">
+                <Padding Top="2px" />
+            </DefaultTabStyle>
+            <BorderDetails 
+                ColorLeft  = "148, 152, 120" 
+                ColorRight = "148, 152, 120" 
+                ColorTop   = "148, 152, 120"
+                StyleBottom= "None" 
+                StyleLeft  = "Solid" 
+                StyleRight = "Solid" 
+                StyleTop   = "Solid" 
+                WidthBottom= "0px"
+                WidthLeft  = "1px" 
+                WidthRight = "1px" 
+                WidthTop   = "1px" />
+ </igtab:UltraWebTab>
+
+
+<asp:Panel ID="pnlSearchByAddress" 
+      runat         = "server" 
+      borderwidth   = '1' 
+      bordercolor   = "148, 152, 120" 
+      style         = "border-top-style:none;" 
+      DefaultButton = "btnSearchByAddress" GroupingText="" 
+      Width         = '546px' >
+
+
+</asp:Panel>  
+
+----------------------------------- VB ----------------------------------
+
+ Protected Sub uwtSearch_TabClick(ByVal sender As Object, ByVal e As Infragistics.WebUI.UltraWebTab.WebTabEvent) Handles uwtSearch.TabClick
+
+        If e.Tab.ToString = "Phone Number" Then
+
+            Exit Sub
+        End If
+
+        If e.Tab.ToString = "Address" Then
+            Exit Sub
+        End If
+
+    End Sub
+End Class
+

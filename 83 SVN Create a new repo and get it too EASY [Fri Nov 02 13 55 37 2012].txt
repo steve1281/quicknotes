@@ -1,0 +1,26 @@
+
+Run - 
+\\tbtappdev\D$\SvnRepo
+
+Opens a folder
+
+
+rightclick - create a repository here
+select OK
+
+Close folder
+
+Open/Create a new folder on your own drive
+
+eg
+	B:\SVNs\ServicePreQualification
+
+
+
+Import
+	right click - tortoiseSVN - Import
+
+Choose repo:
+	https://tbtappdev:8443/svn/DealerPortalMiddleLayer
+
+click ok

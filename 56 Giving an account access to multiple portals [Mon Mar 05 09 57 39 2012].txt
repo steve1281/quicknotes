@@ -1,0 +1,55 @@
+To give an account multi-portal access, and to give it ADMIN rights:
+
+
+rclick table dbo.UserPortals, edit top 200
+
+CTRL 1 - table 
+CTRL 2 - columns
+CTRL 3 - query 
+
+Use CTRL -3
+
+Modify it to:
+
+SELECT     TOP (200) UserId, PortalId, UserPortalId, CreatedDate, Authorised
+FROM         UserPortals where UserId=25464
+
+(
+NOTE:  you get the UserId by doing a query on the dbo.Users table:
+
+SELECT * FROM dbo.Users WHERE Lastname='Husiak' AND FirstName = 'Kyle'
+
+)
+
+Note:   you need to press the '!' button.  f5 doesnt work.
+
+Now you can hand bomb in the Userid, PortalID, CreateDate, Authorised:
+
+UserId	PortalId	UserPortalId	CreatedDate	Authorised
+25464	3		25595		01:36.9		1
+""	0			
+""	4			
+
+Next step is the roles.  The ADMIN role is role 0.
+
+EDIT top 200 of dbo.UserRoles.  CTRL-3
+
+Modify query:
+
+SELECT     TOP (200) UserRoleID, UserID, RoleID, ExpiryDate, IsTrialUsed, EffectiveDate
+FROM         UserRoles
+WHERE     (UserID = 25464)
+
+Add the 0 role.
+
+NOTE:  this should create Kyle with admin on every portal he is connected too.
+
+
+
+-------------
+
+SELECT * FROM dbo.Users WHERE Lastname='Husiak' AND FirstName = 'Kyle'
+SELECT * FROM dbo.Roles
+SELECT * FROM dbo.UserRoles WHERE userid = 25464	
+
+

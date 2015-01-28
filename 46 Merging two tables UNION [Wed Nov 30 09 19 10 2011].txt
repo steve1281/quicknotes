@@ -1,0 +1,10 @@
+
+-- this example 
+-- two identical tables, where one is a history table
+-- in some cases we need to query from both
+--
+select * from 
+( select * from VT_HIST where rownum =1 UNION ALL 
+  select * from VT_TR where rownum = 1) vt
+where
+  vt.master_key=32163;

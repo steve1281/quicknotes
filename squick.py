@@ -69,7 +69,6 @@ def dumpQuickNote(filelist,quick):
         if name.startswith(quick):
             f = open(initfolder+name)
             s = name + "\n"
-            s = s + "Last modified: " + time.ctime(os.path.getmtime(name)) + "\n"
             s = s + "\n"
             s = s + f.read()
             f.close()
@@ -88,8 +87,12 @@ def banner():
     print " |                                                                   |"
     print " |    * will list all quick notes in the folder and reset filter.    |"
     print " |    a number will print the quick note                             |"
+    print " |       (if you want to search by a number, preface witha space)    |"
     print " |    enter on its own will quit the program                         |"
     print " |    / followed by a string will change the search folder.          |"
+    print " |    ~ will list the quicknotes on the current filter.              |"
+    print " |    - will step you back one in the filter. (can only use once!    |"
+    print " |    ? will display this help                                       |"
     print " |                                                                   |"
     print " +-------------------------------------------------------------------+"
     print " "
@@ -111,31 +114,49 @@ def main():
     files = list_files(initfolder)
     quicknotes = sorted(quicknotelist(files),key = lambda x: int(x.split(" ")[0]))
     
-    
+    banner()
     filterstring = ""
+    filterhistory ="*"
     while True:
-        banner()
-        filterstring = raw_input("Enter a single filter string: ")
+        
+        
+        newfilterstring = raw_input("\n"+str(len(quicknotes)) + " records, filter history: "+filterhistory+"\nEnter a single filter string: ")
+        
         print " "
-        if filterstring == "":
+        if newfilterstring == "":
             break
-        elif filterstring[0].isdigit() :
-            print dumpQuickNote(quicknotes,filterstring)
+        elif newfilterstring[0].isdigit() :
+            print dumpQuickNote(quicknotes,newfilterstring)
             continue
-        elif filterstring[0] == "/" :
-            if not filterstring.endswith("/"):
-                filterstring = filterstring + "/"
-            initfolder = filterstring
+        elif newfilterstring[0] == "/" :
+            if not newfilterstring.endswith("/"):
+                newfilterstring = newfilterstring + "/"
+            initfolder = newfilterstring
             files = list_files(initfolder)
             quicknotes = sorted(quicknotelist(files),key = lambda x: int(x.split(" ")[0]))
             continue            
-        elif filterstring == '*':
+        elif newfilterstring[0] == "~" :
+            None
+        elif newfilterstring[0] == "?" :
+            banner()
+            continue
+        elif newfilterstring[0] == "-" :
+            filterstring = newfilterstring
+            filterhistory =  filterhistory +"->" + filterstring
+            quicknotes = oldnotes
+            dump(quicknotes)
+            continue
+        elif newfilterstring == '*':
             files = list_files(initfolder)
             quicknotes = sorted(quicknotelist(files),key = lambda x: int(x.split(" ")[0]))
             filterstring = ""
+            filterhistory = "*"
         else:
-            None
+            filterstring = newfilterstring
+            filterhistory =  filterhistory +"->" + filterstring
+            
         print " "
+        oldnotes = quicknotes
         quicknotes = filterout(quicknotes,filterstring)
         dump(quicknotes)
         print " "

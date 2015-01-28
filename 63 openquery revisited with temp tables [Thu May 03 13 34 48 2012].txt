@@ -1,0 +1,159 @@
+--
+-- Steven V. Falcigno
+-- May 3, 2012
+-- Given a billing point ID return a table of service_types
+-- (Ideally, this should tell us if the data is mobile, digital, etc.)
+--mytbaytel.GetServiceTypesForBPID 
+
+
+
+--
+--  simulate the passed variable
+--
+DECLARE @bpid VARCHAR(40) 
+SET @bpid = '51189786'
+
+--
+-- temp table to capture the data from suitesolutions
+--
+create table #svf_service (sbr_service_type VARCHAR(20))
+
+--
+-- create a executable sql command
+--
+DECLARE @esql AS VARCHAR(MAX)
+SET @esql = '
+
+insert #svf_service select sbr_service_type FROM OPENQUERY(SSTESTDB,''
+select  distinct sbr_service_type
+         FROM 
+			 subscribed_feature sf, 
+			 general_charge gc, 
+			 subscribed_plan ssp, 
+			 charge_classification cc , 
+			 Subscription_point sp,
+			 subscriber_status sst, 
+			 status_option so
+         WHERE 
+          sst.SBS_SUBSCRIBER_STATUS_ID   = getcurrentsubstatus(sp.SBR_SUBSCRIPTION_ID)
+          and so.sop_status_id           = sst.SBS_STATUS
+          and ssp.SSP_SUBSCRIBED_PLAN_ID = sf.SSP_SUBSCRIBED_PLAN_ID  
+          AND sf.GCR_GENERAL_CHARGE_ID   = gc.gcr_general_charge_id 
+          AND sf.ssf_status NOT IN (''''PI'''', ''''P'''') 
+          AND gc.gcr_recurring <> ''''N'''' 
+          AND sf.ssf_start_date < SYSDATE 
+          AND (sf.ssf_stop_date IS NULL or sf.ssf_stop_date > SYSDATE) 
+          AND gc.CHC_CHARGE_CLASS_ID     = cc.CHC_CHARGE_CLASS_ID 
+          AND cc.CHC_CHARGE_CLASS_ID in (576) 
+          and sp.BLP_BILLING_POINT_ID    =*BPID*
+'')'
+
+--
+-- substitute the contained variables (prefer this, its cleaner)
+--
+SET @esql = REPLACE(@esql,'*BPID*', @bpid)
+
+--
+-- Execute
+--
+EXEC (@esql)
+
+-- SELECT * FROM #svf_service
+
+-- 
+-- Build a table that translates (XREFS) the codes with usable English.
+-- Note: Should dynamically create this table
+-- but, maybe, someday, we can actually do this entire thing 
+-- in a webservice. In which case it won't matter
+--
+declare @serviceTypeXREF table (
+  code varchar(10),
+  literal varchar(100),
+  usefull varchar(100)
+)
+--
+-- Manually populate
+--
+insert into @serviceTypeXREF (  
+  code, 
+  literal,
+  usefull
+)  
+select '250','DSL Only', 'dunno'
+union all
+select '110','Toll Free', 'dunno'
+union all
+select '120','10-Calling Card', 'dunno'
+union all
+select '130','15-Dial Up Internet','dunno'
+union all                                
+select '140','20-Directory Only','dunno'
+union all                                  
+select '150','25-Alarm Circuits','dunno'
+union all
+select '160','30-OPX','dunno'
+union all
+select '170','35-Multi Line Trunk','dunno'
+union all
+select '180','40-High Speed','dunno'
+union all
+select '190','45-Data/ Loops/ Circuits/ Specials','dunno'
+union all
+select '200','50-Paystation - Centurian','dunno'
+union all
+select '210','55-Paystation - Millenium','dunno'
+union all
+select '225','36-DID Trunk','dunno'
+union all
+select '230','37-DID/PRD Local','dunno'
+union all
+select '235','38-PRI','dunno'
+union all
+select '215','60-ISDN','dunno'
+union all
+select '115','Distinctive/Teen Ring','dunno'
+union all
+select '245','Special Services','dunno'
+union all
+select '240','Fixed Call Forwarding','dunno'
+union all
+select '195','DEFAULT','dunno'
+union all
+select '100','1-POTS','dunno'
+union all
+select '220','Centrex','dunno'
+union all
+select '99','Wrls-Prepaid','dunno'
+union all
+select '260','Security','dunno'
+union all
+select '255','Satellite Internet','dunno'
+union all
+select '50','05-Analog','dunno'
+union all
+select '51','00-Digital','dunno'
+union all
+select '265','TLINK','dunno'
+union all
+select '270','Digital TV','dunno'
+union all
+select '275','HSPA','dunno'
+union all
+select '280','GSM','dunno'
+union all
+select '285','1FB TLINK','dunno'
+union all
+select '290','HSPA-Prepaid','dunno'
+
+
+--
+-- return the portion of the XREF table that has matching service types. (codes)
+--
+SELECT * FROM @serviceTypeXREF
+WHERE code IN (SELECT sbr_service_type FROM #svf_service)
+
+--
+-- clean up the temp table.
+--
+DROP TABLE #svf_service
+

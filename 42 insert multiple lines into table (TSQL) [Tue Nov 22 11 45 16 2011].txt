@@ -1,0 +1,16 @@
+-- quick way to build test data set
+--
+
+
+declare @dtvlist table (
+DigitalTVAccountNo varchar(20)
+)
+insert into @dtvlist(DigitalTVAccountNo) 
+SELECT '8074500000' 
+UNION ALL
+SELECT '8074500001'
+UNION ALL
+SELECT '8074500004'
+
+- and add on as many as you like.
+- (use the notepad++ and macros to generate a whole bunch of data fast0

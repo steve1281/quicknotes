@@ -1,0 +1,51 @@
+
+DNN6 no longer supports AJAX.  However, JQUERY has an approach which is pretty much the same.
+
+
+
+A DIV that will be displayed as a MODAL:
+
+    <div id="dialog" title="Disclaimer">
+    ... some content ...
+
+
+    ... these force a post which removes the modal (and also sets the field in the form I needed) ...
+
+        <center >
+          <input id="btnOkay" type="button" value="I Agree" runat="server" causesvalidation="false"  />
+          <input id="btnCancel" type="button" value="I Disagree" runat="server"  causesvalidation="false"    />
+        </center>
+
+    </div>
+
+
+
+A url to let the user click something:
+
+   <a class="disclaimer" href="#" ><b>IP Relay Service</b></a>
+
+
+Some jquery, which I put at the end of the ASCX file:
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#dialog").dialog({
+            autoOpen: false,
+            modal: true
+        });
+
+        $(".disclaimer").click(function (e) {
+            e.preventDefault();
+            var targetUrl = $(this).attr("href");
+
+            $("#dialog").dialog("open");
+        });
+
+    }); // end of $(document).ready
+
+</script>
+
+... NOTES ...
+
+The div that is being popped is called "dialog".
+The class that is controlling is is called "disclaimer".
