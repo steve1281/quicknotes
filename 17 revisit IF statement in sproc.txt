@@ -1,7 +1,0 @@
-if (1 = 2) begin
-  select 1 as ReturnCode, 'Error. Invalid Bill Details.' as Message;
-end else if (1 = 2 ) begin 
-  select 2 as ReturnCode, 'Error. Another Error.' as Message;
-end else begin  
-  select 0 as ReturnCode, 'All is OK.' as Message;
-end

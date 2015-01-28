@@ -1,9 +1,0 @@
-
---
---  merge data from t2 into t1
---
-update t1
-set col2 = t2.col2
-from table1 t1 inner join table2 t2
-on t1.col1=t1.col2
-where Col3 >5

@@ -1,5 +1,0 @@
-about:config 
-1. In the address bar, type "about:config" (with no quotes), and press Enter. 
-2. Click "I'll be careful, I promise" 
-3. In the search bar, search for "javascript.enabled" (with no quotes). 
-4. Right click the result named "javascript.enabled" and click "Toggle". JavaScript is now disabled.
