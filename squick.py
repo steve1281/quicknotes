@@ -9,8 +9,10 @@ import os
 import io
 import sys
 import time
+import re
 
-initfolder = '//stone/svf$/Quicknotes/'
+#initfolder = '//stone/svf$/Quicknotes/'
+initfolder = '/Users/sfalcign/Documents/quicknotes/'
 
 def list_files(path):
     # returns a list of names (with extension, without full path) of all files 
@@ -26,15 +28,17 @@ def dump(filelist):
         print(name)
 
 def quicknotelist(filelist):
-    # a quicknote is prefixed with a single, double, or triple integer.
+    # a quicknote is prefixed with a single, double, or triple integer, or quad.
     #
     qlist = []
     for name in filelist:
-        if name[0].isdigit() and name[1]==' ':
+        if name[0].isdigit() and name[1] in (' ', '-'):
             qlist.append(name)
-        elif name[0].isdigit() and name[1].isdigit() and name[2]==' ':
+        elif name[0].isdigit() and name[1].isdigit() and name[2] in (' ', '-'):
             qlist.append(name)
-        elif name[0].isdigit() and name[1].isdigit() and name[2].isdigit() and name[3]==' ':
+        elif name[0].isdigit() and name[1].isdigit() and name[2].isdigit() and name[3] in (' ', '-') :
+            qlist.append(name)
+        elif name[0].isdigit() and name[1].isdigit() and name[2].isdigit() and name[3].isdigit() and name[4] in (' ', '-'):
             qlist.append(name)
         else:
             None
@@ -65,6 +69,7 @@ def dumpQuickNote(filelist,quick):
     # return the first matching file contents
     #
     s = quick + " quick note was not found!"
+
     for name in filelist:
         if name.startswith(quick):
             f = open(initfolder+name)
@@ -105,14 +110,14 @@ def main():
     
     ln = len(sys.argv)
     if ln == 1:
-        initfolder = os.getcwd() + "/"
+        initfolder = initfolder # os.getcwd() + "/"
 
     if ln > 1:
          initfolder = str(sys.argv[1])
          print "the search folder is: " + initfolder
         
     files = list_files(initfolder)
-    quicknotes = sorted(quicknotelist(files),key = lambda x: int(x.split(" ")[0]))
+    quicknotes = sorted(quicknotelist(files),key = lambda x: int(re.split("-| ",x)[0]))
     
     banner()
     filterstring = ""
@@ -133,7 +138,7 @@ def main():
                 newfilterstring = newfilterstring + "/"
             initfolder = newfilterstring
             files = list_files(initfolder)
-            quicknotes = sorted(quicknotelist(files),key = lambda x: int(x.split(" ")[0]))
+            quicknotes = sorted(quicknotelist(files),key = lambda x: int(re.split("-| ",x)[0]))
             continue            
         elif newfilterstring[0] == "~" :
             None
@@ -148,7 +153,7 @@ def main():
             continue
         elif newfilterstring == '*':
             files = list_files(initfolder)
-            quicknotes = sorted(quicknotelist(files),key = lambda x: int(x.split(" ")[0]))
+            quicknotes = sorted(quicknotelist(files),key = lambda x: int(re.split("-| ",x)[0]))
             filterstring = ""
             filterhistory = "*"
         else:
