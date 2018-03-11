@@ -12,7 +12,9 @@ import time
 import re
 
 #initfolder = '//stone/svf$/Quicknotes/'
-initfolder = '/Users/sfalcign/Documents/quicknotes/'
+#initfolder = '/Users/sfalcign/Documents/quicknotes/'
+#initfolder = '/home/steve/Documents/quicknotes/'
+initfolder = os.getenv('QUICKNOTES','/home/steve/Documents/quicknotes/')
 
 def list_files(path):
     # returns a list of names (with extension, without full path) of all files 

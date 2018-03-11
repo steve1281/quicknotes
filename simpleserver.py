@@ -2,11 +2,12 @@
 
 import sys
 import os
+import markdown
 import BaseHTTPServer
 from SimpleHTTPServer import SimpleHTTPRequestHandler
 from squick import *
 
-TEMPLATE_RESPONSE = """<html><head><title>Python Test</title></head><body>[BODY]</body></html>"""
+TEMPLATE_RESPONSE = """<html><head><title>QuickNotes - Markdown Version 1.0</title>[STYLE]</head><body>[BODY]</body></html>"""
 
 MENU_HEADER = """
 
@@ -28,13 +29,19 @@ class MyHttpRequestHandler(SimpleHTTPRequestHandler):
         response_string = TEMPLATE_RESPONSE
         body = self.get_body(self.requestline)
         response_string = response_string.replace("[BODY]", body)
+        hstyle = self.get_style(self.requestline)
+        response_string = response_string.replace("[STYLE]", hstyle)
         self.send_response(self.response_code)
         self.send_header("Content-type", "text/html")
         self.send_header("Content-length", len(response_string ))
         self.end_headers()
         self.wfile.write(response_string)
 
+    def get_style(self, request):
+        return "<style>ul#quicklist{list-style-type: none;} a.quickanchor{text-decoration: none;}</style>"
+
     def get_body(self, request):
+        md = markdown.Markdown()
         global initfolder
         # initfolder = os.getcwd() + "/"
         files = list_files(initfolder)
@@ -50,8 +57,8 @@ class MyHttpRequestHandler(SimpleHTTPRequestHandler):
         elif argument_string == "?":
             return MENU_HEADER.replace("[INITFOLDER]",  initfolder)
         elif argument_string == "list":
-            add_list_converter = ('<li><a href="'+w+'">'+w+'</a></li>' for w in quicknotes)
-            return "<ul>"+"\n".join(add_list_converter)+"</ul>"
+            add_list_converter = ('<li><a class="quickanchor" href="'+w+'">'+w+'</a></li>' for w in quicknotes)
+            return "<ul id='quicklist'>"+"\n".join(add_list_converter)+"</ul>"
         elif (len(argument_string) >= 6 and argument_string[:6]=='filter' or None):
             filters = argument_string.split("/")
             filters.reverse()
@@ -66,7 +73,7 @@ class MyHttpRequestHandler(SimpleHTTPRequestHandler):
         else:
             s = "Error has occurred"
             try:
-                s = "<pre>" + dumpQuickNote([self.strip(argument_string)], newfilterstring) + "</pre>"
+                s =  md.convert(dumpQuickNote([self.strip(argument_string)], newfilterstring)) 
             except Exception as e:
                 self.response_code = 404
             return s
