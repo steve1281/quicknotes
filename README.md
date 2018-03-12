@@ -16,3 +16,8 @@ I use a simple set of quicknotes to store stuff I get hit with. This tool search
 * I may add a flag to switch between the two, or maybe a file extension check? need to think about it.
 * This does mean you will need to pip markdown now.
 * Oh, I am now injecting a style into the head tag.
+
+## Revision March 12, 2018
+* set the environment variable `$QUICKNOTES` to set the folder where the quicknotes are stored.
+* added extensions to the markdown, removed css hack to work around it.
+
