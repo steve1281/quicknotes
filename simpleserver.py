@@ -6,6 +6,7 @@ import markdown
 import BaseHTTPServer
 from SimpleHTTPServer import SimpleHTTPRequestHandler
 from squick import *
+from mdx_gfm import GithubFlavoredMarkdownExtension
 
 TEMPLATE_RESPONSE = """<html><head><title>QuickNotes - Markdown Version 1.0</title>[STYLE]</head><body>[BODY]</body></html>"""
 
@@ -38,10 +39,20 @@ class MyHttpRequestHandler(SimpleHTTPRequestHandler):
         self.wfile.write(response_string)
 
     def get_style(self, request):
-        return "<style>code {white-space: pre ; display: block; unicode-bidi: embed} ul#quicklist{list-style-type: none;} a.quickanchor{text-decoration: none;}</style>"
+        # return "<style>code {white-space: pre ; display: block; unicode-bidi: embed} ul#quicklist{list-style-type: none;} a.quickanchor{text-decoration: none;}</style>"
+        return "<style>ul#quicklist{list-style-type: none;} a.quickanchor{text-decoration: none;}</style>"
 
     def get_body(self, request):
-        md = markdown.Markdown()
+        # Initialize the Markdown parser:
+        md = markdown.Markdown(extensions=[
+            'meta',
+            'markdown.extensions.tables',
+            'markdown.extensions.tables',
+            'markdown.extensions.extra',
+            'markdown.extensions.smarty',
+            GithubFlavoredMarkdownExtension() #,
+#            TocExtension(anchorlink=True, permalink=True),
+        ])
         global initfolder
         # initfolder = os.getcwd() + "/"
         files = list_files(initfolder)
@@ -75,10 +86,7 @@ class MyHttpRequestHandler(SimpleHTTPRequestHandler):
             try:
                 s,ext =  dumpQuickNote([self.strip(argument_string)], newfilterstring) 
                 if ext in ['.md','.MD']:
-                    print s
                     s = md.convert(s)
-                    #s =s.replace("<code>","<pre>")   # code is not working the way I want, maybe I need some css?
-                    #s =s.replace("</code>","</pre>")
                 else:
                     s = "<pre>" + s + "</pre>"
             except Exception as e:
