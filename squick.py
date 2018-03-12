@@ -11,9 +11,6 @@ import sys
 import time
 import re
 
-#initfolder = '//stone/svf$/Quicknotes/'
-#initfolder = '/Users/sfalcign/Documents/quicknotes/'
-#initfolder = '/home/steve/Documents/quicknotes/'
 initfolder = os.getenv('QUICKNOTES','/home/steve/Documents/quicknotes/')
 
 def list_files(path):
@@ -71,16 +68,17 @@ def dumpQuickNote(filelist,quick):
     # return the first matching file contents
     #
     s = quick + " quick note was not found!"
-
+    ext = ""
     for name in filelist:
         if name.startswith(quick):
-            f = open(initfolder+name)
+            f = open(initfolder+name,"rU")
+            _, ext = os.path.splitext(initfolder+name)
             s = name + "\n"
             s = s + "\n"
             s = s + f.read()
             f.close()
             break
-    return s
+    return s, ext
 
 def banner():
     #
@@ -133,7 +131,7 @@ def main():
         if newfilterstring == "":
             break
         elif newfilterstring[0].isdigit() :
-            print dumpQuickNote(quicknotes,newfilterstring)
+            print dumpQuickNote(quicknotes,newfilterstring)[0]
             continue
         elif newfilterstring[0] == "/" :
             if not newfilterstring.endswith("/"):
