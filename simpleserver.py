@@ -38,7 +38,7 @@ class MyHttpRequestHandler(SimpleHTTPRequestHandler):
         self.wfile.write(response_string)
 
     def get_style(self, request):
-        return "<style>ul#quicklist{list-style-type: none;} a.quickanchor{text-decoration: none;}</style>"
+        return "<style>code {white-space: pre ; display: block; unicode-bidi: embed} ul#quicklist{list-style-type: none;} a.quickanchor{text-decoration: none;}</style>"
 
     def get_body(self, request):
         md = markdown.Markdown()
@@ -73,7 +73,14 @@ class MyHttpRequestHandler(SimpleHTTPRequestHandler):
         else:
             s = "Error has occurred"
             try:
-                s =  md.convert(dumpQuickNote([self.strip(argument_string)], newfilterstring)) 
+                s,ext =  dumpQuickNote([self.strip(argument_string)], newfilterstring) 
+                if ext in ['.md','.MD']:
+                    print s
+                    s = md.convert(s)
+                    #s =s.replace("<code>","<pre>")   # code is not working the way I want, maybe I need some css?
+                    #s =s.replace("</code>","</pre>")
+                else:
+                    s = "<pre>" + s + "</pre>"
             except Exception as e:
                 self.response_code = 404
             return s
@@ -90,7 +97,7 @@ if sys.argv[1:]:
 else:
     port = 8000
 
-server_address = ('127.0.0.1', port)
+server_address = ('0.0.0.0', port)
 
 HandlerClass.protocol_version = Protocol
 httpd = ServerClass(server_address, HandlerClass)
