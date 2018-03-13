@@ -1,0 +1,149 @@
+#!/bin/bash
+
+#
+# quickserver
+#  Simple bash script to launch the quicknotes simple server
+#
+#
+QUICKDIR=$HOME/projects/home/quicknotes
+PIDFILE=/tmp/quickserver.pid
+
+# info about the server and ennvironment.
+function info()
+{
+    echo 
+    echo "---- Simple Quicknotes Server ----"
+    echo 
+    
+    # inform user where QUICKNOTES is
+    if [ -z $QUICKNOTES ]
+    then
+        echo 'Using default quicknotes location; depends what is in squick.py'
+    else
+        echo 'Using' $QUICKNOTES 'file location.'
+    fi
+
+    # inform user where PIDFILE is
+    echo 'PID file is' $PIDFILE '.'
+
+}
+
+# kill the server using the pid in the pid file.
+function stopall() 
+{
+    echo 'Stopping process and removing the pid file.'; echo
+    cat $PIDFILE | xargs kill
+    rm $PIDFILE 
+}
+
+# remove the pid file if the process is gone.
+function cleanpid()
+{
+    if [ -z `cat $PIDFILE | xargs ps -o pid= `  ]
+    then 
+        echo 'The pid file appears to be stale;  pid file will be removed.'
+        rm $PIDFILE
+	return 1;
+    fi
+    return 0;
+}
+
+# check if server is running
+function isrunning()
+{
+    if [ -z `cat $PIDFILE | xargs ps -o pid= ` ]
+    then
+        return 1
+    else
+        return 0
+    fi
+}
+
+# print the process idea in the pid file.
+function printpid()
+{
+    echo 'Server launched, pid is ' `cat $PIDFILE | xargs echo` '.'; echo
+}
+
+# actually launch server
+function launch()
+{
+    python $QUICKDIR/simpleserver.py &>/dev/null &    
+    echo $! > /tmp/quickserver.pid
+    printpid
+}
+
+# launch if not running already
+function launch-g()
+{
+    if isrunning 
+    then
+        echo 'Process is running already'; echo
+    else
+	launch
+    fi
+}
+
+# launch server forced. Do everything you can to force a launch
+function launch-f()
+{
+    # check for a pid file
+    if [ -e /tmp/quickserver.pid ]
+    then
+        echo 'PID file ' $PIDFILE ' detected.'; echo
+        cleanpid | stopall
+    fi
+    # launch server
+    launch
+}
+
+# some usage notes.
+function usage()
+{
+    echo "-f will force process to start. Otherwise it wont stop/cleanup other process"
+    echo "-s will stop the process."
+    echo "-c will cleanup the pid file; EVEN IF THE PROCESS IS RUNNING"
+    echo "-p will print the pid in the PID file."
+    echo
+
+}
+
+# ----- simple command line parse ----
+
+    while [ "$1" != "" ]; do
+        PARAM=`echo $1 | awk -F= '{print $1}'`
+	VALUE=`echo $1 | awk -F= '{print $2}'` # not using this, but I could :-)
+        case $PARAM in
+            -h | --help)
+                usage 
+                exit
+                ;;
+            -f | --force)
+		info
+                launch-f 
+		exit
+                ;;
+            -s | --stop)
+                stopall
+		exit
+		;;
+            -c | --clean)
+                cleanpid
+		exit
+		;;
+            -p | --print)
+                printpid
+		exit
+		;;
+            *)
+                usage
+		exit 1
+                ;;
+        esac
+        shift
+    done
+
+# if no params, then I guess we run it, gently
+info
+launch-g
+
