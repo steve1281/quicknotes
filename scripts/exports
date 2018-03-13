@@ -1,0 +1,5 @@
+#!/bin/bash
+
+[[ $_ != $0 ]] || { echo "You need to source this. Script is a subshell"; exit; }
+
+export QUICKNOTES=$HOME/Documents/quicknotes/
