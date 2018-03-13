@@ -1,6 +1,0 @@
-        Dim divControl As HtmlGenericControl = New HtmlGenericControl("div")
-
-        divControl.InnerHtml = ddlHelpList.SelectedItem.ToString + "<hr />" + ddlHelpList.SelectedValue.ToString
-
-        ''        lblAnswer = ddlHelpList.SelectedValue.ToString
-        lblQuestion.Text = divControl.InnerText

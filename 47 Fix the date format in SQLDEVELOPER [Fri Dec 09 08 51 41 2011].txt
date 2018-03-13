@@ -1,6 +1,0 @@
-For date fields, by default SQL Developer will display data in date only without the time. To set it to display the time as well, do the following:
-
-1. From SQL Developer, open menu Tools >> Preferences.
-2. From the Preferences dialog, select Database >> NLS Parameters from the left panel.
-3. From the list of NLS parameters, enter DD-MON-RR HH24:MI:SS into the Date Format field.
-4. Save and close the dialog, done!

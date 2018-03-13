@@ -1,4 +1,0 @@
-
-Creating a List on the fly containing objects:
-
-New List(Of ChargeChangeData) From {updatedCharge, removedCharge, newCharge}
