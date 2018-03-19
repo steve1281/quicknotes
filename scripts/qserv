@@ -1,0 +1,92 @@
+#!/bin/bash
+
+#
+# qserv - a shorter version of quickserver
+#  Simple bash script to launch the quicknotes simple server
+#
+#
+QUICKDIR=$HOME/projects/home/quicknotes
+SIMPLESERVER="simpleserver"
+
+currentpid=`ps -ef | grep $SIMPLESERVER | grep -v grep | awk '{print $2}'`
+
+# info about the server and ennvironment.
+function info()
+{
+    echo;  echo "---- Simple Quicknotes Server ----" ; echo 
+    if [ -z $QUICKNOTES ]; then echo 'Default quicknotes location.'; else echo 'Using' $QUICKNOTES 'file location.'; fi
+    if [ -z $currentpid ]; then echo 'No server.'; else echo 'Server pid' $currentpid; fi
+}
+
+# kill the server using the pid in the pid file.
+function stopall() 
+{
+    if [ -z $currentpid ]; then return 1; else kill $currentpid; return 0; fi
+}
+
+function launch()
+{
+    python $QUICKDIR/$SIMPLESERVER.py &>/dev/null &    
+    pid=$!
+    sleep 1;
+    kill -0 $pid &> /dev/null
+    stat=$?
+    if [ $stat -eq 0 ] ; then
+        currentpid=$pid
+        return 0
+    else
+        return 1
+    fi
+}
+
+# launch server forced. Do everything you can to force a launch
+function launch-f()
+{
+    if [ -z $currentpid ]; then launch;  else kill $currentpid; launch; fi
+    echo 'pid is' $currentpid
+}
+
+# some usage notes.
+function usage()
+{
+    echo ; echo "-s will stop the process."
+    echo "-p will print the pid."
+    echo "-f forces the run, killing previous if needed"
+    echo "no parameter, launches if not running"
+    echo "-h displays help"; echo
+}
+
+# ----- simple command line parse ----
+
+while [ "$1" != "" ]; do
+    PARAM=`echo $1 | awk -F= '{print $1}'`
+    case $PARAM in
+        -h | --help)
+            info
+            usage
+            exit
+            ;;
+        -f | --force)
+            launch-f 
+            exit
+            ;;
+        -s | --stop)
+            stopall
+            exit
+            ;;
+        -p | --print)
+            echo "pid : " $currentpid 
+            exit
+            ;;
+        *)
+            usage
+            exit 1
+         ;;
+    esac
+    shift
+done
+
+if [ -z greppid ]; then echo "Server is running."; else launch; fi
+echo 'pid is' $currentpid
+
+
