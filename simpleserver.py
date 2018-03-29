@@ -40,7 +40,16 @@ class MyHttpRequestHandler(SimpleHTTPRequestHandler):
 
     def get_style(self, request):
         # return "<style>code {white-space: pre ; display: block; unicode-bidi: embed} ul#quicklist{list-style-type: none;} a.quickanchor{text-decoration: none;}</style>"
-        return "<style>ul#quicklist{list-style-type: none;} a.quickanchor{text-decoration: none;} div#wrapper{margin:auto; width:80%;}</style>"
+        return """<style>
+                 body{background-color:#FDF6E3;}
+                 ul#quicklist{list-style-type: none;} 
+                 a.quickanchor{text-decoration: none;} 
+                 div#wrapper{
+                             padding:5px;
+                             margin:auto; width:80%;
+                             background-color:#eee8d5;
+                             }
+                </style>"""
 
     def get_body(self, request):
         # Initialize the Markdown parser:
