@@ -40,7 +40,7 @@ class MyHttpRequestHandler(SimpleHTTPRequestHandler):
 
     def get_style(self, request):
         # return "<style>code {white-space: pre ; display: block; unicode-bidi: embed} ul#quicklist{list-style-type: none;} a.quickanchor{text-decoration: none;}</style>"
-        return "<style>ul#quicklist{list-style-type: none;} a.quickanchor{text-decoration: none;}</style>"
+        return "<style>ul#quicklist{list-style-type: none;} a.quickanchor{text-decoration: none;} div#wrapper{margin:auto; width:80%;}</style>"
 
     def get_body(self, request):
         # Initialize the Markdown parser:
@@ -77,7 +77,7 @@ class MyHttpRequestHandler(SimpleHTTPRequestHandler):
             filtered_list = quicknotes
             for filter in filters:
                 filtered_list = filterout(filtered_list, filter)
-            add_list_converter = ('<li><a href="http://127.0.0.1:8000/'+w+'">'+w+'</a></li>' for w in filtered_list)
+            add_list_converter = ('<li><a class="quickanchor" href="http://127.0.0.1:8000/'+w+'">'+w+'</a></li>' for w in filtered_list)
             return "<ul>"+"\n".join(add_list_converter)+"</ul>"
         elif argument_string == "favicon.ico":
             return ""
@@ -91,6 +91,7 @@ class MyHttpRequestHandler(SimpleHTTPRequestHandler):
                     s = "<pre>" + s + "</pre>"
             except Exception as e:
                 self.response_code = 404
+            s = "<div id='wrapper'>"+s+"</div>"
             return s
 
     def strip(self,s):
