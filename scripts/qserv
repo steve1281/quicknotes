@@ -5,7 +5,7 @@
 #  Simple bash script to launch the quicknotes simple server
 #
 #
-QUICKDIR=$HOME/projects/home/quicknotes
+QUICKDIR=$HOME/projects/home-github/quicknotes
 SIMPLESERVER="simpleserver"
 
 currentpid=`ps -ef | grep $SIMPLESERVER | grep -v grep | awk '{print $2}'`
