@@ -9,7 +9,7 @@ I use a simple set of quicknotes to store stuff I get hit with. This tool search
 * (notes the trailing slash.  I may actually add a check for that)
 * to run:
 * python simpleserver.py
-* then you just http://127.0.0.1/  
+* then you just http://127.0.0.1:8000/  
 
 ## Revision March 11, 2018
 * Switched to markdown conversion. This means the previous pre tags are removed.
@@ -20,4 +20,19 @@ I use a simple set of quicknotes to store stuff I get hit with. This tool search
 ## Revision March 12, 2018
 * set the environment variable `$QUICKNOTES` to set the folder where the quicknotes are stored.
 * added extensions to the markdown, removed css hack to work around it.
+
+## Revision March 29, 2018
+* Only .md files get md rendered now.
+* Expanded the style to make the page a little more pleasent
+
+* there is some libs to pip
+```
+sudo pip install py-gfm
+sudo pip install markdown
+```
+
+* Script you can use.
+```
+./scripts/qserv
+```
 
