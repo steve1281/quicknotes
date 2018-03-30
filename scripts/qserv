@@ -1,12 +1,12 @@
-#!/bin/bash
+#!/bin/bash -x
 
 #
 # qserv - a shorter version of quickserver
 #  Simple bash script to launch the quicknotes simple server
 #
 #
-QUICKDIR=$HOME/projects/home-github/quicknotes
 SIMPLESERVER="simpleserver"
+QUICKDIR=/home/steve/projects/quicknotes
 
 currentpid=`ps -ef | grep $SIMPLESERVER | grep -v grep | awk '{print $2}'`
 
