@@ -2,22 +2,44 @@
 
 import sys
 import os
-import markdown
-import BaseHTTPServer
-from SimpleHTTPServer import SimpleHTTPRequestHandler
+# https://github.com/polarwinkel/mdtex2html
+import mdtex2html
+import http.server
+from http.server import SimpleHTTPRequestHandler
 from squick import *
-from mdx_gfm import GithubFlavoredMarkdownExtension
 
-TEMPLATE_RESPONSE = """<html><head><title>QuickNotes - Markdown Version 1.0</title>[STYLE]</head><body>[BODY]</body></html>"""
+# https://python-markdown.github.io/extensions/
+md_extensions = [
+    'extra',
+    'abbr',
+    'attr_list',
+    'def_list',
+    'fenced_code',
+    'footnotes',
+    'md_in_html',
+    'tables',
+    'admonition',
+    'codehilite',
+    'legacy_attrs',
+    'legacy_em',
+    'meta',
+    'nl2br',
+    'sane_lists',
+    'smarty',
+    'toc',
+    'wikilinks'
+]
+
+TEMPLATE_RESPONSE = """<html><head><title>Placeholder</title>[STYLE]</head><body>[BODY]</body></html>"""
 
 MENU_HEADER = """
 
     <div><pre>
         QuickNotes: Search and Display (HTTP interface)
         Source folder is: " +  [INITFOLDER]
-        http://127.0.0.1:8000/help  - this help
-        http://127.0.0.1:8000/list  - list the files
-        http://127.0.0.1:8000/filter/filter1/filter2/...
+        http://ipaddress:8000/help  - this help
+        http://ipaddress:8000/list  - list the files
+        http://ipaddress:8000/filter/filter1/filter2/...
     </pre></div>
 
     """
@@ -36,7 +58,7 @@ class MyHttpRequestHandler(SimpleHTTPRequestHandler):
         self.send_header("Content-type", "text/html")
         self.send_header("Content-length", len(response_string ))
         self.end_headers()
-        self.wfile.write(response_string)
+        self.wfile.write(response_string.encode())
 
     def get_style(self, request):
         # return "<style>code {white-space: pre ; display: block; unicode-bidi: embed} ul#quicklist{list-style-type: none;} a.quickanchor{text-decoration: none;}</style>"
@@ -53,15 +75,6 @@ class MyHttpRequestHandler(SimpleHTTPRequestHandler):
 
     def get_body(self, request):
         # Initialize the Markdown parser:
-        md = markdown.Markdown(extensions=[
-            'meta',
-            'markdown.extensions.tables',
-            'markdown.extensions.tables',
-            'markdown.extensions.extra',
-            'markdown.extensions.smarty',
-            GithubFlavoredMarkdownExtension() #,
-#            TocExtension(anchorlink=True, permalink=True),
-        ])
         global initfolder
         # initfolder = os.getcwd() + "/"
         files = list_files(initfolder)
@@ -86,7 +99,7 @@ class MyHttpRequestHandler(SimpleHTTPRequestHandler):
             filtered_list = quicknotes
             for filter in filters:
                 filtered_list = filterout(filtered_list, filter)
-            add_list_converter = ('<li><a class="quickanchor" href="http://127.0.0.1:8000/'+w+'">'+w+'</a></li>' for w in filtered_list)
+            add_list_converter = ('<li><a class="quickanchor" href="http://140.238.145.12:8000/'+w+'">'+w+'</a></li>' for w in filtered_list)
             return "<ul>"+"\n".join(add_list_converter)+"</ul>"
         elif argument_string == "favicon.ico":
             return ""
@@ -95,10 +108,11 @@ class MyHttpRequestHandler(SimpleHTTPRequestHandler):
             try:
                 s,ext =  dumpQuickNote([self.strip(argument_string)], newfilterstring) 
                 if ext in ['.md','.MD']:
-                    s = md.convert(s)
+                    s = mdtex2html.convert(s, extensions=md_extensions)
                 else:
                     s = "<pre>" + s + "</pre>"
             except Exception as e:
+                print( e )
                 self.response_code = 404
             s = "<div id='wrapper'>"+s+"</div>"
             return s
@@ -107,7 +121,7 @@ class MyHttpRequestHandler(SimpleHTTPRequestHandler):
         return s.replace("%20", " ")
 
 HandlerClass = MyHttpRequestHandler
-ServerClass = BaseHTTPServer.HTTPServer
+ServerClass = http.server.HTTPServer
 Protocol = "HTTP/1.0"
 
 if sys.argv[1:]:
@@ -120,6 +134,6 @@ server_address = ('0.0.0.0', port)
 HandlerClass.protocol_version = Protocol
 httpd = ServerClass(server_address, HandlerClass)
 sa = httpd.socket.getsockname()
-print "Serving HTTP on", sa[0], "port", sa[1], "..."
+print(("Serving HTTP on", sa[0], "port", sa[1], "..."))
 
 httpd.serve_forever()

@@ -83,25 +83,24 @@ def dumpQuickNote(filelist,quick):
 def banner():
     #
     #
-    print " "
-    print " +-------------------------------------------------------------------+"
-    print " |                                                                   |"
-    print " |    QuickNotes: Search and Display                                 |"
-    print " |                                                                   |"
-    print " |    Source folder is: " +  initfolder
-    print " |                                                                   |"
-    print " |    * will list all quick notes in the folder and reset filter.    |"
-    print " |    a number will print the quick note                             |"
-    print " |       (if you want to search by a number, preface witha space)    |"
-    print " |    enter on its own will quit the program                         |"
-    print " |    / followed by a string will change the search folder.          |"
-    print " |    ~ will list the quicknotes on the current filter.              |"
-    print " |    - will step you back one in the filter. (can only use once!    |"
-    print " |    ? will display this help                                       |"
-    print " |                                                                   |"
-    print " +-------------------------------------------------------------------+"
-    print " "
-    return
+    print( " ")
+    print( " +-------------------------------------------------------------------+")
+    print( " |                                                                   |")
+    print( " |    QuickNotes: Search and Display                                 |")
+    print( " |                                                                   |")
+    print(( " |    Source folder is: " +  initfolder))
+    print( " |                                                                   |")
+    print( " |    * will list all quick notes in the folder and reset filter.    |")
+    print( " |    a number will print the quick note                             |")
+    print( " |       (if you want to search by a number, preface witha space)    |")
+    print( " |    enter on its own will quit the program                         |")
+    print( " |    / followed by a string will change the search folder.          |")
+    print( " |    ~ will list the quicknotes on the current filter.              |")
+    print( " |    - will step you back one in the filter. (can only use once!    |")
+    print( " |    ? will display this help                                       |")
+    print( " |                                                                   |")
+    print( " +-------------------------------------------------------------------+")
+    print( " ")
         
 def main():
     #
@@ -114,7 +113,7 @@ def main():
 
     if ln > 1:
          initfolder = str(sys.argv[1])
-         print "the search folder is: " + initfolder
+         print(( "the search folder is: " + initfolder))
         
     files = list_files(initfolder)
     quicknotes = sorted(quicknotelist(files),key = lambda x: int(re.split("-| ",x)[0]))
@@ -125,13 +124,13 @@ def main():
     while True:
         
         
-        newfilterstring = raw_input("\n"+str(len(quicknotes)) + " records, filter history: "+filterhistory+"\nEnter a single filter string: ")
+        newfilterstring = input("\n"+str(len(quicknotes)) + " records, filter history: "+filterhistory+"\nEnter a single filter string: ")
         
-        print " "
+        print (" ")
         if newfilterstring == "":
             break
         elif newfilterstring[0].isdigit() :
-            print dumpQuickNote(quicknotes,newfilterstring)[0]
+            print((dumpQuickNote(quicknotes,newfilterstring)[0]))
             continue
         elif newfilterstring[0] == "/" :
             if not newfilterstring.endswith("/"):
@@ -160,11 +159,11 @@ def main():
             filterstring = newfilterstring
             filterhistory =  filterhistory +"->" + filterstring
             
-        print " "
+        print (" ")
         oldnotes = quicknotes
         quicknotes = filterout(quicknotes,filterstring)
         dump(quicknotes)
-        print " "
+        print (" ")
 
 
 if __name__ == '__main__':

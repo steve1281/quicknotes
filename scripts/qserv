@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash 
 
 #
 # qserv - a shorter version of quickserver
@@ -6,7 +6,6 @@
 #
 #
 SIMPLESERVER="simpleserver"
-QUICKDIR=/home/steve/projects/quicknotes
 
 currentpid=`ps -ef | grep $SIMPLESERVER | grep -v grep | awk '{print $2}'`
 
@@ -14,7 +13,7 @@ currentpid=`ps -ef | grep $SIMPLESERVER | grep -v grep | awk '{print $2}'`
 function info()
 {
     echo;  echo "---- Simple Quicknotes Server ----" ; echo 
-    if [ -z $QUICKNOTES ]; then echo 'Default quicknotes location.'; else echo 'Using' $QUICKNOTES 'file location.'; fi
+    echo 'launch with: export QUICKDIR=/home/opc/quicknotes && export QUICKNOTES="/home/opc/docs/" && ~/quicknotes/scripts/qserv'; echo
     if [ -z $currentpid ]; then echo 'No server.'; else echo 'Server pid' $currentpid; fi
 }
 
@@ -42,6 +41,7 @@ function launch()
 # launch server forced. Do everything you can to force a launch
 function launch-f()
 {
+    echo 'Starting server.'
     if [ -z $currentpid ]; then launch;  else kill $currentpid; launch; fi
     echo 'pid is' $currentpid
 }
