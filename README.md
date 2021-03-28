@@ -36,3 +36,8 @@ sudo pip install markdown
 ./scripts/qserv
 ```
 
+## Revision March 27, 2021
+* converted (finally) to python 3
+* this has been a long time coming - back in 2018 I was just learning python, and it shows! 
+* I ran the 2to3 conversion, and changed markdown libraries. 
+* This needs a LOT of love.
