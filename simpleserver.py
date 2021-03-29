@@ -3,7 +3,8 @@
 import sys
 import os
 # https://github.com/polarwinkel/mdtex2html
-import mdtex2html
+# import mdtex2html
+import markdown
 import http.server
 from http.server import SimpleHTTPRequestHandler
 from squick import *
@@ -108,7 +109,7 @@ class MyHttpRequestHandler(SimpleHTTPRequestHandler):
             try:
                 s,ext =  dumpQuickNote([self.strip(argument_string)], newfilterstring) 
                 if ext in ['.md','.MD']:
-                    s = mdtex2html.convert(s, extensions=md_extensions)
+                    s = markdown.convert(s, extensions=md_extensions)
                 else:
                     s = "<pre>" + s + "</pre>"
             except Exception as e:
