@@ -49,7 +49,7 @@ def filterout(filelist, filterstring):
     # 
     qlist=[]
     for name in filelist:
-        f = open(initfolder+name,"r")
+        f = open(initfolder+name,"rb")
         s = f.read()
         if s.count(filterstring) > 0 or name.count(filterstring):
             qlist.append(name)
