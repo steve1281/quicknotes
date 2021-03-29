@@ -109,7 +109,8 @@ class MyHttpRequestHandler(SimpleHTTPRequestHandler):
             try:
                 s,ext =  dumpQuickNote([self.strip(argument_string)], newfilterstring) 
                 if ext in ['.md','.MD']:
-                    s = markdown.convert(s, extensions=md_extensions)
+                    # s = markdown.convert(s, extensions=md_extensions)
+                    s = markdown.markdown(s, extensions=md_extensions)
                 else:
                     s = "<pre>" + s + "</pre>"
             except Exception as e:
