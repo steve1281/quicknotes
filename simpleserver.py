@@ -41,9 +41,9 @@ MENU_HEADER = """
     <div><pre>
         QuickNotes: Search and Display (HTTP interface)
         Source folder is: " +  [INITFOLDER]
-        http://ipaddress:8000/help  - this help
-        http://ipaddress:8000/list  - list the files
-        http://ipaddress:8000/filter/filter1/filter2/...
+        http://ipaddress:port/help  - this help
+        http://ipaddress:port/list  - list the files
+        http://ipaddress:port/filter/filter1/filter2/...
     </pre></div>
 
     """
@@ -103,7 +103,7 @@ class MyHttpRequestHandler(SimpleHTTPRequestHandler):
             filtered_list = quicknotes
             for filter in filters:
                 filtered_list = filterout(filtered_list, filter)
-            add_list_converter = ('<li><a class="quickanchor" href="http://127.0.0.1:8000/'+w+'">'+w+'</a></li>' for w in filtered_list)
+            add_list_converter = ('<li><a class="quickanchor" href="http://127.0.0.1:"+_port+"/'+w+'">'+w+'</a></li>' for w in filtered_list)
             return "<ul>"+"\n".join(add_list_converter)+"</ul>"
         elif argument_string == "favicon.ico":
             return ""
@@ -129,11 +129,7 @@ HandlerClass = MyHttpRequestHandler
 ServerClass = http.server.HTTPServer
 Protocol = "HTTP/1.0"
 
-if sys.argv[1:]:
-    port = int(sys.argv[1])
-else:
-    port = int(_port)
-
+port = int(_port)
 server_address = ('0.0.0.0', port)
 
 HandlerClass.protocol_version = Protocol
