@@ -11,4 +11,6 @@ RUN python3 -m pip install markdown
 RUN git clone --branch python391_version --single-branch https://github.com/steve1281/quicknotes
 ENV QUICKDIR=/quicknotes
 ENV QUICKNOTES=/docs/
+ARG PORT=8000
+ARG IPADDRESS=127.0.0.1
 CMD ["python3","/quicknotes/simpleserver.py"]
