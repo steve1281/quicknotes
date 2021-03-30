@@ -9,6 +9,9 @@ import http.server
 from http.server import SimpleHTTPRequestHandler
 from squick import *
 
+
+_port = os.getenv('PORT','8000')
+
 # https://python-markdown.github.io/extensions/
 md_extensions = [
     'extra',
@@ -129,7 +132,7 @@ Protocol = "HTTP/1.0"
 if sys.argv[1:]:
     port = int(sys.argv[1])
 else:
-    port = 8000
+    port = int(_port)
 
 server_address = ('0.0.0.0', port)
 
