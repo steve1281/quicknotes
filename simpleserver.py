@@ -103,7 +103,7 @@ class MyHttpRequestHandler(SimpleHTTPRequestHandler):
             filtered_list = quicknotes
             for filter in filters:
                 filtered_list = filterout(filtered_list, filter)
-            add_list_converter = ('<li><a class="quickanchor" href="http://127.0.0.1:"+_port+"/'+w+'">'+w+'</a></li>' for w in filtered_list)
+            add_list_converter = ('<li><a class="quickanchor" href="http://127.0.0.1:'+_port+'/'+w+'">'+w+'</a></li>' for w in filtered_list)
             return "<ul>"+"\n".join(add_list_converter)+"</ul>"
         elif argument_string == "favicon.ico":
             return ""
