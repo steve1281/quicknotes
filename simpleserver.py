@@ -7,6 +7,10 @@ import os
 import markdown
 import http.server
 from http.server import SimpleHTTPRequestHandler
+
+import logging
+logging.basicConfig(filename='quicknotes.log', encoding='utf-8', level=logging.DEBUG)
+
 from squick import *
 
 
@@ -118,7 +122,7 @@ class MyHttpRequestHandler(SimpleHTTPRequestHandler):
                 else:
                     s = "<pre>" + s + "</pre>"
             except Exception as e:
-                print( e )
+                logging.error(e)
                 self.response_code = 404
             s = "<div id='wrapper'>"+s+"</div>"
             return s
@@ -136,6 +140,6 @@ server_address = ('0.0.0.0', port)
 HandlerClass.protocol_version = Protocol
 httpd = ServerClass(server_address, HandlerClass)
 sa = httpd.socket.getsockname()
-print(("Serving HTTP on", sa[0], "port", sa[1], "..."))
+logging.info(("Serving HTTP on", sa[0], "port", sa[1], "..."))
 
 httpd.serve_forever()
