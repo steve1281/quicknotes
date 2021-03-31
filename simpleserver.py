@@ -56,6 +56,7 @@ MENU_HEADER = """
 
 class MyHttpRequestHandler(SimpleHTTPRequestHandler):
     def do_GET(self):
+        logging.debug(f"do_GET called: {self.requestline}")
         self.response_code = 200
 
         response_string = TEMPLATE_RESPONSE
@@ -83,6 +84,7 @@ class MyHttpRequestHandler(SimpleHTTPRequestHandler):
                 </style>"""
 
     def get_body(self, request):
+        logging.debug(f"get_body called: {request}")
         # Initialize the Markdown parser:
         global initfolder
         # initfolder = os.getcwd() + "/"
