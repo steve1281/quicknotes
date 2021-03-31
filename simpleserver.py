@@ -9,7 +9,7 @@ import http.server
 from http.server import SimpleHTTPRequestHandler
 
 import logging
-logging.basicConfig(filename='quicknotes.log', encoding='utf-8', level=logging.DEBUG)
+logging.basicConfig(filename='quicknotes.log', level=logging.DEBUG)
 
 from squick import *
 
@@ -116,7 +116,7 @@ class MyHttpRequestHandler(SimpleHTTPRequestHandler):
             s = "Error has occurred"
             try:
                 s,ext =  dumpQuickNote([self.strip(argument_string)], newfilterstring) 
-                if ext in ['.md','.MD']:
+                if ext in ['.md', '.MD']:
                     # s = markdown.convert(s, extensions=md_extensions)
                     s = markdown.markdown(s, extensions=md_extensions)
                 else:
