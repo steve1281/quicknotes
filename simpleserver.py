@@ -61,6 +61,10 @@ class MyHttpRequestHandler(SimpleHTTPRequestHandler):
 
         response_string = TEMPLATE_RESPONSE
         body = self.get_body(self.requestline)
+        if body == "":
+            self.send_response(403)
+            return
+        
         response_string = response_string.replace("[BODY]", body)
         hstyle = self.get_style(self.requestline)
         response_string = response_string.replace("[STYLE]", hstyle)
