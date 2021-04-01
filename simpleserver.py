@@ -59,20 +59,24 @@ class MyHttpRequestHandler(SimpleHTTPRequestHandler):
         logging.debug(f"do_GET called: {self.requestline}")
         self.response_code = 200
 
-        response_string = TEMPLATE_RESPONSE
-        body = self.get_body(self.requestline)
+        response_data = TEMPLATE_RESPONSE
+        body,bflag = self.get_body(self.requestline)
         if body == "":
             self.send_response(403)
             return
-
-        response_string = response_string.replace("[BODY]", body)
-        hstyle = self.get_style(self.requestline)
-        response_string = response_string.replace("[STYLE]", hstyle)
-        self.send_response(self.response_code)
-        self.send_header("Content-type", "text/html")
-        self.send_header("Content-length", len(response_string ))
-        self.end_headers()
-        self.wfile.write(response_string.encode())
+        if bflag:
+            self.send_response(self.response_code)
+            self.end_headers()
+            self.wfile.write(response_data)
+        else:
+            response_string = response_data.replace("[BODY]", body)
+            hstyle = self.get_style(self.requestline)
+            response_string = response_string.replace("[STYLE]", hstyle)
+            self.send_response(self.response_code)
+            self.send_header("Content-type", "text/html")
+            self.send_header("Content-length", len(response_string ))
+            self.end_headers()
+            self.wfile.write(response_data.encode())
 
     def get_style(self, request):
         # return "<style>code {white-space: pre ; display: block; unicode-bidi: embed} ul#quicklist{list-style-type: none;} a.quickanchor{text-decoration: none;}</style>"
@@ -120,13 +124,14 @@ class MyHttpRequestHandler(SimpleHTTPRequestHandler):
             return ""
         else:
             s = "<div id='wrapper'>An error has occurred</div>"
+            bflag = None
             try:
                 filename = self.strip(argument_string)
                 _, ext = os.path.splitext(filename)
-                logging.debug(f"filename is {filename} extension is {ext}")
+                logging.debug(f"filename is {initfolder+filename} extension is {ext}")
                 if ext in ['.jpg','.JPG', '.gif', '.GIF','.png','.PNG']:
-                    logging.debug(f"Reading ans returning binary data")
-                    with open(filename, "rb") as f:
+                    logging.debug(f"Reading and returning binary data")
+                    with open(initfolder+filename, "rb") as f:
                         s = f.read()
                 elif ext in ['.md', '.MD']:
                     logging.debug(f"Reading and converting markdown data")
@@ -139,7 +144,7 @@ class MyHttpRequestHandler(SimpleHTTPRequestHandler):
             except Exception as e:
                 logging.error(e)
                 self.response_code = 404
-            return s
+            return s, bflag
 
     def strip(self,s):
         return s.replace("%20", " ")
