@@ -107,7 +107,7 @@ class MyHttpRequestHandler(SimpleHTTPRequestHandler):
         elif argument_string == 'blah/blah':
             return "Sure bub, here is some blah blah for you.", bflag
         elif argument_string == "?":
-            return MENU_HEADER.replace("[INITFOLDER]",  initfolder)
+            return MENU_HEADER.replace("[INITFOLDER]",  initfolder), bflag
         elif argument_string == "list":
             add_list_converter = ('<li><a class="quickanchor" href="'+w+'">'+w+'</a></li>' for w in quicknotes)
             return "<ul id='quicklist'>"+"\n".join(add_list_converter)+"</ul>", bflag
@@ -119,7 +119,7 @@ class MyHttpRequestHandler(SimpleHTTPRequestHandler):
             for filter in filters:
                 filtered_list = filterout(filtered_list, filter)
             add_list_converter = ('<li><a class="quickanchor" href="http://'+_ip+':'+_port+'/'+w+'">'+w+'</a></li>' for w in filtered_list)
-            return "<ul>"+"\n".join(add_list_converter)+"</ul>"
+            return "<ul>"+"\n".join(add_list_converter)+"</ul>", bflag
         elif argument_string == "favicon.ico":
             return "", bflag
         else:
@@ -131,7 +131,7 @@ class MyHttpRequestHandler(SimpleHTTPRequestHandler):
                 if ext in ['.jpg','.JPG', '.gif', '.GIF','.png','.PNG']:
                     logging.debug(f"Reading and returning binary data")
                     with open(initfolder+filename, "rb") as f:
-                        s = f.read()
+                        return f.read(), bflag
                 elif ext in ['.md', '.MD']:
                     logging.debug(f"Reading and converting markdown data")
                     s,_ = dumpQuickNote([self.strip(argument_string)], newfilterstring)
