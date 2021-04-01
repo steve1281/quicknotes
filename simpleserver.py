@@ -64,7 +64,7 @@ class MyHttpRequestHandler(SimpleHTTPRequestHandler):
         if body == "":
             self.send_response(403)
             return
-        
+
         response_string = response_string.replace("[BODY]", body)
         hstyle = self.get_style(self.requestline)
         response_string = response_string.replace("[STYLE]", hstyle)
@@ -119,18 +119,26 @@ class MyHttpRequestHandler(SimpleHTTPRequestHandler):
         elif argument_string == "favicon.ico":
             return ""
         else:
-            s = "Error has occurred"
+            s = "<div id='wrapper'>An error has occurred</div>"
             try:
-                s,ext =  dumpQuickNote([self.strip(argument_string)], newfilterstring) 
-                if ext in ['.md', '.MD']:
-                    # s = markdown.convert(s, extensions=md_extensions)
+                filename = self.strip(argument_string)
+                _, ext = os.path.splitext(filename)
+                logging.debug(f"filename is {filename} extension is {ext}")
+                if ext in ['.jpg','.JPG', '.gif', '.GIF','.png','.PNG']:
+                    logging.debug(f"Reading ans returning binary data")
+                    with open(filename, "rb") as f:
+                        s = f.read()
+                elif ext in ['.md', '.MD']:
+                    logging.debug(f"Reading and converting markdown data")
+                    s,_ = dumpQuickNote([self.strip(argument_string)], newfilterstring)
                     s = markdown.markdown(s, extensions=md_extensions)
+                    s = "<div id='wrapper'>" + s + "</div>"
                 else:
-                    s = "<pre>" + s + "</pre>"
+                    logging.debug(f"Reading and returning plain text")
+                    s = "<div id='wrapper'><pre>" + s + "</pre></div>"
             except Exception as e:
                 logging.error(e)
                 self.response_code = 404
-            s = "<div id='wrapper'>"+s+"</div>"
             return s
 
     def strip(self,s):
