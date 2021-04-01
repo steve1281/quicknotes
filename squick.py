@@ -31,7 +31,10 @@ def quicknotelist(filelist):
     #
     qlist = []
     for name in filelist:
-        if name[0].isdigit() and name[1] in (' ', '-'):
+        _, ext = os.path.splitext(name)
+        if not (ext.lower() in ['.txt', '.md']):
+            pass
+        elif name[0].isdigit() and name[1] in (' ', '-'):
             qlist.append(name)
         elif name[0].isdigit() and name[1].isdigit() and name[2] in (' ', '-'):
             qlist.append(name)

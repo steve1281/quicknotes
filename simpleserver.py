@@ -17,49 +17,66 @@ from squick import *
 _port = os.getenv('PORT','8000')
 _ip   = os.getenv('IPADDRESS', '127.0.0.1')
 
-# https://python-markdown.github.io/extensions/
-md_extensions = [
-    'extra',
-    'abbr',
-    'attr_list',
-    'def_list',
-    'fenced_code',
-    'footnotes',
-    'md_in_html',
-    'tables',
-    'admonition',
-    'codehilite',
-    'legacy_attrs',
-    'legacy_em',
-    'meta',
-    'nl2br',
-    'sane_lists',
-    'smarty',
-    'toc',
-    'wikilinks'
-]
 
-TEMPLATE_RESPONSE = """<html><head><title>Placeholder</title>[STYLE]</head><body>[BODY]</body></html>"""
+class MyHttpRequestHandler(SimpleHTTPRequestHandler):
+    global _port
+    global _ip
+    global initfolder
 
-MENU_HEADER = """
+    # https://python-markdown.github.io/extensions/
+    md_extensions = [
+        'extra',
+        'abbr',
+        'attr_list',
+        'def_list',
+        'fenced_code',
+        'footnotes',
+        'md_in_html',
+        'tables',
+        'admonition',
+        'codehilite',
+        'legacy_attrs',
+        'legacy_em',
+        'meta',
+        'nl2br',
+        'sane_lists',
+        'smarty',
+        'toc',
+        'wikilinks'
+    ]
 
-    <div><pre>
-        QuickNotes: Search and Display (HTTP interface)
-        Source folder is: " +  [INITFOLDER]
-        http://ipaddress:port/help  - this help
-        http://ipaddress:port/list  - list the files
-        http://ipaddress:port/filter/filter1/filter2/...
-    </pre></div>
+    TEMPLATE_RESPONSE = """
+    <html>
+        <head>
+            <link href="data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQEAYAAABPYyMiAAAABmJLR0T///////8JWPfcAAAACXBIWXMAAABIAAAASABGyWs+AAAAF0lEQVRIx2NgGAWjYBSMglEwCkbBSAcACBAAAeaR9cIAAAAASUVORK5CYII=" rel="icon" type="image/x-icon" />
+            <title>Quicknotes</title>
+            [STYLE]
+        </head>
+        <body>
+            [BODY]
+        </body>
+    </html>
+    """
+
+    MENU_HEADER = """
+
+    <div>
+        <h2>QuickNotes: Search and Display (HTTP interface)</h2>
+        
+        <h3>Source folder is:  [INITFOLDER]</h3>
+        <br/>
+        <a href="http://[IPADDRESS]:[PORT]/list"> http://[IPADDRESS]:[PORT]/list  - list the files </a><br/>
+        <a href="http://[IPADDRESS]:[PORT]/filter"> http://[IPADDRESS]:[PORT]/filter/filter1/filter2/...</a> <br/>
+    </div>
 
     """
 
 
-class MyHttpRequestHandler(SimpleHTTPRequestHandler):
     def do_GET(self):
         logging.debug(f"do_GET called: {self.requestline}")
         self.response_code = 200
 
-        response_data = TEMPLATE_RESPONSE
+        response_data = self.TEMPLATE_RESPONSE
         body,bflag = self.get_body(self.requestline)
         logging.debug(f"Writing response for {self.requestline}")
         if body == "":
@@ -99,8 +116,11 @@ class MyHttpRequestHandler(SimpleHTTPRequestHandler):
     def get_body(self, request):
         logging.debug(f"get_body called: {request}")
         # Initialize the Markdown parser:
-        global initfolder
-        # initfolder = os.getcwd() + "/"
+
+        self.MENU_HEADER = self.MENU_HEADER.replace("[INITFOLDER]", initfolder)
+        self.MENU_HEADER = self.MENU_HEADER.replace("[PORT]", _port)
+        self.MENU_HEADER = self.MENU_HEADER.replace("[IPADDRESS]", _ip)
+
         files = list_files(initfolder)
         quicknotes = sorted(quicknotelist(files),key = lambda x: int(re.split("-| ",x)[0]))
         newfilterstring= ""
@@ -108,11 +128,11 @@ class MyHttpRequestHandler(SimpleHTTPRequestHandler):
         bflag = None
 
         if argument_string is None:
-            return MENU_HEADER.replace("[INITFOLDER]",  initfolder), bflag
+            return self.MENU_HEADER, bflag
         elif argument_string == 'blah/blah':
             return "Sure bub, here is some blah blah for you.", bflag
         elif argument_string == "?":
-            return MENU_HEADER.replace("[INITFOLDER]",  initfolder), bflag
+            return self.MENU_HEADER, bflag
         elif argument_string == "list":
             add_list_converter = ('<li><a class="quickanchor" href="'+w+'">'+w+'</a></li>' for w in quicknotes)
             return "<ul id='quicklist'>"+"\n".join(add_list_converter)+"</ul>", bflag
@@ -141,7 +161,7 @@ class MyHttpRequestHandler(SimpleHTTPRequestHandler):
                 elif ext in ['.md', '.MD']:
                     logging.debug(f"Reading and converting markdown data")
                     s,_ = dumpQuickNote([self.strip(argument_string)], newfilterstring)
-                    s = markdown.markdown(s, extensions=md_extensions)
+                    s = markdown.markdown(s, extensions=self.md_extensions)
                     s = "<div id='wrapper'>" + s + "</div>"
                 elif ext in ['.txt', '.TXT']:
                     logging.debug(f"Reading and returning plain text")
