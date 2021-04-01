@@ -61,17 +61,18 @@ class MyHttpRequestHandler(SimpleHTTPRequestHandler):
 
         response_data = TEMPLATE_RESPONSE
         body,bflag = self.get_body(self.requestline)
-        logging.debug(f"Writing response")
+        logging.debug(f"Writing response for {self.requestline}")
         if body == "":
+            logging.debug(f"Body is empty, sending a 403, binary flag is ({bflag}) ")
             self.send_response(403)
             return
         if bflag:
-            logging.debug(f"binary flag set {bflag}")
+            logging.debug(f"binary flag set ({bflag}) ")
             self.send_response(self.response_code)
             self.end_headers()
             self.wfile.write(response_data)
         else:
-            logging.debug(f"binary flag not set {bflag}")
+            logging.debug(f"binary flag not set ({bflag})")
             response_string = response_data.replace("[BODY]", body)
             hstyle = self.get_style(self.requestline)
             response_string = response_string.replace("[STYLE]", hstyle)
