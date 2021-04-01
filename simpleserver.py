@@ -69,8 +69,9 @@ class MyHttpRequestHandler(SimpleHTTPRequestHandler):
         if bflag:
             logging.debug(f"binary flag set ({bflag}) ")
             self.send_response(self.response_code)
+            self.send_header("Content-length", len(body))
             self.end_headers()
-            self.wfile.write(response_data)
+            self.wfile.write(body)
         else:
             logging.debug(f"binary flag not set ({bflag})")
             response_string = response_data.replace("[BODY]", body)
@@ -80,7 +81,7 @@ class MyHttpRequestHandler(SimpleHTTPRequestHandler):
             self.send_header("Content-type", "text/html")
             self.send_header("Content-length", len(response_string ))
             self.end_headers()
-            self.wfile.write(response_data.encode())
+            self.wfile.write(response_string.encode())
 
     def get_style(self, request):
         # return "<style>code {white-space: pre ; display: block; unicode-bidi: embed} ul#quicklist{list-style-type: none;} a.quickanchor{text-decoration: none;}</style>"
@@ -134,6 +135,7 @@ class MyHttpRequestHandler(SimpleHTTPRequestHandler):
                 logging.debug(f"filename is {initfolder+filename} extension is {ext}")
                 if ext in ['.jpg','.JPG', '.gif', '.GIF','.png','.PNG']:
                     logging.debug(f"Reading and returning binary data")
+                    bflag = True
                     with open(initfolder+filename, "rb") as f:
                         return f.read(), bflag
                 elif ext in ['.md', '.MD']:
@@ -141,9 +143,13 @@ class MyHttpRequestHandler(SimpleHTTPRequestHandler):
                     s,_ = dumpQuickNote([self.strip(argument_string)], newfilterstring)
                     s = markdown.markdown(s, extensions=md_extensions)
                     s = "<div id='wrapper'>" + s + "</div>"
-                else:
+                elif ext in ['.txt', '.TXT']:
                     logging.debug(f"Reading and returning plain text")
+                    s,_ = dumpQuickNote([self.strip(argument_string)], newfilterstring)
                     s = "<div id='wrapper'><pre>" + s + "</pre></div>"
+                else:
+                    logging.debug(f"Unhandled extension {ext}")
+                    s = f"<div id='wrapper'>Unhandled extension {ext}</div>"
             except Exception as e:
                 logging.error(e)
                 self.response_code = 404
