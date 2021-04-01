@@ -100,17 +100,17 @@ class MyHttpRequestHandler(SimpleHTTPRequestHandler):
         quicknotes = sorted(quicknotelist(files),key = lambda x: int(re.split("-| ",x)[0]))
         newfilterstring= ""
         argument_string = len(request) >= 14 and request[5:-9] or None
-
+        bflag = None
 
         if argument_string is None:
-            return MENU_HEADER.replace("[INITFOLDER]",  initfolder)
+            return MENU_HEADER.replace("[INITFOLDER]",  initfolder), bflag
         elif argument_string == 'blah/blah':
-            return "Sure bub, here is some blah blah for you."
+            return "Sure bub, here is some blah blah for you.", bflag
         elif argument_string == "?":
             return MENU_HEADER.replace("[INITFOLDER]",  initfolder)
         elif argument_string == "list":
             add_list_converter = ('<li><a class="quickanchor" href="'+w+'">'+w+'</a></li>' for w in quicknotes)
-            return "<ul id='quicklist'>"+"\n".join(add_list_converter)+"</ul>"
+            return "<ul id='quicklist'>"+"\n".join(add_list_converter)+"</ul>", bflag
         elif (len(argument_string) >= 6 and argument_string[:6]=='filter' or None):
             filters = argument_string.split("/")
             filters.reverse()
@@ -121,10 +121,9 @@ class MyHttpRequestHandler(SimpleHTTPRequestHandler):
             add_list_converter = ('<li><a class="quickanchor" href="http://'+_ip+':'+_port+'/'+w+'">'+w+'</a></li>' for w in filtered_list)
             return "<ul>"+"\n".join(add_list_converter)+"</ul>"
         elif argument_string == "favicon.ico":
-            return ""
+            return "", bflag
         else:
             s = "<div id='wrapper'>An error has occurred</div>"
-            bflag = None
             try:
                 filename = self.strip(argument_string)
                 _, ext = os.path.splitext(filename)
