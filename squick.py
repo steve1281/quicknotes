@@ -76,7 +76,7 @@ def dumpQuickNote(filelist,quick):
         if name.startswith(quick):
             f = open(initfolder+name,"rU")
             _, ext = os.path.splitext(initfolder+name)
-            s = name + "\n"
+            s = "<pre>" + name + "</pre>\n"
             s = s + "\n"
             s = s + f.read()
             f.close()
