@@ -13,7 +13,7 @@ currentpid=`ps -ef | grep $SIMPLESERVER | grep -v grep | awk '{print $2}'`
 function info()
 {
     echo;  echo "---- Simple Quicknotes Server ----" ; echo 
-    echo 'launch with: export QUICKDIR=/home/opc/quicknotes && export QUICKNOTES="/home/opc/docs/" && ~/quicknotes/scripts/qserv'; echo
+    echo 'launch with: export QUICKDIR=/home/steve/projects/quicknotes && export QUICKNOTES="/mnt/d/shared/" && ~/projects/quicknotes/scripts/qserv'; echo
     if [ -z $currentpid ]; then echo 'No server.'; else echo 'Server pid' $currentpid; fi
 }
 

@@ -1,21 +1,32 @@
 #!/usr/bin/env python
 
-import sys
 import os
+import re
 # https://github.com/polarwinkel/mdtex2html
 # import mdtex2html
 import markdown
 import http.server
 from http.server import SimpleHTTPRequestHandler
+from squick import dumpQuickNote, list_files, quicknotelist, filterout
 
 import logging
-logging.basicConfig(filename='quicknotes.log', level=logging.DEBUG)
 
-from squick import *
+initfolder = os.getenv('QUICKNOTES', '/docs/')
+_port = os.getenv('PORT', '8000')
+_ip = os.getenv('IPADDRESS', '127.0.0.1')
 
-
-_port = os.getenv('PORT','8000')
-_ip   = os.getenv('IPADDRESS', '127.0.0.1')
+_debug_level = os.getenv("DEBUG_LEVEL", "ERROR")
+if _debug_level == "ERROR":
+    logging.basicConfig(level=logging.ERROR)
+elif _debug_level == "WARNING":
+    logging.basicConfig(level=logging.WARNING)
+elif _debug_level == "INFO":
+    logging.basicConfig(level=logging.INFO)
+elif _debug_level == "DEBUG":
+    logging.basicConfig(level=logging.DEBUG)
+else:
+    logging.basicConfig(level=logging.DEBUG)
+    logging.ERROR(f"{_debug_level} unknown.")
 
 
 class MyHttpRequestHandler(SimpleHTTPRequestHandler):
@@ -71,7 +82,6 @@ class MyHttpRequestHandler(SimpleHTTPRequestHandler):
 
     """
 
-
     def do_GET(self):
         logging.debug(f"do_GET called: {self.requestline}")
         self.response_code = 200
@@ -123,7 +133,6 @@ class MyHttpRequestHandler(SimpleHTTPRequestHandler):
 
         files = list_files(initfolder)
         quicknotes = sorted(quicknotelist(files),key = lambda x: int(re.split("-| ",x)[0]))
-        newfilterstring= ""
         argument_string = len(request) >= 14 and request[5:-9] or None
         bflag = None
 
@@ -142,7 +151,7 @@ class MyHttpRequestHandler(SimpleHTTPRequestHandler):
             filters.pop()
             filtered_list = quicknotes
             for filter in filters:
-                filtered_list = filterout(filtered_list, filter)
+                filtered_list = filterout(initfolder, filtered_list, filter)
             add_list_converter = ('<li><a class="quickanchor" href="http://'+_ip+':'+_port+'/'+w+'">'+w+'</a></li>' for w in filtered_list)
             return "<ul>"+"\n".join(add_list_converter)+"</ul>", bflag
         elif argument_string == "favicon.ico":
@@ -160,12 +169,12 @@ class MyHttpRequestHandler(SimpleHTTPRequestHandler):
                         return f.read(), bflag
                 elif ext in ['.md', '.MD']:
                     logging.debug(f"Reading and converting markdown data")
-                    s,_ = dumpQuickNote([self.strip(argument_string)], newfilterstring)
+                    s,_ = dumpQuickNote(initfolder, self.strip(argument_string))
                     s = markdown.markdown(s, extensions=self.md_extensions)
                     s = "<div id='wrapper'>" + s + "</div>"
                 elif ext in ['.txt', '.TXT']:
                     logging.debug(f"Reading and returning plain text")
-                    s,_ = dumpQuickNote([self.strip(argument_string)], newfilterstring)
+                    s,_ = dumpQuickNote(initfolder, self.strip(argument_string))
                     s = "<div id='wrapper'><pre>" + s + "</pre></div>"
                 else:
                     logging.debug(f"Unhandled extension {ext}")
@@ -177,6 +186,7 @@ class MyHttpRequestHandler(SimpleHTTPRequestHandler):
 
     def strip(self,s):
         return s.replace("%20", " ")
+
 
 HandlerClass = MyHttpRequestHandler
 ServerClass = http.server.HTTPServer
