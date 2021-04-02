@@ -153,7 +153,7 @@ class MyHttpRequestHandler(SimpleHTTPRequestHandler):
                 filename = self.strip(argument_string)
                 _, ext = os.path.splitext(filename)
                 logging.debug(f"filename is {initfolder+filename} extension is {ext}")
-                if ext in ['.jpg','.JPG', '.gif', '.GIF','.png','.PNG']:
+                if ext.lower() in ['.jpg', '.gif','.png','jpeg']:
                     logging.debug(f"Reading and returning binary data")
                     bflag = True
                     with open(initfolder+filename, "rb") as f:
