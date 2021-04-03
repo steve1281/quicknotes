@@ -36,12 +36,13 @@ def quicknotelist(filelist):
             qlist.append(name)
         elif name[0].isdigit() and name[1].isdigit() and name[2] in (' ', '-'):
             qlist.append(name)
-        elif name[0].isdigit() and name[1].isdigit() and name[2].isdigit() and name[3] in (' ', '-') :
+        elif name[0].isdigit() and name[1].isdigit() and name[2].isdigit() and name[3] in (' ', '-'):
             qlist.append(name)
-        elif name[0].isdigit() and name[1].isdigit() and name[2].isdigit() and name[3].isdigit() and name[4] in (' ', '-'):
+        elif name[0].isdigit() and name[1].isdigit() and name[2].isdigit() and name[3].isdigit() \
+                and name[4] in (' ', '-'):
             qlist.append(name)
         else:
-            None
+            pass
     return qlist
 
 
