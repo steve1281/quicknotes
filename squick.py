@@ -4,7 +4,7 @@ Retrieve a list of quicknotes from a directory, sort them.
 Search for a specific string, shorten the list. Repeat.
 """
 import os
-
+import re
 
 def list_files(path):
     """
@@ -20,29 +20,22 @@ def list_files(path):
 
 def quicknotelist(filelist):
     """
-    a quicknote is prefixed with a single, double, or triple integer, or quad.
+    a quicknote is prefixed with 2 digits, 3 digits, or 4
+    followed by a dash.
+
+    a quicknote must be a .md or a .txt file.
 
     :param filelist:  list of potential files
     :return: files that match our specs
 
-    @todo: replace this with with (a simple) regex.
     """
     qlist = []
     for name in filelist:
         _, ext = os.path.splitext(name)
         if not (ext.lower() in ['.txt', '.md']):
-            pass
-        elif name[0].isdigit() and name[1] in (' ', '-'):
+            continue
+        if re.search("^[0-9]{2,4}-.*$", name):
             qlist.append(name)
-        elif name[0].isdigit() and name[1].isdigit() and name[2] in (' ', '-'):
-            qlist.append(name)
-        elif name[0].isdigit() and name[1].isdigit() and name[2].isdigit() and name[3] in (' ', '-'):
-            qlist.append(name)
-        elif name[0].isdigit() and name[1].isdigit() and name[2].isdigit() and name[3].isdigit() \
-                and name[4] in (' ', '-'):
-            qlist.append(name)
-        else:
-            pass
     return qlist
 
 
