@@ -1,0 +1,10 @@
+<style>
+             body{background-color:#FDF6E3;}
+             ul#quicklist{list-style-type: none;}
+             a.quickanchor{text-decoration: none;}
+             div#wrapper{
+                         padding:5px;
+                         margin:auto; width:80%;
+                         background-color:#eee8d5;
+                         }
+</style>

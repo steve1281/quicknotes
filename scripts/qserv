@@ -5,7 +5,7 @@
 #  Simple bash script to launch the quicknotes simple server
 #
 #
-SIMPLESERVER="simpleserver"
+SIMPLESERVER="fapi"
 
 currentpid=`ps -ef | grep $SIMPLESERVER | grep -v grep | awk '{print $2}'`
 

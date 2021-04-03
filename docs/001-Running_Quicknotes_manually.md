@@ -17,14 +17,15 @@ You can of course do this on non-ubuntu systems - change the apt-get to yum as a
 ```
 cd
 sudo apt-get update
-sudo apt-get install python3 git python3-pip markdown
-git clone --branch python391_version --single-branch https://github.com/steve1281/quicknotes
+sudo apt-get install python3 git 
+git clone --branch fastapi --single-branch https://github.com/steve1281/quicknotes
 cd quicknotes
+pip install -y markdown fastapi uvicorn aiofiles
 export QUICKDIR=.
 export QUICKNOTES=~/docs/
 export PORT=8000
 export IPADDRESS=127.0.0.1
-python3 simpleserver.py
+python3 fapi.py
 ```
 
 You can change the environment variables to adjust to your preferences.
@@ -41,13 +42,12 @@ cd projects/quicknotes
 pyenv version 3.8.6
 python3 -m venv virtualenv
 . virtualenv/bin/activate
-pip install markdown
-cd quicknotes
+pip install markdown fastapi uvicorn aiofiles
 export QUICKDIR=.
 export QUICKNOTES=~/docs/
 export PORT=8000
 export IPADDRESS=127.0.0.1
-python3 simpleserver.py
+python3 fapi.py
 ```
 
 ## About the Environment variables
@@ -60,4 +60,4 @@ python3 simpleserver.py
 ## qserv
 
 Included is a bash script *qserv* which will launch the server in background and report an process id. It is not windows friendly.
-
+(this needs to be fixed for fapi.py!)

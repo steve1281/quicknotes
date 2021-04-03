@@ -28,6 +28,13 @@ text in a `<pre>` tag.
 If its a markdown (md) file, then it is rendered.
 
 
+## Setup
+
+You need to decide on a `docs` folder. Into this folder, create a `templates` subfolder.
+Copy the templates from the repositories templates folder here. Customize as you will.
+
+Into the docs folder, add a `000-Placeholder.md`.  You can overwrite this later.
+
 
 ## What can I do with this?
 
@@ -37,11 +44,11 @@ It has the ability to list and search your notes.  The more criteria you provide
 search result.
 
 ```
-http://localhost:8000/filter/search1/search2/search3/.../searchN
+http://localhost:8000/filter=search1,search2,search3,...,searchN
 ```
 
-So, instead of flipping through the your notebook, you can limit your searching to pages with 
-the pertinant information in it.
+So, instead of flipping through the notebook, you can limit your searching to pages with 
+the information in it.
 
 
 ## How do I run this?
@@ -53,7 +60,7 @@ There are two ways to run quicknotes:
 
 ## Note about supported filetypes
 
-As mentioned above, txt an md files are supported. The code looks for those extensions. Nothing stops you from renaming a binary file to a txt or md file; this will break the quicknote server.
+As mentioned above, txt and md files are supported. The code looks for those extensions. Nothing stops you from renaming a binary file to a txt or md file; this will break the quicknote server.
 
 Graphic files (jpg, jpeg, png, gif) are rendered as binary files.
 
@@ -64,6 +71,7 @@ Support for other media (mp4, wav, etc) is coming, as of April 2, 2021 they are 
 
 * Unhandled extension  - Tried to open a file with an unsupported extension. 
 * An error has occurred - Server could not find/resolve the file you wanted to open.
+* No access - Some folders are locked out (templates for example)
 
 ## Programmer's notes
 
@@ -74,5 +82,8 @@ Quicknotes uses an insecure, non-swagger, adhoc, home hacked webserver at its co
 This is not a CMS. 
 
 This is not fit for production.
+
+As of April 3, 2021 simpleserver.py is deprecated.  The code has been modified to use FastAPI and uvicorn.
+The script fapy.py should be used instead.
 
 
