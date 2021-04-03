@@ -72,12 +72,10 @@ def dumpQuickNote(initfolder, filename):
     :param filelist: List of (text) files
     :return:
     """
-    s = " quick note was not found!"
+    s = f"{filename}: quick note was not found!"
     ext = ""
-    with open(initfolder+filename,"rU") as f:
+    with open(initfolder+filename, "rU") as f:
         _, ext = os.path.splitext(initfolder+filename)
-        s = "<pre>" + filename + "</pre>\n"
-        s = s + "\n"
+        s = "<pre>" + filename + "</pre>\n\n"
         s = s + f.read()
-        f.close()
     return s, ext
