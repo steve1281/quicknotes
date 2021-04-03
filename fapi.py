@@ -46,23 +46,29 @@ def strip(s):
     return s.replace("%20", " ")
 
 
+def template_loader(file):
+    try:
+        with open(file) as f:
+            return f.read()
+    except:
+        return ""
+
+
 def get_style():
-    with open(initfolder+"templates/style.template") as f:
-        template = f.read()
-    return template
+    return template_loader(initfolder+"templates/style.template")
 
 
 def build_response(body):
-    with open(initfolder+"templates/body.template") as f:
-        template = f.read()
+    template = template_loader(initfolder+"templates/body.template")
+    if template == "":
+        template = f"<h2>Populate the {initfolder}template folder.</h2><br>[BODY]"
     return template.replace("[STYLE]", get_style()).replace("[BODY]", body)
 
 
 # --- API ---
 @app.get("/", response_class=HTMLResponse)
 async def root():
-    with open(initfolder+"templates/root.template") as f:
-        template = f.read()
+    template = template_loader(initfolder+"templates/root.template")
     return build_response(template.replace("[IPADDRESS]", _ip).replace("[PORT]", _port).replace("[INITFOLDER]", initfolder))
 
 
@@ -102,7 +108,7 @@ async def templates_folder(resource: str):
 @app.get('/{filename}', include_in_schema=False)
 async def all_others(filename: str):
     _, ext = os.path.splitext(filename)
-    if ext.lower() in ['.jpg', '.gif', '.png', 'jpeg']:
+    if ext.lower() in ['.jpg', '.gif', '.png', '.jpeg','.mp4']:
         with open(initfolder + filename, "rb") as f:
             return FileResponse(path=initfolder+filename)
     elif ext in ['.md', '.MD']:
