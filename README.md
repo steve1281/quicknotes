@@ -1,15 +1,10 @@
-updates are not coming.
 
 # quicknotes
 I use a simple set of quicknotes to store stuff I get hit with. This tool searches them.
 
 ## Notes
-* you should export a QUICKNOTES variable saying where your quicknotes are:
-* 'export QUICKNOTES="/home/steve/Documents/quicknotes/"'
-* (notes the trailing slash.  I may actually add a check for that)
-* to run:
-* python simpleserver.py
-* then you just http://127.0.0.1:8000/  
+
+[Installation](000_Welcome_to_Quicknotes.md)
 
 ## Revision March 11, 2018
 * Switched to markdown conversion. This means the previous pre tags are removed.
@@ -24,20 +19,10 @@ I use a simple set of quicknotes to store stuff I get hit with. This tool search
 ## Revision March 29, 2018
 * Only .md files get md rendered now.
 * Expanded the style to make the page a little more pleasent
-
-* there is some libs to pip
-```
-sudo pip install py-gfm
-sudo pip install markdown
-```
-
-* Script you can use.
-```
-./scripts/qserv
-```
+* Added unix script for launching/monitoring.
 
 ## Revision March 27, 2021
-* converted (finally) to python 3
+* converted to python 3
 * this has been a long time coming - back in 2018 I was just learning python, and it shows! 
 * I ran the 2to3 conversion, and changed markdown libraries. 
 * This needs a LOT of love.
@@ -52,3 +37,9 @@ sudo pip install markdown
 * deleted unused methods
 * modernized file handling (with)
 * first pass refactor (lots of love needed)
+
+## Revision April 3, 2021
+* set master to the python3 version
+* set master to the FastAPI verison
+* you can still find the older versions in their own branches. 
+* allowing mp4 extension, but html is required to embed.
