@@ -4,7 +4,7 @@ I use a simple set of quicknotes to store stuff I get hit with. This tool search
 
 ## Notes
 
-[Installation](./docs/000_Welcome_to_Quicknotes.md)
+[Installation](./docs/000-Welcome_to_Quicknotes.md)
 
 ## Revision March 11, 2018
 * Switched to markdown conversion. This means the previous pre tags are removed.
