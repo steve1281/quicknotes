@@ -18,7 +18,7 @@ You can of course do this on non-ubuntu systems - change the apt-get to yum as a
 cd
 sudo apt-get update
 sudo apt-get install python3 git 
-git clone --branch fastapi --single-branch https://github.com/steve1281/quicknotes
+git clone --branch master --single-branch https://github.com/steve1281/quicknotes
 cd quicknotes
 pip install -y markdown fastapi uvicorn aiofiles
 export QUICKDIR=.
@@ -37,7 +37,7 @@ So you might (as an example) do it this way:
 
 ```
 cd 
-git clone --branch python391_version --single-branch https://github.com/steve1281/quicknotes
+git clone --branch master --single-branch https://github.com/steve1281/quicknotes
 cd projects/quicknotes
 pyenv version 3.8.6
 python3 -m venv virtualenv
@@ -52,7 +52,7 @@ python3 fapi.py
 
 ## About the Environment variables
 
-* QUICKDIR is where ever simplepython.py is. 
+* QUICKDIR is where ever fapi.py is. 
 * QUICKNOTES is where your quick notes are. Don't forget the trailing slash.
 * PORT is the port you want to use for your webserver.
 * IPADDRESS is the ip address you want the webserver to advertise on. Leave as 127.0.0.1 for local use. 
