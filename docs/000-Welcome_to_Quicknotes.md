@@ -84,6 +84,6 @@ This is not a CMS.
 This is not fit for production.
 
 As of April 3, 2021 simpleserver.py is deprecated.  The code has been modified to use FastAPI and uvicorn.
-The script fapy.py should be used instead.
+The script fapi.py should be used instead.
 
 
