@@ -60,4 +60,4 @@ python3 fapi.py
 ## qserv
 
 Included is a bash script *qserv* which will launch the server in background and report an process id. It is not windows friendly.
-(this needs to be fixed for fapi.py!)
+
