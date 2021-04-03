@@ -12,6 +12,9 @@ from squick import dumpQuickNote, list_files, quicknotelist, filterout
 import logging
 
 initfolder = os.getenv('QUICKNOTES', '/docs/')
+if not initfolder.endswith('/'):
+    initfolder = initfolder + "/"
+
 _port = os.getenv('PORT', '8000')
 _ip = os.getenv('IPADDRESS', '127.0.0.1')
 
