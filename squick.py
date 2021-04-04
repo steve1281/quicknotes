@@ -73,8 +73,14 @@ def dump_quick_note(document_folder, filename):
     :param filename: return contents of a quick note
     :return:
     """
-    with open(document_folder + filename, "rU") as f:
-        _, ext = os.path.splitext(document_folder + filename)
-        s = "<pre>" + filename + "</pre>\n\n"
-        s = s + f.read()
-    return s, ext
+    try:
+        with open(document_folder + filename, "rU") as f:
+            _, ext = os.path.splitext(document_folder + filename)
+            s = f"<pre> {filename} </pre>\n\n"
+            s = s + f.read()
+            return s, ext
+    except FileNotFoundError:
+        s = f"<pre>{filename} not found.</pre>"
+        return s, None
+    
+    
