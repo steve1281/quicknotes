@@ -31,9 +31,9 @@ md_extensions = [
 ]
 
 # ---- globals ----
-initfolder = os.getenv('QUICKNOTES', '/docs/')
-if not initfolder.endswith('/'):
-    initfolder = initfolder + "/"
+document_folder = os.getenv('QUICKNOTES', '/docs/')
+if not document_folder.endswith('/'):
+    document_folder = document_folder + "/"
 _port = os.getenv('PORT', '8000')
 _ip = os.getenv('IPADDRESS', '127.0.0.1')
 
@@ -52,18 +52,18 @@ def template_loader(file):
 
 
 def get_style():
-    return template_loader(initfolder+"templates/style.template")
+    return template_loader(document_folder + "templates/style.template")
 
 
 def build_response(body):
-    template = template_loader(initfolder+"templates/body.template")
+    template = template_loader(document_folder + "templates/body.template")
     if template == "":
-        template = f"<h2>Populate the {initfolder}template folder.</h2><br>[BODY]"
+        template = f"<h2>Populate the {document_folder}template folder.</h2><br>[BODY]"
     return template.replace("[STYLE]", get_style()).replace("[BODY]", body)
 
 
 def build_quicknotes():
-    files = list_files(initfolder)
+    files = list_files(document_folder)
     quicknotes = sorted(quicknotelist(files), key=lambda x: int(x.split('-')[0]))
     return quicknotes
 
@@ -71,9 +71,9 @@ def build_quicknotes():
 # --- API ---
 @app.get("/", response_class=HTMLResponse)
 async def root():
-    template = template_loader(initfolder+"templates/root.template")
+    template = template_loader(document_folder + "templates/root.template")
     return build_response(template.replace("[IPADDRESS]", _ip).replace("[PORT]", _port)
-                          .replace("[INITFOLDER]", initfolder))
+                          .replace("[INITFOLDER]", document_folder))
 
 
 @app.get("/blah/blah", response_class=HTMLResponse)
@@ -97,7 +97,7 @@ async def read_item(filters):
     filter_list.reverse()
     filtered_list = quicknotes
     for s in filter_list:
-        filtered_list = filterout(initfolder, filtered_list, s)
+        filtered_list = filterout(document_folder, filtered_list, s)
     add_list_converter = ('<li><a class="quickanchor" href="http://' + _ip + ':' + _port + '/' + w + '">'
                           + w + '</a></li>' for w in filtered_list)
     body = "<ul>" + "\n".join(add_list_converter) + "</ul>"
@@ -113,14 +113,14 @@ async def templates_folder(resource: str):
 async def all_others(filename: str):
     _, ext = os.path.splitext(filename)
     if ext.lower() in ['.jpg', '.gif', '.png', '.jpeg', '.mp4']:
-        return FileResponse(path=initfolder+filename)
+        return FileResponse(path=document_folder + filename)
     elif ext in ['.md', '.MD']:
-        s, _ = dump_quicknote(initfolder, strip(filename))
+        s, _ = dump_quicknote(document_folder, strip(filename))
         s = markdown.markdown(s, extensions=md_extensions)
         s = "<div id='wrapper'>" + s + "</div>"
         return HTMLResponse(build_response(s))
     elif ext in ['.txt', '.TXT']:
-        s, _ = dump_quicknote(initfolder, strip(filename))
+        s, _ = dump_quicknote(document_folder, strip(filename))
         s = "<div id='wrapper'><pre>" + s + "</pre></div>"
         return HTMLResponse(build_response(s))
     else:
