@@ -3,7 +3,7 @@ import uvicorn
 import os
 import markdown
 from fastapi.responses import HTMLResponse, FileResponse
-from squick import dump_quicknote, list_files, quicknotelist, filterout
+from squick import dump_quick_note, list_files, build_quick_note_list, build_filtered_file_list
 from fastapi import FastAPI
 
 app = FastAPI()
@@ -62,10 +62,10 @@ def build_response(body):
     return template.replace("[STYLE]", get_style()).replace("[BODY]", body)
 
 
-def build_quicknotes():
+def build_quick_notes():
     files = list_files(document_folder)
-    quicknotes = sorted(quicknotelist(files), key=lambda x: int(x.split('-')[0]))
-    return quicknotes
+    quick_notes = sorted(build_quick_note_list(files), key=lambda x: int(x.split('-')[0]))
+    return quick_notes
 
 
 # --- API ---
@@ -83,21 +83,21 @@ async def blah():
 
 @app.get("/list", response_class=HTMLResponse)
 async def list_quick_notes():
-    quicknotes = build_quicknotes()
+    quick_notes = build_quick_notes()
     add_list_converter = ('<li><a class="quickanchor" href="' + w + '">'
-                          + w + '</a></li>' for w in quicknotes)
+                          + w + '</a></li>' for w in quick_notes)
     body = "<ul id='quicklist'>" + "\n".join(add_list_converter) + "</ul>"
     return build_response(body)
 
 
 @app.get("/filter={filters}", response_class=HTMLResponse)
 async def read_item(filters):
-    quicknotes = build_quicknotes()
+    quick_notes = build_quick_notes()
     filter_list = filters.split(",")
     filter_list.reverse()
-    filtered_list = quicknotes
+    filtered_list = quick_notes
     for s in filter_list:
-        filtered_list = filterout(document_folder, filtered_list, s)
+        filtered_list = build_filtered_file_list(document_folder, filtered_list, s)
     add_list_converter = ('<li><a class="quickanchor" href="http://' + _ip + ':' + _port + '/' + w + '">'
                           + w + '</a></li>' for w in filtered_list)
     body = "<ul>" + "\n".join(add_list_converter) + "</ul>"
@@ -115,12 +115,12 @@ async def all_others(filename: str):
     if ext.lower() in ['.jpg', '.gif', '.png', '.jpeg', '.mp4']:
         return FileResponse(path=document_folder + filename)
     elif ext in ['.md', '.MD']:
-        s, _ = dump_quicknote(document_folder, strip(filename))
+        s, _ = dump_quick_note(document_folder, strip(filename))
         s = markdown.markdown(s, extensions=md_extensions)
         s = "<div id='wrapper'>" + s + "</div>"
         return HTMLResponse(build_response(s))
     elif ext in ['.txt', '.TXT']:
-        s, _ = dump_quicknote(document_folder, strip(filename))
+        s, _ = dump_quick_note(document_folder, strip(filename))
         s = "<div id='wrapper'><pre>" + s + "</pre></div>"
         return HTMLResponse(build_response(s))
     else:

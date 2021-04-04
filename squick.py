@@ -1,6 +1,6 @@
 
 """
-Retrieve a list of quicknotes from a directory, sort them.
+Retrieve a list of quick notes from a directory, sort them.
 Search for a specific string, shorten the list. Repeat.
 """
 import os
@@ -19,64 +19,62 @@ def list_files(path):
     return files
 
 
-def quicknotelist(filelist):
+def build_quick_note_list(file_list):
     """
-    a quicknote is prefixed with 2 digits, 3 digits, or 4
+    a quick note is prefixed with 2 digits, 3 digits, or 4
     followed by a dash.
 
-    a quicknote must be a .md or a .txt file.
+    a quick note must be a .md or a .txt file.
 
-    :param filelist:  list of potential files
+    :param file_list:  list of potential files
     :return: files that match our specs
 
     """
-    qlist = []
-    for name in filelist:
+    quick_list = []
+    for name in file_list:
         _, ext = os.path.splitext(name)
         if not (ext.lower() in ['.txt', '.md']):
             continue
         if re.search("^[0-9]{2,4}-.*$", name):
-            qlist.append(name)
-    return qlist
+            quick_list.append(name)
+    return quick_list
 
 
-def filterout(initfolder, filelist, filterstring):
+def build_filtered_file_list(document_folder, file_list, filter_string):
     """
     check the body and title of quick note for a string match.
     also checks upper and lower cases of the filter string.
 
-    :param initfolder: QUICKNOTES folder; location of documents
-    :param filelist: List of (text) files to search
-    :param filterstring: String to search for
+    :param document_folder: location of documents
+    :param file_list: List of (text) files to search
+    :param filter_string: String to search for
     :return: list of files containing the search string
     """
-    qlist = []
-    for name in filelist:
-        with open(initfolder + name, "r") as f:
+    quick_list = []
+    for name in file_list:
+        with open(document_folder + name, "r") as f:
             s = f.read()
-            if s.count(filterstring) > 0 or name.count(filterstring):
-                qlist.append(name)
-            elif s.count(filterstring.upper()) > 0 or name.count(filterstring.upper()):
-                qlist.append(name)
-            elif s.count(filterstring.lower()) > 0 or name.count(filterstring.lower()):
-                qlist.append(name)
+            if s.count(filter_string) > 0 or name.count(filter_string):
+                quick_list.append(name)
+            elif s.count(filter_string.upper()) > 0 or name.count(filter_string.upper()):
+                quick_list.append(name)
+            elif s.count(filter_string.lower()) > 0 or name.count(filter_string.lower()):
+                quick_list.append(name)
             else:
                 pass
-    return qlist
+    return quick_list
 
 
-def dump_quicknote(initfolder, filename):
+def dump_quick_note(document_folder, filename):
     """
     return the first matching file contents
 
-    :param initfolder: QUICKNOTES folder; location of documents
-    :param filename: return contents of a quicknote
+    :param document_folder: location of documents
+    :param filename: return contents of a quick note
     :return:
     """
-    s = f"{filename}: quick note was not found!"
-    ext = ""
-    with open(initfolder+filename, "rU") as f:
-        _, ext = os.path.splitext(initfolder+filename)
+    with open(document_folder + filename, "rU") as f:
+        _, ext = os.path.splitext(document_folder + filename)
         s = "<pre>" + filename + "</pre>\n\n"
         s = s + f.read()
     return s, ext
