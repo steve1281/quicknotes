@@ -1,10 +1,9 @@
 #!/usr/bin/env python
 import uvicorn
-import re
 import os
 import markdown
 from fastapi.responses import HTMLResponse, FileResponse
-from squick import dumpQuickNote, list_files, quicknotelist, filterout
+from squick import dump_quicknote, list_files, quicknotelist, filterout
 from fastapi import FastAPI
 
 app = FastAPI()
@@ -48,7 +47,7 @@ def template_loader(file):
     try:
         with open(file) as f:
             return f.read()
-    except:
+    except FileNotFoundError:
         return ""
 
 
@@ -65,7 +64,7 @@ def build_response(body):
 
 def build_quicknotes():
     files = list_files(initfolder)
-    quicknotes = sorted(quicknotelist(files), key=lambda x: int(re.split("-| ", x)[0]))
+    quicknotes = sorted(quicknotelist(files), key=lambda x: int(x.split('-')[0]))
     return quicknotes
 
 
@@ -116,12 +115,12 @@ async def all_others(filename: str):
     if ext.lower() in ['.jpg', '.gif', '.png', '.jpeg', '.mp4']:
         return FileResponse(path=initfolder+filename)
     elif ext in ['.md', '.MD']:
-        s, _ = dumpQuickNote(initfolder, strip(filename))
+        s, _ = dump_quicknote(initfolder, strip(filename))
         s = markdown.markdown(s, extensions=md_extensions)
         s = "<div id='wrapper'>" + s + "</div>"
         return HTMLResponse(build_response(s))
     elif ext in ['.txt', '.TXT']:
-        s, _ = dumpQuickNote(initfolder, strip(filename))
+        s, _ = dump_quicknote(initfolder, strip(filename))
         s = "<div id='wrapper'><pre>" + s + "</pre></div>"
         return HTMLResponse(build_response(s))
     else:

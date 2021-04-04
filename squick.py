@@ -6,6 +6,7 @@ Search for a specific string, shorten the list. Repeat.
 import os
 import re
 
+
 def list_files(path):
     """
     returns a list of names (with extension, without full path) of all files
@@ -64,12 +65,12 @@ def filterout(initfolder, filelist, filterstring):
     return qlist
 
 
-def dumpQuickNote(initfolder, filename):
+def dump_quicknote(initfolder, filename):
     """
     return the first matching file contents
 
     :param initfolder: QUICKNOTES folder; location of documents
-    :param filelist: List of (text) files
+    :param filename: return contents of a quicknote
     :return:
     """
     s = f"{filename}: quick note was not found!"
