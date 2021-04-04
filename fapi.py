@@ -3,6 +3,8 @@ import uvicorn
 import os
 import markdown
 from fastapi.responses import HTMLResponse, FileResponse
+from starlette.responses import RedirectResponse
+
 from squick import dump_quick_note, list_files, build_quick_note_list, build_filtered_file_list
 from fastapi import FastAPI
 
@@ -31,7 +33,8 @@ md_extensions = [
 ]
 
 # ---- globals ----
-document_folder = os.getenv('QUICKNOTES', '/docs/')
+document_sources = os.getenv('QUICKNOTES', '/docs/').split(',')
+document_folder = document_sources[0]
 if not document_folder.endswith('/'):
     document_folder = document_folder + "/"
 _port = os.getenv('PORT', '8000')
@@ -58,7 +61,7 @@ def get_style():
 def build_response(body):
     template = template_loader(document_folder + "templates/body.template")
     if template == "":
-        template = f"<h2>Populate the {document_folder}template folder.</h2><br>[BODY]"
+        template = f"<h2>Populate the {document_folder} template folder.</h2><br>[BODY]"
     return template.replace("[STYLE]", get_style()).replace("[BODY]", body)
 
 
@@ -108,6 +111,24 @@ async def read_item(filters):
 async def templates_folder(resource: str):
     return HTMLResponse(build_response(f"No access to {resource}."))
 
+@app.get('/sources')
+async def list_docs():
+    body = f"Current document source: <b>{document_folder}</b>"
+    body = body + f"<h2>Available sources</h2>"
+    body = body + f"<ol>"
+    for idx, src in enumerate(document_sources):
+        body = body + f"<li><a href='//{_ip}:{_port}/setsource/{idx}'>{src}</a></li>"
+    body = body + "</ol>"
+    return HTMLResponse(build_response(body))
+
+@app.get('/setsource/{srcid}')
+async def set_document_source(srcid: int):
+    global document_folder
+    document_folder= document_sources[srcid]
+    if not document_folder.endswith('/'):
+        document_folder = document_folder + "/"
+    return RedirectResponse(url='/')
+
 
 @app.get('/{filename}', include_in_schema=False)
 async def all_others(filename: str):
@@ -125,6 +146,7 @@ async def all_others(filename: str):
         return HTMLResponse(build_response(s))
     else:
         return HTMLResponse(build_response("Unsupported extension"))
+
 
 
 if __name__ == '__main__':
