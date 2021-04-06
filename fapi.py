@@ -150,4 +150,4 @@ async def all_others(filename: str):
 
 
 if __name__ == '__main__':
-    uvicorn.run(app='fapi:app', host='0.0.0.0', port=int(_port), reload=True, debug=True)
+    uvicorn.run(app='fapi:app', host='0.0.0.0', port=int(_port), reload=True, debug=False)
