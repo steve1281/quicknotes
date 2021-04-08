@@ -1,0 +1,10 @@
+    <div>
+        <h2>QuickNotes: Search and Display (HTTP interface)</h2>
+
+        <h3>Source folder is:  [INITFOLDER]</h3>
+        <br/>
+        <a href="//[IPADDRESS]:[PORT]/list"> http://[IPADDRESS]:[PORT]/list  - list the files </a><br/>
+        <a href="//[IPADDRESS]:[PORT]/filter=0"> http://[IPADDRESS]:[PORT]/filter=filter1,filter2,...</a> <br/>
+        <a href="//[IPADDRESS]:[PORT]/sources"> http://[IPADDRESS]:[PORT]/sources</a> <br/>
+
+    </div>

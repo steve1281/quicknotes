@@ -1,10 +1,13 @@
 #!/usr/bin/env python
+import random
+
 import uvicorn
 import os
 import markdown
 from fastapi.responses import HTMLResponse, FileResponse
 from starlette.responses import RedirectResponse
 
+from fortune import get_fortune, get_record_count
 from squick import dump_quick_note, list_files, build_quick_note_list, build_filtered_file_list
 from fastapi import FastAPI
 
@@ -71,6 +74,18 @@ def build_quick_notes():
     return quick_notes
 
 
+def select_fortune(filename):
+    """
+    A random fortune
+    :param filename: filename to pull the fortune from
+    :return:
+    """
+    record_count = get_record_count(document_folder+filename)
+    random_record = random.randint(0, record_count-1)
+    s = get_fortune(document_folder+filename, random_record)
+    return f'<a href="/">home</a><hr><div><br><pre><span class="inner-pre" style="font-size: 18px">{s}</span></pre><br></div>'
+
+
 # --- API ---
 @app.get("/", response_class=HTMLResponse)
 async def root():
@@ -128,6 +143,15 @@ async def set_document_source(srcid: int):
     if not document_folder.endswith('/'):
         document_folder = document_folder + "/"
     return RedirectResponse(url='/')
+
+@app.get('/fortune')
+async def fortune():
+    return HTMLResponse(build_response(select_fortune("scene")))
+
+
+@app.get('/fortune/obscene')
+async def fortune_obscene():
+    return HTMLResponse(build_response(select_fortune("obscene")))
 
 
 @app.get('/{filename}', include_in_schema=False)
