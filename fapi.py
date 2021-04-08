@@ -126,6 +126,7 @@ async def read_item(filters):
 async def templates_folder(resource: str):
     return HTMLResponse(build_response(f"No access to {resource}."))
 
+
 @app.get('/sources')
 async def list_docs():
     body = f"Current document source: <b>{document_folder}</b>"
@@ -136,6 +137,7 @@ async def list_docs():
     body = body + "</ol>"
     return HTMLResponse(build_response(body))
 
+
 @app.get('/setsource/{srcid}')
 async def set_document_source(srcid: int):
     global document_folder
@@ -143,6 +145,7 @@ async def set_document_source(srcid: int):
     if not document_folder.endswith('/'):
         document_folder = document_folder + "/"
     return RedirectResponse(url='/')
+
 
 @app.get('/fortune')
 async def fortune():
