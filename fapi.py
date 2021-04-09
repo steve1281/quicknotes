@@ -134,9 +134,12 @@ async def set_document_source(srcid: int):
 @app.get('/fortune/{filename}')
 async def fortune(filename : str):
     record_count = get_record_count(document_folder+filename)
-    random_record = random.randint(0, record_count-1)
-    s = get_fortune(document_folder+filename, random_record)
-    body = f'<pre><span class="inner-pre" style="font-size: 18px">{s}</span></pre>{random_record}'
+    if record_count > 0:
+        random_record = random.randint(0, record_count - 1)
+        s = get_fortune(document_folder+filename, random_record)
+        body = f'<pre><span class="inner-pre" style="font-size: 18px">{s}</span></pre>{random_record}'
+    else:
+        body = f'Error reading {filename}.'
     return HTMLResponse(build_response(body))
 
 
