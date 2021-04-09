@@ -74,18 +74,6 @@ def build_quick_notes():
     return quick_notes
 
 
-def select_fortune(filename):
-    """
-    A random fortune
-    :param filename: filename to pull the fortune from
-    :return:
-    """
-    record_count = get_record_count(document_folder+filename)
-    random_record = random.randint(0, record_count-1)
-    s = get_fortune(document_folder+filename, random_record)
-    return f'<a href="/">home</a><hr><div><br><pre><span class="inner-pre" style="font-size: 18px">{s}</span></pre><br></div>'
-
-
 # --- API ---
 @app.get("/", response_class=HTMLResponse)
 async def root():
@@ -93,10 +81,6 @@ async def root():
     return build_response(template.replace("[IPADDRESS]", _ip).replace("[PORT]", _port)
                           .replace("[INITFOLDER]", document_folder))
 
-
-@app.get("/blah/blah", response_class=HTMLResponse)
-async def blah():
-    return "Sure bub, here is some blah blah for you."
 
 
 @app.get("/list", response_class=HTMLResponse)
@@ -147,14 +131,24 @@ async def set_document_source(srcid: int):
     return RedirectResponse(url='/')
 
 
-@app.get('/fortune')
-async def fortune():
-    return HTMLResponse(build_response(select_fortune("scene")))
+@app.get('/fortune/{filename}')
+async def fortune(filename : str):
+    record_count = get_record_count(document_folder+filename)
+    random_record = random.randint(0, record_count-1)
+    s = get_fortune(document_folder+filename, random_record)
+    body = f'<pre><span class="inner-pre" style="font-size: 18px">{s}</span></pre>{random_record}'
+    return HTMLResponse(build_response(body))
 
 
-@app.get('/fortune/obscene')
-async def fortune_obscene():
-    return HTMLResponse(build_response(select_fortune("obscene")))
+@app.get('/fortune/{filename}/{record_number}')
+async def fortune(filename : str, record_number: int):
+    record_count = get_record_count(document_folder+filename)
+    if record_count < record_number:
+        body = f"Invalid record_number {record_number}. Must be less than {record_count}."
+    else:
+        s = get_fortune(document_folder+filename, record_number)
+        body = f'<pre><span class="inner-pre" style="font-size: 18px">{s}</span></pre>'
+    return HTMLResponse(build_response(body))
 
 
 @app.get('/{filename}', include_in_schema=False)
