@@ -137,7 +137,12 @@ async def fortune(filename : str):
     if record_count > 0:
         random_record = random.randint(0, record_count - 1)
         s = get_fortune(document_folder+filename, random_record)
-        body = f'<pre><span class="inner-pre" style="font-size: 18px">{s}</span></pre>{random_record}'
+        body = f'''
+        <pre>
+            <span class="inner-pre" style="font-size: 18px">{s}</span>
+        </pre>
+        <a href="//[IPADDRESS]:[PORT]/fortune/{filename}/{random_record}">{random_record}</a>
+        '''.replace("[IPADDRESS]", _ip).replace("[PORT]", _port)
     else:
         body = f'Error reading {filename}.'
     return HTMLResponse(build_response(body))
