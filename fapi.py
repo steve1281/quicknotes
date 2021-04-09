@@ -82,7 +82,6 @@ async def root():
                           .replace("[INITFOLDER]", document_folder))
 
 
-
 @app.get("/list", response_class=HTMLResponse)
 async def list_quick_notes():
     quick_notes = build_quick_notes()
@@ -125,15 +124,15 @@ async def list_docs():
 @app.get('/setsource/{srcid}')
 async def set_document_source(srcid: int):
     global document_folder
-    document_folder= document_sources[srcid]
+    document_folder = document_sources[srcid]
     if not document_folder.endswith('/'):
         document_folder = document_folder + "/"
     return RedirectResponse(url='/')
 
 
 @app.get('/fortune/{filename}')
-async def fortune(filename : str):
-    record_count = get_record_count(document_folder+filename)
+async def fortune(filename: str):
+    record_count = get_record_count(document_folder + filename)
     if record_count > 0:
         random_record = random.randint(0, record_count - 1)
         s = get_fortune(document_folder+filename, random_record)
@@ -149,12 +148,12 @@ async def fortune(filename : str):
 
 
 @app.get('/fortune/{filename}/{record_number}')
-async def fortune(filename : str, record_number: int):
-    record_count = get_record_count(document_folder+filename)
+async def fortune(filename: str, record_number: int):
+    record_count = get_record_count(document_folder + filename)
     if record_count < record_number:
         body = f"Invalid record_number {record_number}. Must be less than {record_count}."
     else:
-        s = get_fortune(document_folder+filename, record_number)
+        s = get_fortune(document_folder + filename, record_number)
         body = f'<pre><span class="inner-pre" style="font-size: 18px">{s}</span></pre>'
     return HTMLResponse(build_response(body))
 
@@ -175,7 +174,6 @@ async def all_others(filename: str):
         return HTMLResponse(build_response(s))
     else:
         return HTMLResponse(build_response("Unsupported extension"))
-
 
 
 if __name__ == '__main__':
