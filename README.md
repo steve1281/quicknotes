@@ -43,3 +43,7 @@ I use a simple set of quicknotes to store stuff I get hit with. This tool search
 * set master to the FastAPI verison
 * you can still find the older versions in their own branches. 
 * allowing mp4 extension, but html is required to embed.
+
+## Revision April 9, 2021
+* added support for fortune files
+* you need to put a fortune file in the document folder, then you can open with /fortune/{filename} api
