@@ -141,8 +141,8 @@ async def fortune(filename : str):
         <pre>
             <span class="inner-pre" style="font-size: 18px">{s}</span>
         </pre>
-        <a href="//[IPADDRESS]:[PORT]/fortune/{filename}/{random_record}">{random_record}</a>
-        '''.replace("[IPADDRESS]", _ip).replace("[PORT]", _port)
+        <a href="//{_ip}:{_port}/fortune/{filename}/{random_record}">{random_record}</a>
+        '''
     else:
         body = f'Error reading {filename}.'
     return HTMLResponse(build_response(body))
