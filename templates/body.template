@@ -5,10 +5,12 @@
             [STYLE]
         </head>
         <body>
-            <input action="action" onclick="location.href='http://localhost:8001/'" type="submit" value="Top" />
-            <input action="action" onclick="location.href='http://localhost:8001/list'" type="submit" value="List" />
-            <input action="action" onclick="location.href='http://localhost:8001/filter=0'" type="submit" value="Filter" />
-            <input action="action" onclick="location.href='http://localhost:8001/sources'" type="submit" value="Sources" />
+            <input action="action" onclick="location.href='//[IPADDRESS]:[PORT]/'" type="submit" value="Top" />
+            <input action="action" onclick="location.href='//[IPADDRESS]:[PORT]/list'" type="submit" value="List" />
+            <input action="action" onclick="location.href='//[IPADDRESS]:[PORT]/filter=0'" type="submit" value="Filter" />
+            <input action="action" onclick="location.href='//[IPADDRESS]:[PORT]/sources'" type="submit" value="Sources" />
+            <input action="action" onclick="location.href='//[IPADDRESS]:[PORT]/fortune/scene'" type="submit" value="Fortune" />
+            <input action="action" onclick="location.href='//[IPADDRESS]:[PORT]/fortune/obscene'" type="submit" value="Obscene Fortune" />
             <input action="action" onclick="window.history.go(-1); return false;" type="submit" value="Back" />
             <hr />
 

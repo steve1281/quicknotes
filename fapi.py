@@ -65,7 +65,7 @@ def build_response(body):
     template = template_loader(document_folder + "templates/body.template")
     if template == "":
         template = f"<h2>Populate the {document_folder} template folder.</h2><br>[BODY]"
-    return template.replace("[STYLE]", get_style()).replace("[BODY]", body)
+    return template.replace("[STYLE]", get_style()) .replace("[BODY]", body) .replace("[IPADDRESS]",_ip) .replace("[PORT]",_port)
 
 
 def build_quick_notes():
