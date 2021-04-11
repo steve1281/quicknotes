@@ -6,12 +6,14 @@ import os
 import markdown
 from fastapi.responses import HTMLResponse, FileResponse
 from starlette.responses import RedirectResponse
+from fastapi.staticfiles import StaticFiles
 
 from fortune import get_fortune, get_record_count
 from squick import dump_quick_note, list_files, build_quick_note_list, build_filtered_file_list
 from fastapi import FastAPI
 
 app = FastAPI()
+
 
 # https://python-markdown.github.io/extensions/
 md_extensions = [
@@ -42,6 +44,19 @@ if not document_folder.endswith('/'):
     document_folder = document_folder + "/"
 _port = os.getenv('PORT', '8000')
 _ip = os.getenv('IPADDRESS', '127.0.0.1')
+
+# --- static file mounts ----
+app.mount(
+    "/js",
+    StaticFiles(directory=document_folder + "/js"),
+    name="js"
+)
+
+app.mount(
+    "/css",
+    StaticFiles(directory=document_folder + "/css"),
+    name="css"
+)
 
 
 # --- helper ----
@@ -161,7 +176,7 @@ async def fortune(filename: str, record_number: int):
 @app.get('/{filename}', include_in_schema=False)
 async def all_others(filename: str):
     _, ext = os.path.splitext(filename)
-    if ext.lower() in ['.jpg', '.gif', '.png', '.jpeg', '.mp4']:
+    if ext.lower() in ['.jpg', '.gif', '.png', '.jpeg', '.mp4', '.htm', '.html']:
         return FileResponse(path=document_folder + filename)
     elif ext in ['.md', '.MD']:
         s, _ = dump_quick_note(document_folder, strip(filename))

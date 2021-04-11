@@ -47,3 +47,8 @@ I use a simple set of quicknotes to store stuff I get hit with. This tool search
 ## Revision April 9, 2021
 * added support for fortune files
 * you need to put a fortune file in the document folder, then you can open with /fortune/{filename} api
+
+## Revision April 11, 2021
+* added support for html/htm extensions. Place the file in your document folder. Note that html files are not filtered and are not listed as quicknotes. (yet)
+* added support for css and js. Note that css files served by the quickserver _must_ be in subfolder called css off of document folder. (there is a subfolder called js for javascript).
+ 
