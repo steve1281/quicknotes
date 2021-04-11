@@ -51,4 +51,23 @@ I use a simple set of quicknotes to store stuff I get hit with. This tool search
 ## Revision April 11, 2021
 * added support for html/htm extensions. Place the file in your document folder. Note that html files are not filtered and are not listed as quicknotes. (yet)
 * added support for css and js. Note that css files served by the quickserver _must_ be in subfolder called css off of document folder. (there is a subfolder called js for javascript).
+* restructured the docs folder so you can copy it directly as a starting point. Contains example html game, and fortune files.
+
+```
+docs
+├── 000-Welcome_to_Quicknotes.md
+├── 001-Running_Quicknotes_manually.md
+├── 002-Running_Quicknotes_docked.md
+├── breakout.html
+├── css
+│   └── breakout.css
+├── js
+│   └── breakout.js
+├── obscene
+├── scene
+└── templates
+    ├── body.template
+    ├── root.template
+    └── style.template
+```
  
