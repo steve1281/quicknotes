@@ -46,17 +46,19 @@ _port = os.getenv('PORT', '8000')
 _ip = os.getenv('IPADDRESS', '127.0.0.1')
 
 # --- static file mounts ----
-app.mount(
-    "/js",
-    StaticFiles(directory=document_folder + "/js"),
-    name="js"
-)
 
-app.mount(
-    "/css",
-    StaticFiles(directory=document_folder + "/css"),
-    name="css"
-)
+def create_static_mounts():
+    app.mount(
+        "/js",
+        StaticFiles(directory=document_folder + "/js"),
+        name="js"
+    )
+
+    app.mount(
+        "/css",
+        StaticFiles(directory=document_folder + "/css"),
+        name="css"
+    )
 
 
 # --- helper ----
@@ -142,6 +144,7 @@ async def set_document_source(srcid: int):
     document_folder = document_sources[srcid]
     if not document_folder.endswith('/'):
         document_folder = document_folder + "/"
+    create_static_mounts()
     return RedirectResponse(url='/')
 
 
@@ -192,4 +195,5 @@ async def all_others(filename: str):
 
 
 if __name__ == '__main__':
+    create_static_mounts()
     uvicorn.run(app='fapi:app', host='0.0.0.0', port=int(_port), reload=True, debug=False)
