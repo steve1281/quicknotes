@@ -12,6 +12,7 @@
             <input action="action" onclick="location.href='//[IPADDRESS]:[PORT]/fortune/scene'" type="submit" value="Fortune" />
             <input action="action" onclick="location.href='//[IPADDRESS]:[PORT]/fortune/obscene'" type="submit" value="Obscene Fortune" />
             <input action="action" onclick="location.href='//[IPADDRESS]:[PORT]/breakout.html'" type="submit" value="Breakout" />
+            <input action="action" onclick="location.href='//[IPADDRESS]:[PORT]/fractals.html'" type="submit" value="Fractals" />
             <input action="action" onclick="window.history.go(-1); return false;" type="submit" value="Back" />
             <hr />
 
