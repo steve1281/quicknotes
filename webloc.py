@@ -20,9 +20,12 @@ def get_webloc_files(document_folder, webloc_folder):
 def build_url_list(files):
     url_list = dict()
     for filename in files:
-        with open(filename, 'r') as f:
-            data = f.read()
-        bs_data = BeautifulSoup(data, 'xml')
-        url = bs_data.find('string').text
-        url_list[os.path.splitext(os.path.basename(filename))[0]] = url
+        try:
+            with open(filename, 'r') as f:
+                data = f.read()
+            bs_data = BeautifulSoup(data, 'xml')
+            url = bs_data.find('string').text
+            url_list[os.path.splitext(os.path.basename(filename))[0]] = url
+        except FileNotFoundError:
+            pass
     return url_list
