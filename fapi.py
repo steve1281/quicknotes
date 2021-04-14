@@ -90,10 +90,11 @@ def build_response(body):
 def build_url_div(url_list):
     div_contents = "<div id='quicknote_list'><ul>"
     for key in url_list:
-        anchor_string = f'<a href="{url_list[key]}">{key}</a>'
+        anchor_string = f'<a href="{url_list[key]}" target="_blank">{key}</a>'
         div_contents = div_contents + "<li>" + anchor_string + "</li>"
     div_contents = div_contents + "</ul></div>"
     return div_contents
+
 
 def build_quick_notes():
     files = list_files(document_folder)
