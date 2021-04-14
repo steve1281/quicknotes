@@ -9,6 +9,7 @@ from starlette.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
 
 from fortune import get_fortune, get_record_count
+from webloc import get_webloc_files, build_url_list
 from squick import dump_quick_note, list_files, build_quick_note_list, build_filtered_file_list
 from fastapi import FastAPI
 
@@ -47,6 +48,7 @@ _ip = os.getenv('IPADDRESS', '127.0.0.1')
 
 # --- static file mounts ----
 
+
 def create_static_mounts():
     app.mount(
         "/js",
@@ -84,6 +86,14 @@ def build_response(body):
         template = f"<h2>Populate the {document_folder} template folder.</h2><br>[BODY]"
     return template.replace("[STYLE]", get_style()) .replace("[BODY]", body) .replace("[IPADDRESS]",_ip) .replace("[PORT]",_port)
 
+
+def build_url_div(url_list):
+    div_contents = "<div id='quicknote_list'><ul>"
+    for key in url_list:
+        anchor_string = f'<a href="{url_list[key]}">{key}</a>'
+        div_contents = div_contents + "<li>" + anchor_string + "</li>"
+    div_contents = div_contents + "</ul></div>"
+    return div_contents
 
 def build_quick_notes():
     files = list_files(document_folder)
@@ -162,6 +172,21 @@ async def fortune(filename: str):
         '''
     else:
         body = f'Error reading {filename}.'
+    return HTMLResponse(build_response(body))
+
+
+@app.get('/webloc/{folder_name}')
+async def build_webloc_link_page(folder_name :str):
+    body = ""
+    files = get_webloc_files(document_folder, folder_name)
+    if files:
+        url_list = build_url_list(files)
+        if url_list:
+            body = build_url_div(url_list)
+        else:
+            body = f"No urls found in {folder_name}"
+    else:
+        body = f"No files found in {folder_name}"
     return HTMLResponse(build_response(body))
 
 
