@@ -88,11 +88,11 @@ def build_response(body):
 
 
 def build_url_div(url_list):
-    div_contents = "<div id='quicknote_list'><ul>"
+    div_contents = "<div> <table id='quicknote_table'><tr><th>Web Links</th></tr>"
     for key in url_list:
         anchor_string = f'<a href="{url_list[key]}" target="_blank">{key}</a>'
-        div_contents = div_contents + "<li>" + anchor_string + "</li>"
-    div_contents = div_contents + "</ul></div>"
+        div_contents = div_contents + "<tr><td>" + anchor_string + "</td></tr>"
+    div_contents = div_contents + "</table></div>"
     return div_contents
 
 
