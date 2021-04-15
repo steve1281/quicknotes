@@ -189,7 +189,7 @@ async def fortune(filename: str):
     return HTMLResponse(build_response(body))
 
 
-@app.get('/webloc/{folder_name}')
+@app.get('/links/{folder_name}')
 async def build_webloc_link_page(folder_name :str):
     body = ""
     files = get_webloc_files(document_folder, folder_name)
