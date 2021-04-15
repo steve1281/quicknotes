@@ -1,7 +1,7 @@
 import os
 from bs4 import BeautifulSoup
-from  configparser import ConfigParser
-
+from configparser import ConfigParser
+import time
 
 def get_webloc_files(document_folder, webloc_folder):
     files = []
@@ -56,13 +56,20 @@ def build_url_list(files):
     url_list = dict()
     for filename in files:
         try:
+            create_time = time.ctime(os.path.getctime(filename))
             display_name, ext = os.path.splitext(os.path.basename(filename))
             if ext.lower() == '.webloc':
-                url_list[display_name] = webloc_get(filename)
+                url_list[display_name] = {"url": webloc_get(filename),
+                                          "link type": "mac",
+                                          "created": str(create_time)}
             elif ext.lower() == '.url':
-                url_list[display_name] = url_get(filename)
+                url_list[display_name] = {"url": url_get(filename),
+                                          "link type": "windows",
+                                          "created": str(create_time)}
             elif ext.lower() == '.desktop':
-                url_list[display_name] = desktop_get(filename)
+                url_list[display_name] = {"url": desktop_get(filename),
+                                          "link type": "ubuntu",
+                                          "created": str(create_time)}
             else:
                 pass
 

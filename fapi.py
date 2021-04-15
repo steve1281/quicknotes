@@ -88,10 +88,23 @@ def build_response(body):
 
 
 def build_url_div(url_list):
-    div_contents = "<div> <table id='quicknote_table'><tr><th>Web Links</th></tr>"
+    div_contents = "<div>"
+
+    div_contents = div_contents + "<table id='quicknote_table'>"
+    div_contents = div_contents + "<tr>"
+    div_contents = div_contents + "<th style='width:50%'>Web Link</th>"
+    div_contents = div_contents + "<th style='width:25%'>Link Type</th>"
+    div_contents = div_contents + "<th style='width:35%'>Created</th>"
+    div_contents = div_contents + "</tr>"
+
     for key in url_list:
-        anchor_string = f'<a href="{url_list[key]}" target="_blank">{key}</a>'
-        div_contents = div_contents + "<tr><td>" + anchor_string + "</td></tr>"
+        anchor_string = f'<a href="{url_list[key]["url"]}" target="_blank">{key}</a>'
+        div_contents = div_contents + "<tr>"
+        div_contents = div_contents + "<td>" + anchor_string + "</td>"
+        div_contents = div_contents + "<td>" + url_list[key]['link type'] + "</td>"
+        div_contents = div_contents + "<td>" + url_list[key]['created'] + "</td>"
+        div_contents = div_contents + "</tr>"
+
     div_contents = div_contents + "</table></div>"
     return div_contents
 
