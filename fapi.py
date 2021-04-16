@@ -49,13 +49,21 @@ _ip = os.getenv('IPADDRESS', '127.0.0.1')
 # --- static file mounts ----
 
 
+def purge_route(route_name):
+    for x in app.routes:
+        if x.name == route_name:
+            app.routes.remove(x)
+
+
 def create_static_mounts():
+    purge_route('js')
     app.mount(
         "/js",
         StaticFiles(directory=document_folder + "/js"),
         name="js"
     )
 
+    purge_route('css')
     app.mount(
         "/css",
         StaticFiles(directory=document_folder + "/css"),
