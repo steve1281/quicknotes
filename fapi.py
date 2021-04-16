@@ -90,7 +90,7 @@ def build_response(body):
 def build_url_div(url_list):
     div_contents = "<div>"
 
-    div_contents = div_contents + "<table id='quicknote_table'>"
+    div_contents = div_contents + "<table class='js-sort-table' id='quicknote_table'>"
     div_contents = div_contents + "<tr>"
     div_contents = div_contents + "<th style='width:50%'>Web Link</th>"
     div_contents = div_contents + "<th style='width:25%'>Link Type</th>"
