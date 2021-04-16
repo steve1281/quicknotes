@@ -96,24 +96,33 @@ def build_response(body):
 
 
 def build_url_div(url_list):
-    div_contents = "<div>"
+    div_contents = "<div>\n"
 
-    div_contents = div_contents + "<table class='js-sort-table' id='quicknote_table'>"
-    div_contents = div_contents + "<tr>"
-    div_contents = div_contents + "<th style='width:50%'>Web Link</th>"
-    div_contents = div_contents + "<th style='width:25%'>Link Type</th>"
-    div_contents = div_contents + "<th style='width:35%'>Created</th>"
-    div_contents = div_contents + "</tr>"
+    div_contents = div_contents + "<table class='sortable' id='quicknote_table'>\n"
+    div_contents = div_contents + "<thead>\n"
+    div_contents = div_contents + "<tr>\n"
+    div_contents = div_contents + "<th style='width:50%'>Web Link</th>\n"
+    div_contents = div_contents + "<th style='width:25%'>Link Type</th>\n"
+    div_contents = div_contents + "<th class='date' style='width:35%'>Created</th>\n"
+    div_contents = div_contents + "</tr>\n"
+    div_contents = div_contents + "</thead>\n"
+
+    div_contents = div_contents + "<tbody>\n"
 
     for key in url_list:
         anchor_string = f'<a href="{url_list[key]["url"]}" target="_blank">{key}</a>'
-        div_contents = div_contents + "<tr>"
-        div_contents = div_contents + "<td>" + anchor_string + "</td>"
-        div_contents = div_contents + "<td>" + url_list[key]['link type'] + "</td>"
-        div_contents = div_contents + "<td>" + url_list[key]['created'] + "</td>"
-        div_contents = div_contents + "</tr>"
+        div_contents = div_contents + "<tr>\n"
+        div_contents = div_contents + "<td>" + anchor_string + "</td>\n"
+        div_contents = div_contents + "<td>" + url_list[key]['link type'] + "</td>\n"
+        div_contents = div_contents + "<td>" + url_list[key]['created'] + "</td>\n"
+        div_contents = div_contents + "</tr>\n"
 
-    div_contents = div_contents + "</table></div>"
+    div_contents = div_contents + "</tbody>\n"
+
+    div_contents = div_contents + "</table>\n"
+
+    div_contents = div_contents + "<script src='/js/sort-table.js'></script>\n"
+    div_contents = div_contents + "</div>\n"
     return div_contents
 
 
