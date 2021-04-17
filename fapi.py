@@ -11,6 +11,8 @@ from fastapi.staticfiles import StaticFiles
 from fortune import get_fortune, get_record_count
 from webloc import get_webloc_files, build_url_list
 from squick import dump_quick_note, list_files, build_quick_note_list, build_filtered_file_list
+from unjumble import scan_words
+
 from fastapi import FastAPI
 
 app = FastAPI()
@@ -230,6 +232,20 @@ async def fortune(filename: str, record_number: int):
         s = get_fortune(document_folder + filename, record_number)
         body = f'<pre><span class="inner-pre" style="font-size: 18px">{s}</span></pre>'
     return HTMLResponse(build_response(body))
+
+
+@app.get('/unjumble/{scrambled_word}')
+async def unjumble(scrambled_word: str):
+    matches = scan_words(document_folder, scrambled_word, len(scrambled_word))
+    if matches:
+        body = "<div>\n"
+        body = f"Scrambled word: <b>{scrambled_word}</b>\n<br/>Found: "
+        for s in matches:
+            body = body + f"<b>{s}</b>&nbsp; "
+        body = body + "</div>"
+        return HTMLResponse(build_response(body))
+    else:
+        return HTMLResponse(build_response("no matches found"))
 
 
 @app.get('/{filename}', include_in_schema=False)
