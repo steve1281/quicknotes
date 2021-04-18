@@ -50,6 +50,19 @@ _ip = os.getenv('IPADDRESS', '127.0.0.1')
 
 # --- static file mounts ----
 
+app.mount(
+    "/js",
+    StaticFiles(directory=document_folder + "/js"),
+    name="js"
+)
+
+
+app.mount(
+    "/css",
+    StaticFiles(directory=document_folder + "/css"),
+    name="css"
+)
+
 
 def purge_route(route_name):
     for x in app.routes:
@@ -61,14 +74,14 @@ def create_static_mounts():
     purge_route('js')
     app.mount(
         "/js",
-        StaticFiles(directory=document_folder + "/js"),
+        StaticFiles(directory=document_folder + "js"),
         name="js"
     )
 
     purge_route('css')
     app.mount(
         "/css",
-        StaticFiles(directory=document_folder + "/css"),
+        StaticFiles(directory=document_folder + "css"),
         name="css"
     )
 
@@ -272,5 +285,5 @@ async def all_others(filename: str):
 
 
 if __name__ == '__main__':
-    create_static_mounts()
+    # create_static_mounts()
     uvicorn.run(app='fapi:app', host='0.0.0.0', port=int(_port), reload=True, debug=False)
