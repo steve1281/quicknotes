@@ -22,6 +22,8 @@ RUN python3 -m pip install markdown
 RUN python3 -m pip install fastapi
 RUN python3 -m pip install uvicorn
 RUN python3 -m pip install aiofiles
+RUN python3 -m pip install beautifulsoup4
+RUN python3 -m pip install lxml
 RUN git clone --branch master --single-branch https://github.com/steve1281/quicknotes
 ENV QUICKDIR=/quicknotes
 ENV QUICKNOTES=/docs/
@@ -50,8 +52,10 @@ this will expose it to your whole network. (so security risk).
 
 Map a volume to wherever you want to keep your documents.
 
+For example, if you cloned quicknotes into /projects/quicknotes:
+
 ```
-docker run -d -v ~/docs_old/:/docs -p 8001:8001 -e "PORT=8001" -e IPADDRESS="127.0.0.1" quicknotes:0.1
+docker run -d -v /projects/quicknotes/docs:/docs -p 8001:8001 -e "PORT=8001" -e IPADDRESS="127.0.0.1" -e "QUICKNOTES=/docs/" quicknotes:0.1
 ```
 
 

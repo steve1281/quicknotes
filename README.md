@@ -4,7 +4,7 @@ I use a simple set of quicknotes to store stuff I get hit with. This tool search
 
 ## Notes
 
-[Installation](./docs/000-Welcome_to_Quicknotes.md)
+[Installation/Documentation](./docs/000-Welcome_to_Quicknotes.md)
 
 ## Revision March 11, 2018
 * Switched to markdown conversion. This means the previous pre tags are removed.
@@ -18,7 +18,7 @@ I use a simple set of quicknotes to store stuff I get hit with. This tool search
 
 ## Revision March 29, 2018
 * Only .md files get md rendered now.
-* Expanded the style to make the page a little more pleasent
+* Expanded the style to make the page a little more pleasant
 * Added unix script for launching/monitoring.
 
 ## Revision March 27, 2021
@@ -40,7 +40,7 @@ I use a simple set of quicknotes to store stuff I get hit with. This tool search
 
 ## Revision April 3, 2021
 * set master to the python3 version
-* set master to the FastAPI verison
+* set master to the FastAPI version
 * you can still find the older versions in their own branches. 
 * allowing mp4 extension, but html is required to embed.
 
@@ -71,3 +71,11 @@ docs
     └── style.template
 ```
  
+## Revision update April 17, 2021
+* added /links/{folder_name} api - will read a folder_name with url, desktop, and build a web page of clickable links. 
+* added fractal.html (demonstration) - playing with javascript canvas
+* added /unjumble={comma deliminated list of jumbled words} api - will unjumble words
+* added a requirements.txt to track the libraries that need to be pipped
+* added a rumors (Nethack fortune cookie) file. Use the /fortune/rumors to get a fortune.
+
+  

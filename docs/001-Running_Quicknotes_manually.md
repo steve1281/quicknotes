@@ -42,9 +42,8 @@ cd projects/quicknotes
 pyenv version 3.8.6
 python3 -m venv virtualenv
 . virtualenv/bin/activate
-pip install markdown fastapi uvicorn aiofiles
-export QUICKDIR=.
-export QUICKNOTES=~/docs/
+pip install markdown fastapi uvicorn aiofiles beautifulsoup4 lxml
+export QUICKNOTES=./docs/
 export PORT=8000
 export IPADDRESS=127.0.0.1
 python3 fapi.py
@@ -52,12 +51,6 @@ python3 fapi.py
 
 ## About the Environment variables
 
-* QUICKDIR is where ever fapi.py is. 
-* QUICKNOTES is where your quick notes are. Don't forget the trailing slash.
+* QUICKNOTES is where your quick notes are. 
 * PORT is the port you want to use for your webserver.
 * IPADDRESS is the ip address you want the webserver to advertise on. Leave as 127.0.0.1 for local use. 
-
-## qserv
-
-Included is a bash script *qserv* which will launch the server in background and report an process id. It is not windows friendly.
-
