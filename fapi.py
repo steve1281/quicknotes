@@ -234,18 +234,23 @@ async def fortune(filename: str, record_number: int):
     return HTMLResponse(build_response(body))
 
 
-@app.get('/unjumble/{scrambled_word}')
-async def unjumble(scrambled_word: str):
-    matches = scan_words(document_folder, scrambled_word, len(scrambled_word))
-    if matches:
-        body = "<div>\n"
-        body = f"Scrambled word: <b>{scrambled_word}</b>\n<br/>Found: "
-        for s in matches:
-            body = body + f"<b>{s}</b>&nbsp; "
-        body = body + "</div>"
-        return HTMLResponse(build_response(body))
-    else:
-        return HTMLResponse(build_response("no matches found"))
+@app.get('/unjumble={scrambled_words}')
+async def unjumble(scrambled_words: str):
+    scramble_list = scrambled_words.split(",")
+    body=""
+   
+    for scrambled_word in scramble_list:
+        matches = scan_words(document_folder, scrambled_word, len(scrambled_word))
+        if matches:
+            body = body + "<div>\n"
+            body = body + f"Scrambled word: <b>{scrambled_word}</b>\n<br/>Found: "
+            for s in matches:
+                body = body + f"<b>{s}</b>&nbsp; "
+            body = body + "</div><br />"
+        else:
+            body = body + "no matches found for {scrambled_word}"
+
+    return HTMLResponse(build_response(body))
 
 
 @app.get('/{filename}', include_in_schema=False)

@@ -1,0 +1,14 @@
+aiofiles==0.6.0
+beautifulsoup4==4.9.3
+click==7.1.2
+fastapi==0.63.0
+h11==0.12.0
+latex2mathml==2.16.5
+lxml==4.6.3
+Markdown==3.3.4
+mdtex2html==1.1.1
+pydantic==1.8.1
+soupsieve==2.2.1
+starlette==0.13.6
+typing-extensions==3.7.4.3
+uvicorn==0.13.4
