@@ -261,7 +261,7 @@ async def unjumble(scrambled_words: str):
                 body = body + f"<b>{s}</b>&nbsp; "
             body = body + "</div><br />"
         else:
-            body = body + "no matches found for {scrambled_word}"
+            body = body + f"no matches found for {scrambled_word}"
 
     return HTMLResponse(build_response(body))
 
