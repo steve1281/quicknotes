@@ -74,7 +74,7 @@ def dump_quick_note(document_folder, filename):
     :return:
     """
     try:
-        with open(document_folder + filename, "rU") as f:
+        with open(document_folder + filename, "r") as f:
             _, ext = os.path.splitext(document_folder + filename)
             s = f"<pre> {filename} </pre>\n\n"
             s = s + f.read()

@@ -50,6 +50,8 @@ _ip = os.getenv('IPADDRESS', '127.0.0.1')
 
 # --- static file mounts ----
 
+print(document_folder)
+
 app.mount(
     "/js",
     StaticFiles(directory=document_folder + "/js"),
@@ -286,4 +288,4 @@ async def all_others(filename: str):
 
 if __name__ == '__main__':
     # create_static_mounts()
-    uvicorn.run(app='fapi:app', host='0.0.0.0', port=int(_port), reload=True, debug=False)
+    uvicorn.run(app='fapi:app', host='0.0.0.0', port=int(_port), reload=True)
