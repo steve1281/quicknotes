@@ -78,4 +78,10 @@ docs
 * added a requirements.txt to track the libraries that need to be pipped
 * added a rumors (Nethack fortune cookie) file. Use the /fortune/rumors to get a fortune.
 
+## Revision update July 4, 2025
+* stood up a manual running version on Windows 11
+* had to install python 3.x on my windows
+* use *set* instead of *export*
+* some minor code changes
+* see *windows_ver* branch
   
