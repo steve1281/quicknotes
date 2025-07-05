@@ -84,4 +84,11 @@ docs
 * use *set* instead of *export*
 * some minor code changes
 * see *windows_ver* branch
+
+## Revision update July 5, 2025
+* modified the Dockerfile to get the pips going again.
+* when you run in a windows environment use full paths, for example:
+```
+  docker run -d -v c:\Users\steve\python_projects\quicknotes\docs:/docs -p 8001:8001 -e "PORT=8001" -e IPADDRESS="127.0.0.1" -e "QUICKNOTES=/docs/" quicknotes:0.1
+```
   
